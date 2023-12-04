@@ -4,6 +4,16 @@
 #include "util.h"
 #include "atendimentos.h"
 
+struct paciente{
+    char codigo_paciente[8];  
+    char nome_paciente[40];
+    char RG_paciente[12]; 
+    char CPF_paciente[12];
+    char tipo_sanguineo_paciente[3];
+    char fator_RH_paciente[9];  
+    char endereco_paciente[40];
+    char data_nascimento_paciente[40];
+};
 
 int menu_pacientes();
 void exibe_informacoes_paciente(char nomes_pacientes[][40], char codigo_pacientes[][8], char RG_pacientes[][12], char CPF_pacientes[][12], char tipo_sanguineo_pacientes[][3], char fator_RH_pacientes[][9], char endereco_pacientes[][40], char datas_nascimento_pacientes[][40], int espaco_livre);
