@@ -13,6 +13,7 @@ struct paciente{
     char fator_RH_paciente[9];  
     char endereco_paciente[40];
     char data_nascimento_paciente[40];
+    struct paciente *proximo;
 };
 
 int menu_pacientes();
