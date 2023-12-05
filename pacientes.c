@@ -17,10 +17,10 @@ int menu_pacientes() {
 
     while(1) {
         printf(YELLOW"\n\nSelecione a Funcionalidade Desejada: \n"RESET);
-        __fpurge(stdin);
+        fflush(stdin);
         int interacao_menu_pacientes;
-        
-        __fpurge(stdin);
+
+        fflush(stdin);
         scanf("%d", &interacao_menu_pacientes);
 
         if(interacao_menu_pacientes < 1 || interacao_menu_pacientes > 10){
@@ -172,30 +172,29 @@ int procura_informacao(char informacao_paciente[], char matriz_informacao_pacien
 }
 
 
-int cadastra_nome_paciente(char matriz_nomes_pacientes[][40],int espaco_livre, int QNTD_PACIENTES) {
+int cadastra_nome_paciente(pacientes *novo_paciente) {
     while(1) {
         printf("Digite o Nome do Paciente:\n");
-        ler_str(matriz_nomes_pacientes[espaco_livre]);
-        
-        int nome_incorreto = checar_string(matriz_nomes_pacientes[espaco_livre]);
-        if(nome_incorreto) {
+        ler_str(novo_paciente->nome);
+
+        if(checar_string(novo_paciente->nome)) {
             printf(RED"Digite o nome corretamente!\n"RESET);
             continue;
         }
 
-        formata_string_maisculo(matriz_nomes_pacientes[espaco_livre]);
-        
+        formata_string_maisculo(novo_paciente->nome);
+        /*
         int ja_cadastrado = ja_existe(matriz_nomes_pacientes[espaco_livre], matriz_nomes_pacientes,QNTD_PACIENTES,espaco_livre);
-        if(ja_cadastrado) { 
+        if(ja_cadastrado) {
             printf(RED"Paciente já cadastrado!\n"RESET);
             return 1;
         }
-
+        */
         break;
     }
-
     return 0;
 }
+
 
 
 void exibe_tipo_sanguineo_pacientes(char tipo_sanguineo[], char matriz_tipo_sanguineo[][3], char matriz_fator_RH[][9], int tam_matriz_tp_sanguineo,char matriz_pacientes[][40]) {
