@@ -1,3 +1,0 @@
-C:/Users/Dr Marcus/Desktop/matheus/Coding/CRUD2.0-IP/cmake-build-debug/CMakeFiles/CRUD2_0_IP.dir
-C:/Users/Dr Marcus/Desktop/matheus/Coding/CRUD2.0-IP/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Dr Marcus/Desktop/matheus/Coding/CRUD2.0-IP/cmake-build-debug/CMakeFiles/rebuild_cache.dir

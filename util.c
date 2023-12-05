@@ -28,7 +28,7 @@ int menu_principal() {
     while(1) {
         int interacao_menu_pacientes;
 
-        fflush(stdin);
+        __fpurge(stdin);
         interacao_menu_pacientes = getchar();
 
         switch (interacao_menu_pacientes)
@@ -54,7 +54,7 @@ int coletar_opcao(char opcao1[],char opcao2[]){
         printf(BLUE"[0]"RESET" %s   "BLUE"[1]"RESET"%s\n",opcao1,opcao2);;
         
         printf(BLUE);
-        fflush(stdin);
+        __fpurge(stdin);  
         opcao=getchar();
         printf(RESET);
         
@@ -98,7 +98,7 @@ int procura_espaco_livre(int vetor_ativos[], int tamanho_vetor) {
 void ler_str(char string[]) {
     
     printf(BLUE);
-    fflush(stdin);
+    __fpurge(stdin);  
     gets(string);
     printf(RESET);
 }
@@ -231,30 +231,4 @@ int varrer_datas(char data[][40], char matriz_datas_atendimentos_copia[][40], in
         }
     }
     return -1;
-}
-
-/*
-void lista_encadeada(struct paciente novo, struct paciente antigo) {
-    novo.proximo = &antigo;
-    antigo.proximo = NULL;
-
-    struct paciente *alloc = malloc(5 * sizeof(struct paciente));
-}
- */
-
-/*
-void escreve_arquivo(FILE *arquivo, char *nome_arquivo, int qntd_elementos, int tamanho_elemento) {
-    arquivo = fopen(nome_arquivo, "ab");
-
-    if(arquivo == NULL)
-        arquivo = fopen(nome_arquivo, "wb");
-
-    // como eu vou deixar a parte do: "ptr − This is the pointer to
-    // the array of elements to be written." para as duas structs, tanto aluno quanti paciente?
-    //fwrite(???, qntd_elementos, tamanho_elemento, arquivo);
-}
-*/
-
-void ler_arquivo() {
-
 }
