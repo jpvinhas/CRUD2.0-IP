@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "pacientes.h"
 #include "atendimentos.h"
 #include "util.h"
@@ -56,7 +57,6 @@ int main(void) {
                     int informacao_nao_obrigatoria;
                     int formatacao_incorreta;
 
-
                     switch (interacao_menu_pacientes) {
                         case 1:
                             system("clear");
@@ -73,14 +73,15 @@ int main(void) {
                                     if(!coletar_opcao("Inserir outro paciente", "Ir para o Menu Pacientes")) {continue;}
                                     else {break;}
                                 }
-                                puts(todos_pacientes[espaco_livre].nome);
 
                                 todos_pacientes[espaco_livre].codigo2 = ++new_code;
                                 new_code++;
 
                                 //cria_codigo(codigo_pacientes,espaco_livre);
 
-                                cadastra_documento("RG", todos_pacientes[espaco_livre].RG);
+                                if(cadastra_documento("RG", todos_pacientes[espaco_livre].RG)) {
+                                    strcpy(todos_pacientes[espaco_livre].RG, "Nao Informado");
+                                }
                                 if(procura_informacao(todos_pacientes, espaco_livre, 100, 1)) {
                                     printf(RED"RG já cadastrado --> Impossível Inserir este Paciente!\n"RESET);
 
@@ -88,23 +89,29 @@ int main(void) {
                                     else {break;}
                                 }
 
-
-                                cadastra_documento("CPF", todos_pacientes[espaco_livre].CPF);
+                                if(cadastra_documento("CPF", todos_pacientes[espaco_livre].CPF)) {
+                                    strcpy(todos_pacientes[espaco_livre].CPF, "Nao Informado");
+                                }
                                 if(procura_informacao(todos_pacientes, espaco_livre, 100, 0)) {
                                     printf(RED"CPF já cadastrado --> Impossível Inserir este Paciente!\n"RESET);
 
                                     if(!coletar_opcao("Inserir outro paciente", "Ir para o Menu Pacientes")) {continue;}
                                     else {break;}
-                                    printf("ad");
+                                }
+
                                     while (1) {
                                         printf("Selecione o seu Tipo Sanguíneo (Sem o Fator RH) ou ENTER para pular:\n");
                                         printf(BLUE"[1] A     [2] B     [3] AB     [4] O\n"RESET);
-                                        ler_str(tipo_sanguineo_pacientes[espaco_livre]);
+                                        ler_str(todos_pacientes[espaco_livre].tipo_sanguineo);
 
-                                        informacao_nao_obrigatoria = cadastro_informacao_nao_obrigatorio(tipo_sanguineo_pacientes[espaco_livre]);
-                                        if(informacao_nao_obrigatoria) {break;}
+                                        informacao_nao_obrigatoria = cadastro_informacao_nao_obrigatorio(todos_pacientes[espaco_livre].tipo_sanguineo);
 
-                                        formatacao_incorreta = valida_tipo_sanguineo(tipo_sanguineo_pacientes[espaco_livre]);
+                                        if(informacao_nao_obrigatoria) {
+                                            strcpy(todos_pacientes[espaco_livre].tipo_sanguineo, "Nao Informado");
+                                            break;
+                                        }
+
+                                        formatacao_incorreta = valida_tipo_sanguineo(todos_pacientes[espaco_livre].tipo_sanguineo);
                                         if(formatacao_incorreta) {
                                             printf(RED"Tipo Sanguíneo Inválido, Digite Novamente!\n"RESET);
                                             continue;
@@ -115,7 +122,7 @@ int main(void) {
 
 
                                 }
-                            }
+
                     }
                 }
         }

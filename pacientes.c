@@ -131,8 +131,7 @@ int cadastra_documento(char tipo_documento[], char str_documento[]) {
         }
         ler_str(str_documento);
 
-        int enter_pressionado = cadastro_informacao_nao_obrigatorio(str_documento);
-        if(documento_nao_obrigatorio && enter_pressionado) {
+        if(documento_nao_obrigatorio && cadastro_informacao_nao_obrigatorio(str_documento)) {
             return 1;
         }
         if(valida_documento(str_documento)) {
@@ -147,12 +146,12 @@ int cadastra_documento(char tipo_documento[], char str_documento[]) {
 }
 
 
-int cadastro_informacao_nao_obrigatorio(char str_documento[]) {
-        int documento_nao_obrigatorio_vazio = str_documento[0] == '\0';
-        if(documento_nao_obrigatorio_vazio) {
-            strcpy(str_documento, "Não Informado");
-            return 1;
-        }
+int cadastro_informacao_nao_obrigatorio(char documento[]) {
+    int documento_nao_obrigatorio_vazio = documento[0] == '\0';
+
+    if(documento_nao_obrigatorio_vazio){return 1;}
+
+    return 0;
 }
 
 
