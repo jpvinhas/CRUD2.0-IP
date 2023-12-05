@@ -13,7 +13,7 @@ typedef struct {
     char CPF[12];
     char tipo_sanguineo[3];
     char fator_RH[9];
-    char enderecoe[40];
+    char endereco[40];
     char data_nascimento[40];
     struct paciente *proximo_paciente;
 }pacientes;
@@ -21,7 +21,7 @@ typedef struct {
 pacientes todos_pacientes[100];
 
 int menu_pacientes();
-void exibe_informacoes_paciente(char nomes_pacientes[][40], char codigo_pacientes[][8], char RG_pacientes[][12], char CPF_pacientes[][12], char tipo_sanguineo_pacientes[][3], char fator_RH_pacientes[][9], char endereco_pacientes[][40], char datas_nascimento_pacientes[][40], int espaco_livre);
+void exibe_informacoes_paciente(pacientes todos_pacientes, int espaco_livre);
 int valida_tipo_sanguineo(char tipo_sanguineo[]);
 int valida_fato_rh(char fator_rh[]);
 int valida_documento(char documento[]);

@@ -1,3 +1,11 @@
+/*
+ * Notas *
+ * 1) "Espaco livre" somar ao final
+ * 2) Guardar no Arquivo o numero aleatorio "Codigo"
+ * 3) Fazer o time_t para ler as datas
+ */
+
+
 #include <stdio.h>
 #include <string.h>
 #include "pacientes.h"
@@ -138,8 +146,23 @@ int main(void) {
                                     break;
                                 }
 
+                                printf("Digite seu Endereço ou ENTER para pular:\n");
+                                ler_str(todos_pacientes[espaco_livre].endereco);
+                                if(cadastro_informacao_nao_obrigatorio(todos_pacientes[espaco_livre].endereco)) {
+                                    strcpy(todos_pacientes[espaco_livre].endereco, "Nao Informado");
                                 }
 
+                                //printf("Digite a Data de Nascimento do Paciente:\n");
+                                //receber_data(datas_nascimento_pacientes, espaco_livre);
+
+                                system("clear");
+                                exibe_informacoes_paciente(todos_pacientes[espaco_livre], espaco_livre);
+                                pacientes_ativos[espaco_livre] = 1;
+
+                                if(!coletar_opcao("Incluir novo paciente", "Voltar ao Menu Pacientes")) {continue;}
+                                else {break;}
+                            }
+                            break;
                     }
                 }
         }
@@ -147,40 +170,6 @@ int main(void) {
     return 0;
 }
 /*
-
-
-                                while(1) {
-                                    printf("Selecione o Fator RH do Paciente (Positivo ou Negativo) ou ENTER para pular:\n");
-                                    printf(BLUE"[1] Positivo     [2] Negativo\n"RESET);
-                                    ler_str(fator_RH_pacientes[espaco_livre]);
-
-                                    informacao_nao_obrigatoria = cadastro_informacao_nao_obrigatorio(fator_RH_pacientes[espaco_livre]);
-                                    if(informacao_nao_obrigatoria) {break;}
-
-                                    formatacao_incorreta = valida_fato_rh(fator_RH_pacientes[espaco_livre]);
-                                    if(formatacao_incorreta) {
-                                        printf(RED"Fator RH Inválido, Digite Novamente!\n"RESET);
-                                        continue;
-                                    }
-                                    break;
-                                }
-
-                                printf("Digite seu Endereço ou ENTER para pular:\n");
-                                ler_str(endereco_pacientes[espaco_livre]);
-                                informacao_nao_obrigatoria = cadastro_informacao_nao_obrigatorio(endereco_pacientes[espaco_livre]);
-
-                                printf("Digite a Data de Nascimento do Paciente:\n");
-                                receber_data(datas_nascimento_pacientes, espaco_livre);
-
-                                system("clear");
-                                exibe_informacoes_paciente(nomes_pacientes, codigo_pacientes, RG_pacientes, CPF_pacientes, tipo_sanguineo_pacientes, fator_RH_pacientes, endereco_pacientes, datas_nascimento_pacientes, espaco_livre);
-
-                                pacientes_ativos[espaco_livre] = 1;
-
-                                if(!coletar_opcao("Incluir novo paciente", "Voltar ao Menu Pacientes")) {continue;}
-                                else {break;}
-                            }
-                            break;
                         case 2:
                             system("clear");
                             while(1) {

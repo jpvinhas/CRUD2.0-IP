@@ -34,20 +34,19 @@ int menu_pacientes() {
     }
 }
 
-
-void exibe_informacoes_paciente(char nomes_pacientes[][40], char codigo_pacientes[][8], char RG_pacientes[][12], char CPF_pacientes[][12], char tipo_sanguineo_pacientes[][3], char fator_RH_pacientes[][9], char endereco_pacientes[][40], char datas_nascimento_pacientes[][40], int espaco_livre) {
+void exibe_informacoes_paciente(pacientes todos_pacientes, int espaco_livre) {
     printf("\n-----------"GREEN"Paciente"RESET"-----------\n");
-    printf("-> "BLUE"Nome:"RESET" "GREEN"%s\n"RESET, &nomes_pacientes[espaco_livre]);
-    printf("-> "BLUE"Código do Paciente:"RESET" "GREEN"%s\n"RESET, &codigo_pacientes[espaco_livre]);
-    printf("-> "BLUE"RG do Paciente:"RESET" "GREEN"%s\n"RESET, &RG_pacientes[espaco_livre]);
-    printf("-> "BLUE"CPF do Paciente:"RESET" "GREEN"%s\n"RESET, &CPF_pacientes[espaco_livre]);
-    printf("-> "BLUE"Tipo Sanguíneo do Paciente:"RESET" "GREEN"%s\n"RESET, &tipo_sanguineo_pacientes[espaco_livre]);
-    printf("-> "BLUE"Fator RH  do Paciente:"RESET" "GREEN"%s\n"RESET, &fator_RH_pacientes[espaco_livre]);
-    printf("-> "BLUE"Endereço do Paciente:"RESET" "GREEN"%s\n"RESET, &endereco_pacientes[espaco_livre]);
-    printf("-> "BLUE"Data de Nascimento do Paciente:"RESET GREEN"%s\n"RESET, &datas_nascimento_pacientes[espaco_livre]);
+    printf("-> "BLUE"Nome:"RESET" "GREEN"%s\n"RESET, todos_pacientes.nome);
+    printf("-> "BLUE"Código do Paciente:"RESET" "GREEN"%ld\n"RESET, todos_pacientes.codigo2);
+    printf("-> "BLUE"RG do Paciente:"RESET" "GREEN"%s\n"RESET, todos_pacientes.RG);
+    printf("-> "BLUE"CPF do Paciente:"RESET" "GREEN"%s\n"RESET, todos_pacientes.CPF);
+    printf("-> "BLUE"Tipo Sanguíneo do Paciente:"RESET" "GREEN"%s\n"RESET, todos_pacientes.tipo_sanguineo);
+    printf("-> "BLUE"Fator RH  do Paciente:"RESET" "GREEN"%s\n"RESET, todos_pacientes.fator_RH);
+    printf("-> "BLUE"Endereço do Paciente:"RESET" "GREEN"%s\n"RESET, todos_pacientes.endereco);
+    printf("-> "BLUE"Data de Nascimento do Paciente:"RESET GREEN"%s\n"RESET, todos_pacientes.data_nascimento);
     printf("--------------------------------------------\n");
-
 }
+
 
 int valida_tipo_sanguineo(char tipo_sanguineo[]) {
     int tipo_sanguineo_convertido = atoi(tipo_sanguineo);
