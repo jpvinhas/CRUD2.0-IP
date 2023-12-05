@@ -55,7 +55,7 @@ int coletar_opcao(char opcao1[],char opcao2[]){
         
         printf(BLUE);
         fflush(stdin);
-        opcao=getchar();
+        opcao = getchar();
         printf(RESET);
         
         switch(opcao){
@@ -95,34 +95,33 @@ int procura_espaco_livre(int vetor_ativos[], int tamanho_vetor) {
 }
 
 
-void ler_str(char string[]) {
+void ler_str(char entrada[]) {
     
     printf(BLUE);
     fflush(stdin);
-    gets(string);
+    gets(entrada);
     printf(RESET);
 }
-int checar_string(char string[]){
-    if(string == NULL || string[0] =='\0'){
+int checar_string(char entrada[]){
+    if(entrada == NULL || entrada[0] =='\0'){
         return 1;
     }
-    for(int i = 0; string[i] != '\0';i++){
-        if(string[i] == ' '){
+    for(int i = 0; entrada[i] != '\0';i++){
+        if(entrada[i] == ' '){
             continue;
         }
-        if(isdigit(string[i]) || !isalnum(string[i])){
+        if(isdigit(entrada[i]) || !isalnum(entrada[i])){
           return 1;  
         }
     }return 0;
 }
 
-void formata_string_maisculo(char string[]) {
-    int string_tamanho = strlen(string);
-
-    for (int i = 0; i < string_tamanho; ++i)
-        string[i] = toupper(string[i]);
+void formata_string_maisculo(char entrada[]) {
+    for (int i = 0; i < strlen(entrada); ++i)
+        entrada[i] = toupper(entrada[i]);
 }
 
+/*
 int ja_existe(char string[],char vetor[][40],int tamanho,int indice){
     for(int i = 0; i < tamanho; i++){
         if(i == indice)
@@ -132,6 +131,8 @@ int ja_existe(char string[],char vetor[][40],int tamanho,int indice){
         }
     }return 0;
 }
+*/
+
 int procura_string(char string[],char vetor[][40],int tamanho){
     for(int i = 0; i < tamanho; i++){
         if(strcmp(string,vetor[i]) == 0){
@@ -184,8 +185,8 @@ void imprimir_vetor_codigos(char vetor[][8],int tamanho){
     }
 }
 
-void cria_codigo(char vetor[][8],int indice_livre){
-    char caracteres[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";//36 caracteres
+void cria_codigo(char *espaco_codigo[],int indice_livre){
+    char caracteres[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     char novo_codigo[8];
     
     srand(time(NULL));
@@ -196,7 +197,7 @@ void cria_codigo(char vetor[][8],int indice_livre){
         novo_codigo[i] = caracteres[indice_aleatorio];
         
     }
-    strcpy(vetor[indice_livre],novo_codigo);
+    strcpy(*espaco_codigo, novo_codigo);
 }
 
 
