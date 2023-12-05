@@ -6,7 +6,8 @@
 #include "atendimentos.h"
 
 typedef struct {
-    char codigo[8];
+    long int codigo2;
+    char codigo[8]; // codigo not
     char nome[40];
     char RG[12];
     char CPF[12];
@@ -24,9 +25,9 @@ void exibe_informacoes_paciente(char nomes_pacientes[][40], char codigo_paciente
 int valida_tipo_sanguineo(char tipo_sanguineo[]);
 int valida_fato_rh(char fator_rh[]);
 int valida_documento(char documento[]);
-int cadastra_documento(char tipo_documento[], char str_documento[], int espaco_livre);
+int cadastra_documento(char tipo_documento[], char str_documento[]);
 int cadastro_informacao_nao_obrigatorio(char str_documento[]);
-int procura_informacao(char informacao_paciente[], char matriz_informacao_paciente[][12], int tamanho_matriz, int indice_matriz);
+int procura_informacao(pacientes todos_pacientes[], int espaco_livre, int tamanho, int controle);
 int cadastra_nome_paciente(pacientes *novo_paciente);
 void exibe_tipo_sanguineo_pacientes(char tipo_sanguineo[], char matriz_tipo_sanguineo[][3], char matriz_fator_RH[][9], int tam_matriz_tp_sanguineo,char matriz_pacientes[][40]);
 void busca_tipo_sanguineo(int tam_matriz_tp_sanguineo, char tipo_sanguineo[], char matriz_tipo_sanguineo[][3], char matriz_fator_RH[][9], char fator_rh_escolhido[] ,char matriz_pacientes[][40]);

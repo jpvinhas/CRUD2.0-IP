@@ -118,7 +118,7 @@ int valida_documento(char documento[]) {
 }
 
 
-int cadastra_documento(char tipo_documento[], char str_documento[], int espaco_livre) {
+int cadastra_documento(char tipo_documento[], char str_documento[]) {
     while(1) {
         printf("Digite o %s do Paciente", tipo_documento);
 
@@ -129,16 +129,13 @@ int cadastra_documento(char tipo_documento[], char str_documento[], int espaco_l
         else {
             printf(":\n");
         }
-
         ler_str(str_documento);
 
         int enter_pressionado = cadastro_informacao_nao_obrigatorio(str_documento);
         if(documento_nao_obrigatorio && enter_pressionado) {
             return 1;
         }
-    
-        int documento_invalido = valida_documento(str_documento);
-        if(documento_invalido) {
+        if(valida_documento(str_documento)) {
             printf(RED"%s Inválido!\n"RESET, tipo_documento);
             continue;
         }
@@ -159,15 +156,17 @@ int cadastro_informacao_nao_obrigatorio(char str_documento[]) {
 }
 
 
-int procura_informacao(char informacao_paciente[], char matriz_informacao_paciente[][12], int tamanho_matriz, int indice_matriz) {  
-        for(int i = 0; i < tamanho_matriz; i++){
-            if(i == indice_matriz)
-                continue;
-            if(!(strcmp(informacao_paciente, matriz_informacao_paciente[i]))){
-                return 1;
+int procura_informacao(pacientes todos_pacientes[], int espaco_livre, int tamamnho, int controle) {  //mudar tamanho mt grande iteracoes prejudiciais
+        for(int i = 0; i < 1; i++) {
+            if(todos_pacientes[espaco_livre].codigo2 == todos_pacientes[i].codigo2){continue;}
+
+            if(controle) {
+                if(!(strcmp(todos_pacientes[espaco_livre].RG, todos_pacientes[i].RG))){return 1;}
             }
-    }
-    
+            else {
+                if(!(strcmp(todos_pacientes[espaco_livre].CPF, todos_pacientes[i].CPF))){return 1;}
+            }
+        }
     return 0;
 }
 

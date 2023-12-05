@@ -11,7 +11,7 @@
 #define YELLOW  "\x1b[33m"
 #define BLUE    "\x1b[34m"
 
-
+long int new_code = 44083;  // salvar no arquivo para continuar pra sempre
 
 int pacientes_ativos[QNTD_PACIENTES];
 
@@ -75,10 +75,13 @@ int main(void) {
                                 }
                                 puts(todos_pacientes[espaco_livre].nome);
 
-                                cria_codigo(codigo_pacientes,espaco_livre);
+                                todos_pacientes[espaco_livre].codigo2 = ++new_code;
+                                new_code++;
 
-                                cadastra_documento("RG", RG_pacientes[espaco_livre], espaco_livre);
-                                if(procura_informacao(RG_pacientes[espaco_livre], RG_pacientes, 12, espaco_livre)) {
+                                //cria_codigo(codigo_pacientes,espaco_livre);
+
+                                cadastra_documento("RG", todos_pacientes[espaco_livre].RG);
+                                if(procura_informacao(todos_pacientes, espaco_livre, 100, 1)) {
                                     printf(RED"RG já cadastrado --> Impossível Inserir este Paciente!\n"RESET);
 
                                     if(!coletar_opcao("Inserir outro paciente", "Ir para o Menu Pacientes")) {continue;}
@@ -86,15 +89,40 @@ int main(void) {
                                 }
 
 
-                                cadastra_documento("CPF", CPF_pacientes[espaco_livre], espaco_livre);
-                                if(procura_informacao(CPF_pacientes[espaco_livre], CPF_pacientes, 12, espaco_livre)) {
+                                cadastra_documento("CPF", todos_pacientes[espaco_livre].CPF);
+                                if(procura_informacao(todos_pacientes, espaco_livre, 100, 0)) {
                                     printf(RED"CPF já cadastrado --> Impossível Inserir este Paciente!\n"RESET);
 
                                     if(!coletar_opcao("Inserir outro paciente", "Ir para o Menu Pacientes")) {continue;}
                                     else {break;}
+                                    printf("ad");
+                                    while (1) {
+                                        printf("Selecione o seu Tipo Sanguíneo (Sem o Fator RH) ou ENTER para pular:\n");
+                                        printf(BLUE"[1] A     [2] B     [3] AB     [4] O\n"RESET);
+                                        ler_str(tipo_sanguineo_pacientes[espaco_livre]);
+
+                                        informacao_nao_obrigatoria = cadastro_informacao_nao_obrigatorio(tipo_sanguineo_pacientes[espaco_livre]);
+                                        if(informacao_nao_obrigatoria) {break;}
+
+                                        formatacao_incorreta = valida_tipo_sanguineo(tipo_sanguineo_pacientes[espaco_livre]);
+                                        if(formatacao_incorreta) {
+                                            printf(RED"Tipo Sanguíneo Inválido, Digite Novamente!\n"RESET);
+                                            continue;
+                                        }
+                                        break;
+                                    }
+
+
 
                                 }
-
+                            }
+                    }
+                }
+        }
+    }
+    return 0;
+}
+/*
                                 while (1) {
                                     printf("Selecione o seu Tipo Sanguíneo (Sem o Fator RH) ou ENTER para pular:\n");
                                     printf(BLUE"[1] A     [2] B     [3] AB     [4] O\n"RESET);
@@ -553,13 +581,13 @@ int main(void) {
                                     case 1:
                                         printf("Paciente anterior : %s \n",nomes_pacientes[indice_do_paciente]);
                                         int indice_novo_paciente = procura_paciente(nomes_pacientes,QNTD_PACIENTES);
-/*
+
                                         int data_ja_cadastrada=atendimento_ja_cadastrado(data_atendimentos,indice_novo_paciente,espaco_livre,QNTD_ATENDIMENTOS);
                                         if(data_ja_cadastrada)continue;
 
                                         paciente_do_atendimento[indice_do_atendimento]=indice_novo_paciente;
                                         printf(GREEN"Paciente do atendimento %s alterado!\n"RESET,codigo_atendimentos[indice_do_atendimento]);
-*/
+
                                         break;
                                     case 2:
                                         printf("Digite a nova data:\n");
@@ -742,3 +770,4 @@ int main(void) {
 
     return 0;
 }
+*/

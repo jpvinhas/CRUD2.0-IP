@@ -95,32 +95,32 @@ int procura_espaco_livre(int vetor_ativos[], int tamanho_vetor) {
 }
 
 
-void ler_str(char string[]) {
+void ler_str(char entrada[]) {
     
     printf(BLUE);
     fflush(stdin);
-    gets(string);
+    gets(entrada);
     printf(RESET);
 }
-int checar_string(char string[]){
-    if(string == NULL || string[0] =='\0'){
+int checar_string(char entrada[]){
+    if(entrada == NULL || entrada[0] =='\0'){
         return 1;
     }
-    for(int i = 0; string[i] != '\0';i++){
-        if(string[i] == ' '){
+    for(int i = 0; entrada[i] != '\0';i++){
+        if(entrada[i] == ' '){
             continue;
         }
-        if(isdigit(string[i]) || !isalnum(string[i])){
+        if(isdigit(entrada[i]) || !isalnum(entrada[i])){
           return 1;  
         }
     }return 0;
 }
 
-void formata_string_maisculo(char string[]) {
-    int string_tamanho = strlen(string);
+void formata_string_maisculo(char entrada[]) {
+    int string_tamanho = strlen(entrada);
 
     for (int i = 0; i < string_tamanho; ++i)
-        string[i] = toupper(string[i]);
+        entrada[i] = toupper(entrada[i]);
 }
 
 int ja_existe(char string[],char vetor[][40],int tamanho,int indice){
