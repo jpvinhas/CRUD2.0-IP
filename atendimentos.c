@@ -24,7 +24,7 @@ int menu_atendimento() {
     int opcao;
     
     printf(BLUE);
-    fflush(stdin);
+    __fpurge(stdin);
     scanf("%d",&opcao);
     printf(RESET);
 
@@ -38,7 +38,7 @@ void receber_status_atendimento(char vetor_status_atendimentos[][40],int indice_
     char opcao;
     printf(BLUE"Status da consulta:\n"RESET);
     printf(BLUE"[1]"RESET"Agendado "BLUE"[2]"RESET"Esperando "BLUE"[3]"RESET"Em atendimento "BLUE"[4]"RESET"Atendido\n");
-    fflush(stdin);
+    __fpurge(stdin);
     printf(BLUE);  
     opcao=getchar();
     printf(RESET);

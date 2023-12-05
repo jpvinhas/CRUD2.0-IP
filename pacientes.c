@@ -17,10 +17,10 @@ int menu_pacientes() {
 
     while(1) {
         printf(YELLOW"\n\nSelecione a Funcionalidade Desejada: \n"RESET);
-        fflush(stdin);
+        __fpurge(stdin);
         int interacao_menu_pacientes;
         
-        fflush(stdin);
+        __fpurge(stdin);
         scanf("%d", &interacao_menu_pacientes);
 
         if(interacao_menu_pacientes < 1 || interacao_menu_pacientes > 10){
@@ -172,24 +172,25 @@ int procura_informacao(char informacao_paciente[], char matriz_informacao_pacien
 }
 
 
-int cadastra_nome_paciente(pacientes *novo_paciente) {
+int cadastra_nome_paciente(char matriz_nomes_pacientes[][40],int espaco_livre, int QNTD_PACIENTES) {
     while(1) {
         printf("Digite o Nome do Paciente:\n");
-        ler_str(novo_paciente->nome);
-
-        if(checar_string(novo_paciente->nome)) {
+        ler_str(matriz_nomes_pacientes[espaco_livre]);
+        
+        int nome_incorreto = checar_string(matriz_nomes_pacientes[espaco_livre]);
+        if(nome_incorreto) {
             printf(RED"Digite o nome corretamente!\n"RESET);
             continue;
         }
 
-        formata_string_maisculo(novo_paciente->nome);
-        /*
+        formata_string_maisculo(matriz_nomes_pacientes[espaco_livre]);
+        
         int ja_cadastrado = ja_existe(matriz_nomes_pacientes[espaco_livre], matriz_nomes_pacientes,QNTD_PACIENTES,espaco_livre);
         if(ja_cadastrado) { 
             printf(RED"Paciente já cadastrado!\n"RESET);
             return 1;
         }
-        */
+
         break;
     }
 

@@ -1,5 +1,4 @@
 #include <stdio.h>
-
 #include "pacientes.h"
 #include "atendimentos.h"
 #include "util.h"
@@ -11,6 +10,8 @@
 #define GREEN   "\x1b[32m"
 #define YELLOW  "\x1b[33m"
 #define BLUE    "\x1b[34m"
+#define MAGENTA "\x1b[35m"
+#define CIANO   "\x1b[36m"
 #define RESET   "\x1b[0m"
 
 
@@ -36,6 +37,8 @@ char status_atendimentos[QNTD_ATENDIMENTOS][40];
 float preco_atendimentos[QNTD_ATENDIMENTOS];
 
 int main(void) {
+    //preenche_matriz_bidimensional(nomes_pacientes,QNTD_PACIENTES); 
+    //preenche_matriz_bidimensional(data_atendimentos,QNTD_ATENDIMENTOS); 
     preenche_vetor_ativos(pacientes_ativos, QNTD_PACIENTES);
     preenche_vetor_ativos(atendimentos_ativos, QNTD_ATENDIMENTOS);
 
@@ -55,25 +58,25 @@ int main(void) {
                     int informacao_nao_obrigatoria;                   
                     int formatacao_incorreta;
 
+
                     switch (interacao_menu_pacientes) {
                         case 1:
                             system("clear");
                             printf("\nOpção -> "BLUE"[1], \"Inserir um Novo Paciente\" "RESET"Selecionada...\n\n");
-
                             while (1) {
+
                                 espaco_livre = procura_espaco_livre(pacientes_ativos, QNTD_PACIENTES);
                                 if(espaco_livre < 0) {
                                     printf(RED"\nCadastro Impossível, Quantidade de Pacientes Cadastrados Cheia!\n"RESET);
                                     break;
                                 }
-
-                                if(cadastra_nome_paciente(&todos_pacientes[espaco_livre])) {
+                                
+                                if(cadastra_nome_paciente(nomes_pacientes, espaco_livre, QNTD_PACIENTES)) {
                                     if(!coletar_opcao("Inserir outro paciente", "Ir para o Menu Pacientes")) {continue;}
                                     else {break;}
                                 }
-                                printf("NOME -> %s", todos_pacientes[espaco_livre].nome);
                                 
-                                cria_codigo(&todos_pacientes[espaco_livre].codigo,espaco_livre);
+                                cria_codigo(codigo_pacientes,espaco_livre);
 
                                 cadastra_documento("RG", RG_pacientes[espaco_livre], espaco_livre);
                                 if(procura_informacao(RG_pacientes[espaco_livre], RG_pacientes, 12, espaco_livre)) { 
@@ -141,7 +144,6 @@ int main(void) {
                                 else {break;}                   
                             }
                             break;
-
                         case 2:
                             system("clear");
                             while(1) {
@@ -169,7 +171,7 @@ int main(void) {
                                             char nome_antigo[40];
                                             strcpy(nome_antigo ,nomes_pacientes[index_paciente]);                               
 
-                                            if(cadastra_nome_paciente(&todos_pacientes[0])) {
+                                            if(cadastra_nome_paciente(nomes_pacientes, espaco_livre, QNTD_PACIENTES)) {
                                                 if(!coletar_opcao("Inserir outro paciente", "Ir para o Menu Pacientes")) {continue;}
                                                 else {break;}
                                             }
@@ -552,14 +554,14 @@ int main(void) {
                                     case 1: 
                                         printf("Paciente anterior : %s \n",nomes_pacientes[indice_do_paciente]);
                                         int indice_novo_paciente = procura_paciente(nomes_pacientes,QNTD_PACIENTES);
-/*
+
                                         int data_ja_cadastrada=atendimento_ja_cadastrado(data_atendimentos,indice_novo_paciente,espaco_livre,QNTD_ATENDIMENTOS);
                                         if(data_ja_cadastrada)continue;
                                         
                                         paciente_do_atendimento[indice_do_atendimento]=indice_novo_paciente;
                                         printf(GREEN"Paciente do atendimento %s alterado!\n"RESET,codigo_atendimentos[indice_do_atendimento]);
                                         
-                                        break;*/
+                                        break;
                                     case 2:
                                         printf("Digite a nova data:\n");
                                         receber_data(data_atendimentos,indice_do_atendimento);
