@@ -99,27 +99,44 @@ int main(void) {
                                     else {break;}
                                 }
 
-                                    while (1) {
-                                        printf("Selecione o seu Tipo Sanguíneo (Sem o Fator RH) ou ENTER para pular:\n");
-                                        printf(BLUE"[1] A     [2] B     [3] AB     [4] O\n"RESET);
-                                        ler_str(todos_pacientes[espaco_livre].tipo_sanguineo);
+                                while (1) {
+                                    printf("Selecione o seu Tipo Sanguíneo (Sem o Fator RH) ou ENTER para pular:\n");
+                                    printf(BLUE"[1] A     [2] B     [3] AB     [4] O\n"RESET);
+                                    ler_str(todos_pacientes[espaco_livre].tipo_sanguineo);
 
-                                        informacao_nao_obrigatoria = cadastro_informacao_nao_obrigatorio(todos_pacientes[espaco_livre].tipo_sanguineo);
+                                    informacao_nao_obrigatoria = cadastro_informacao_nao_obrigatorio(todos_pacientes[espaco_livre].tipo_sanguineo);
 
-                                        if(informacao_nao_obrigatoria) {
-                                            strcpy(todos_pacientes[espaco_livre].tipo_sanguineo, "Nao Informado");
-                                            break;
-                                        }
-
-                                        formatacao_incorreta = valida_tipo_sanguineo(todos_pacientes[espaco_livre].tipo_sanguineo);
-                                        if(formatacao_incorreta) {
-                                            printf(RED"Tipo Sanguíneo Inválido, Digite Novamente!\n"RESET);
-                                            continue;
-                                        }
+                                    if(informacao_nao_obrigatoria) {
+                                        strcpy(todos_pacientes[espaco_livre].tipo_sanguineo, "Nao Informado");
                                         break;
                                     }
 
+                                    formatacao_incorreta = valida_tipo_sanguineo(todos_pacientes[espaco_livre].tipo_sanguineo);
+                                    if(formatacao_incorreta) {
+                                        printf(RED"Tipo Sanguíneo Inválido, Digite Novamente!\n"RESET);
+                                        continue;
+                                    }
+                                    break;
+                                }
 
+                                while(1) {
+                                    printf("Selecione o Fator RH do Paciente (Positivo ou Negativo) ou ENTER para pular:\n");
+                                    printf(BLUE"[1] Positivo     [2] Negativo\n"RESET);
+                                    ler_str(todos_pacientes[espaco_livre].fator_RH);
+
+                                    informacao_nao_obrigatoria = cadastro_informacao_nao_obrigatorio(fator_RH_pacientes[espaco_livre]);
+                                    if(informacao_nao_obrigatoria) {
+                                        strcpy(todos_pacientes[espaco_livre].fator_RH, "Nao Informado");
+                                        break;
+                                    }
+
+                                    formatacao_incorreta = valida_fato_rh(todos_pacientes[espaco_livre].fator_RH);
+                                    if(formatacao_incorreta) {
+                                        printf(RED"Fator RH Inválido, Digite Novamente!\n"RESET);
+                                        continue;
+                                    }
+                                    break;
+                                }
 
                                 }
 
@@ -130,21 +147,7 @@ int main(void) {
     return 0;
 }
 /*
-                                while (1) {
-                                    printf("Selecione o seu Tipo Sanguíneo (Sem o Fator RH) ou ENTER para pular:\n");
-                                    printf(BLUE"[1] A     [2] B     [3] AB     [4] O\n"RESET);
-                                    ler_str(tipo_sanguineo_pacientes[espaco_livre]);
 
-                                    informacao_nao_obrigatoria = cadastro_informacao_nao_obrigatorio(tipo_sanguineo_pacientes[espaco_livre]);
-                                    if(informacao_nao_obrigatoria) {break;}
-
-                                    formatacao_incorreta = valida_tipo_sanguineo(tipo_sanguineo_pacientes[espaco_livre]);
-                                    if(formatacao_incorreta) {
-                                        printf(RED"Tipo Sanguíneo Inválido, Digite Novamente!\n"RESET);
-                                        continue;
-                                    }
-                                    break;
-                                }
 
                                 while(1) {
                                     printf("Selecione o Fator RH do Paciente (Positivo ou Negativo) ou ENTER para pular:\n");
