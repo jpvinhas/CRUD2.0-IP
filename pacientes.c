@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "pacientes.h"
+#include "util.h"
+
 
 
 int menu_pacientes() {
@@ -17,10 +19,10 @@ int menu_pacientes() {
 
     while(1) {
         printf(YELLOW"\n\nSelecione a Funcionalidade Desejada: \n"RESET);
-        __fpurge(stdin);
+        fflush(stdin);
         int interacao_menu_pacientes;
         
-        __fpurge(stdin);
+        fflush(stdin);
         scanf("%d", &interacao_menu_pacientes);
 
         if(interacao_menu_pacientes < 1 || interacao_menu_pacientes > 10){
@@ -151,11 +153,12 @@ int cadastra_documento(char tipo_documento[], char str_documento[], int espaco_l
 
 
 int cadastro_informacao_nao_obrigatorio(char str_documento[]) {
-        int documento_nao_obrigatorio_vazio = str_documento[0] == '\0';
-        if(documento_nao_obrigatorio_vazio) {
-            strcpy(str_documento, "Não Informado");
-            return 1;
-        }
+    int documento_nao_obrigatorio_vazio = str_documento[0] == '\0';
+    if(documento_nao_obrigatorio_vazio) {
+        strcpy(str_documento, "Não Informado");
+        return 1;
+    }
+    return 0;
 }
 
 
@@ -172,20 +175,20 @@ int procura_informacao(char informacao_paciente[], char matriz_informacao_pacien
 }
 
 
-int cadastra_nome_paciente(char matriz_nomes_pacientes[][40],int espaco_livre, int QNTD_PACIENTES) {
+int cadastra_nome_paciente(paciente* novopaciente,paciente*pacientes, int qnt_pacientes) {
     while(1) {
         printf("Digite o Nome do Paciente:\n");
-        ler_str(matriz_nomes_pacientes[espaco_livre]);
+        ler_str(novopaciente->nome_paciente);
         
-        int nome_incorreto = checar_string(matriz_nomes_pacientes[espaco_livre]);
+        int nome_incorreto = checar_string(novopaciente->nome_paciente);
         if(nome_incorreto) {
             printf(RED"Digite o nome corretamente!\n"RESET);
             continue;
         }
 
-        formata_string_maisculo(matriz_nomes_pacientes[espaco_livre]);
+        formata_string_maisculo(novopaciente->nome_paciente);
         
-        int ja_cadastrado = ja_existe(matriz_nomes_pacientes[espaco_livre], matriz_nomes_pacientes,QNTD_PACIENTES,espaco_livre);
+        int ja_cadastrado = ja_existe(novopaciente->nome_paciente, pacientes,qnt_pacientes);
         if(ja_cadastrado) { 
             printf(RED"Paciente já cadastrado!\n"RESET);
             return 1;
@@ -208,7 +211,7 @@ void exibe_tipo_sanguineo_pacientes(char tipo_sanguineo[], char matriz_tipo_sang
     printf(BLUE"\n---------------------------------------------------------"RESET);
     printf(YELLOW"\n---> %s Negativo\n"RESET, tipo_sanguineo);
     busca_tipo_sanguineo(tam_matriz_tp_sanguineo, tipo_sanguineo, matriz_tipo_sanguineo, matriz_fator_RH, "Negativo", matriz_pacientes);
-    printf(BLUE"\n---------------------------------------------------------\n"RESET, tipo_sanguineo);
+    printf(BLUE"\n---------------------------------------------------------\n"RESET);
 }
 
 

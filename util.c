@@ -14,7 +14,6 @@
 #include <time.h>
 #include "util.h"
 
-
 int menu_principal() {
     printf(BLUE"\n******************************************\n"RESET);
     printf("\n"BLUE"*"RESET YELLOW"Seja Muito Bem vindo(a) a Clinica Fatima"RESET BLUE"*\n"RESET);
@@ -28,7 +27,7 @@ int menu_principal() {
     while(1) {
         int interacao_menu_pacientes;
 
-        __fpurge(stdin);
+        fflush(stdin);
         interacao_menu_pacientes = getchar();
 
         switch (interacao_menu_pacientes)
@@ -54,7 +53,7 @@ int coletar_opcao(char opcao1[],char opcao2[]){
         printf(BLUE"[0]"RESET" %s   "BLUE"[1]"RESET"%s\n",opcao1,opcao2);;
         
         printf(BLUE);
-        __fpurge(stdin);  
+        fflush(stdin);  
         opcao=getchar();
         printf(RESET);
         
@@ -78,12 +77,15 @@ int preenche_vetor_ativos(int vetor_ativos[], int tamanho_vetor) {
         vetor_ativos[i] = 0;
 }
 
+void* procura_paciente_livre(paciente* vetordestructs, int tamanho_vetor) {
+    for (int i = 0; i < tamanho_vetor; i++) {
 
-int preenche_matriz_bidimensional(char vetor_ativos[][40], int tamanho_vetor) {
-    for (int i = 0; i < tamanho_vetor; i++)
-        strcpy(vetor_ativos[i], "VOID");}
-
-
+        if(vetordestructs[i].ativo) {
+            return &vetordestructs[i];
+        }
+    }
+    return NULL;
+}
 int procura_espaco_livre(int vetor_ativos[], int tamanho_vetor) {
     for (int i = 0; i < tamanho_vetor; i++) {
 
@@ -94,11 +96,9 @@ int procura_espaco_livre(int vetor_ativos[], int tamanho_vetor) {
     return -1;
 }
 
-
-void ler_str(char string[]) {
-    
+void ler_str(char* string) {
     printf(BLUE);
-    __fpurge(stdin);  
+    fflush(stdin);  
     gets(string);
     printf(RESET);
 }
@@ -123,11 +123,9 @@ void formata_string_maisculo(char string[]) {
         string[i] = toupper(string[i]);
 }
 
-int ja_existe(char string[],char vetor[][40],int tamanho,int indice){
+int ja_existe(char* string,paciente*pacientes,int tamanho){
     for(int i = 0; i < tamanho; i++){
-        if(i == indice)
-            continue;
-        if(strcmp(string,vetor[i]) == 0){
+        if(strcmp(string,pacientes[i].nome_paciente) == 0){
             return 1;
         }
     }return 0;
@@ -194,11 +192,25 @@ void cria_codigo(char vetor[][8],int indice_livre){
         if(i==7)break;
         int indice_aleatorio = rand() % 36;
         novo_codigo[i] = caracteres[indice_aleatorio];
-        
     }
+    novo_codigo[8]='\0';
     strcpy(vetor[indice_livre],novo_codigo);
 }
+void cria_codigo2(void* codigo) {
+    char caracteres[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    char novo_codigo[9];
 
+    srand((unsigned int)time(NULL));
+
+    for (int i = 0; i < 8; i++) {
+        int indice_aleatorio = rand() % 36;
+        novo_codigo[i] = caracteres[indice_aleatorio];
+    }
+
+    novo_codigo[8] = '\0';
+
+    strcpy((char*)codigo, novo_codigo);
+}
 
 float soma_consultas_pagas_pacientes(char nome_paciente_desejado[], char matriz_nomes_paciente[][40], float vetor_preco_atendimentos[], int tamanho_vetores, int vetor_paciente_atendimento_indice[]) {
     float soma_consultas = 0;
@@ -232,3 +244,92 @@ int varrer_datas(char data[][40], char matriz_datas_atendimentos_copia[][40], in
     }
     return -1;
 }
+FILE* abrir_arquivo(const char nome[], const char modo[]){
+    FILE *arquivo = fopen(nome,modo);
+    if(arquivo == NULL){
+        arquivo= fopen(nome,"wb+");
+        printf("Arquivo %s criado! \n",nome);
+    }
+    printf("Arquivo %s aberto! \n",nome);
+    return arquivo;
+}
+void* ler(const char* nomeArquivo, size_t* numero_structs,size_t tamanho_struct) {
+    FILE* arquivo = abrir_arquivo(nomeArquivo, "rb+");
+
+    if (arquivo == NULL) {
+        perror("Erro ao abrir o arquivo");
+        exit(EXIT_FAILURE);
+    }
+
+    // Obtém o tamanho total do arquivo
+    fseek(arquivo, 0, SEEK_END);
+    long tamanhoArquivo = ftell(arquivo);
+    fseek(arquivo, 0, SEEK_SET);
+
+    *numero_structs = tamanhoArquivo / tamanho_struct;
+
+    // Aloca dinamicamente memória para o vetor de structs
+    void* vetorStructs = malloc(*numero_structs * tamanho_struct); // atendimento* vetor= (atendimento*)malloc(numero_structs * sizeof(atendimento));
+
+    if (vetorStructs == NULL) {
+        perror("Erro ao alocar memória para o vetor de structs");
+        fclose(arquivo);
+        exit(EXIT_FAILURE);
+    }
+
+    fread(vetorStructs, tamanho_struct, *numero_structs, arquivo);
+
+    fclose(arquivo);
+
+    return vetorStructs;
+}
+void adicionar(const char* nomeArquivo, void* novopaciente,int qnd_novos_pacientes) {
+    FILE* arquivo = fopen(nomeArquivo, "a+b");  // Abre o arquivo em modo de leitura e escrita no final
+
+    if (arquivo == NULL) {
+        perror("Erro ao abrir o arquivo");
+        exit(EXIT_FAILURE);
+    }
+
+    // Escreve os novos structs no final do arquivo
+    fwrite(novopaciente, sizeof(paciente), qnd_novos_pacientes, arquivo);
+    
+    fclose(arquivo);
+}
+void alterar(const char* nomeArquivo, size_t indice, void* novainformacao, size_t tamanho_struct) {
+    FILE* arquivo = fopen(nomeArquivo, "rb+");  // Abre o arquivo em modo de leitura e escrita
+
+    if (arquivo == NULL) {
+        perror("Erro ao abrir o arquivo");
+        exit(EXIT_FAILURE);
+    }
+
+    fseek(arquivo, indice * tamanho_struct, SEEK_SET);
+
+    // Escreve a nova struct na posição calculada
+    fwrite(novainformacao, tamanho_struct, 1, arquivo);
+
+    fclose(arquivo);
+}
+
+void* salvar(void* pacientes,void* atendimentos, int* alteracoes_pacientes, int* alteracoes_atendimentos, size_t qnd_pacientes,size_t qnd_atendimentos){
+    for(int i=0; i< qnd_pacientes;i++){
+        if(alteracoes_pacientes[i]==1) alterar("pacientes.bin",i,&pacientes[i],sizeof(paciente));
+    }
+    for(int i=0; i< qnd_pacientes;i++){
+        if(alteracoes_atendimentos[i]==1) alterar("atendimentos.bin",i,&atendimentos[i],sizeof(atendimento));
+    }
+}
+void* salvar_novos(void* novos_pacientes,void*novos_atendimentos,int* qnt_novos_pacientes, int* qnt_novos_atendimentos){
+    adicionar("pacientes.bin",novos_pacientes,*qnt_novos_pacientes);
+    adicionar("atendimentos.bin",novos_atendimentos,*qnt_novos_atendimentos);
+    qnt_novos_pacientes = 0;
+    qnt_novos_atendimentos= 0;
+}
+// int procura_paciente(const char* nome, paciente*pacientes , int qnt_pacientes){
+//     for(int i=0; i <qnt_pacientes; i++){
+//         if(!strcmp(pacientes[i].nome,nome))
+//         return i;
+//     }
+//     return -1;
+// }

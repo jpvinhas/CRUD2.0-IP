@@ -14,6 +14,17 @@
 #define CIANO   "\x1b[36m"
 #define RESET   "\x1b[0m"
 
+paciente* pacientes;
+atendimento* atendimentos;
+
+paciente novospacientes[10];
+atendimento novosatendimentos[10];
+
+
+int qnt_pacientes;
+int qnt_atendimentos;
+int qnt_alterados=0;
+
 
 int pacientes_ativos[QNTD_PACIENTES];
 
@@ -36,12 +47,13 @@ char data_atendimentos[QNTD_ATENDIMENTOS][40];
 char status_atendimentos[QNTD_ATENDIMENTOS][40];  
 float preco_atendimentos[QNTD_ATENDIMENTOS];
 
+
 int main(void) {
-    //preenche_matriz_bidimensional(nomes_pacientes,QNTD_PACIENTES); 
-    //preenche_matriz_bidimensional(data_atendimentos,QNTD_ATENDIMENTOS); 
     preenche_vetor_ativos(pacientes_ativos, QNTD_PACIENTES);
     preenche_vetor_ativos(atendimentos_ativos, QNTD_ATENDIMENTOS);
-
+    
+    pacientes = ler("pacientes.bin",&qnt_pacientes,sizeof(paciente));
+    atendimentos = ler("atendimentos.bin",&qnt_atendimentos,sizeof(atendimento));
 
     while(1) {
         system("clear");
@@ -65,18 +77,30 @@ int main(void) {
                             printf("\nOpção -> "BLUE"[1], \"Inserir um Novo Paciente\" "RESET"Selecionada...\n\n");
                             while (1) {
 
-                                espaco_livre = procura_espaco_livre(pacientes_ativos, QNTD_PACIENTES);
-                                if(espaco_livre < 0) {
-                                    printf(RED"\nCadastro Impossível, Quantidade de Pacientes Cadastrados Cheia!\n"RESET);
-                                    break;
+                                paciente* novopaciente = procura_paciente_livre(pacientes, qnt_pacientes);
+                                
+                                if(espaco_livre == NULL) {
+                                    novopaciente = &novospacientes[qnt_alterados];
                                 }
                                 
-                                if(cadastra_nome_paciente(nomes_pacientes, espaco_livre, QNTD_PACIENTES)) {
+                                if(cadastra_nome_paciente(novopaciente, pacientes, qnt_pacientes)) {
                                     if(!coletar_opcao("Inserir outro paciente", "Ir para o Menu Pacientes")) {continue;}
                                     else {break;}
                                 }
+                                printf("%s\n",novopaciente->nome_paciente);
                                 
-                                cria_codigo(codigo_pacientes,espaco_livre);
+                                for(;;){
+                                    int k=0;
+                                    cria_codigo2(novopaciente->codigo_paciente);
+                                    for(int i=0;i < qnt_pacientes;i++){
+                                        if(!strcmp(novopaciente->codigo_paciente,pacientes[i].codigo_paciente)) k=1;
+                                        break;
+                                    }
+                                    if(k) continue;
+                                    break;
+                                }
+                                
+                                printf("%s\n",novopaciente->codigo_paciente);
 
                                 cadastra_documento("RG", RG_pacientes[espaco_livre], espaco_livre);
                                 if(procura_informacao(RG_pacientes[espaco_livre], RG_pacientes, 12, espaco_livre)) { 
@@ -740,6 +764,7 @@ int main(void) {
                 break;
         }continue;
     }
-
+    free(pacientes);
+    free(atendimentos);
     return 0;
 }

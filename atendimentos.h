@@ -4,14 +4,15 @@
 #include "pacientes.h"
 #include "util.h"
 
-struct atendimentos
+typedef struct
 {   char paciente_do_atendimento[40];
     char codigo_atendimento[8];
     char tipo_atendimento[40];  
     char data_atendimento[40];
     char status_atendimento[40];  
     float preco_atendimento;
-};
+    int ativo;
+}atendimento;
 
 #define RED     "\x1b[31m"
 #define GREEN   "\x1b[32m"
