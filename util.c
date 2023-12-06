@@ -77,15 +77,15 @@ int preenche_vetor_ativos(int vetor_ativos[], int tamanho_vetor) {
         vetor_ativos[i] = 0;
 }
 
-void* procura_paciente_livre(paciente* vetordestructs, int tamanho_vetor) {
-    for (int i = 0; i < tamanho_vetor; i++) {
+// void* procura_paciente_livre(paciente* vetordestructs, int tamanho_vetor) {
+//     for (int i = 0; i < tamanho_vetor; i++) {
 
-        if(vetordestructs[i].ativo) {
-            return &vetordestructs[i];
-        }
-    }
-    return NULL;
-}
+//         if(vetordestructs[i].ativo) {
+//             return &vetordestructs[i];
+//         }
+//     }
+//     return NULL;
+// }
 int procura_espaco_livre(int vetor_ativos[], int tamanho_vetor) {
     for (int i = 0; i < tamanho_vetor; i++) {
 
@@ -100,6 +100,7 @@ void ler_str(char* string) {
     printf(BLUE);
     fflush(stdin);  
     gets(string);
+    fflush(stdin);
     printf(RESET);
 }
 int checar_string(char string[]){
@@ -123,13 +124,13 @@ void formata_string_maisculo(char string[]) {
         string[i] = toupper(string[i]);
 }
 
-int ja_existe(char* string,paciente*pacientes,int tamanho){
-    for(int i = 0; i < tamanho; i++){
-        if(strcmp(string,pacientes[i].nome_paciente) == 0){
-            return 1;
-        }
-    }return 0;
-}
+// int ja_existe(char* string,paciente*pacientes,int tamanho){
+//     for(int i = 0; i < tamanho; i++){
+//         if(strcmp(string,pacientes[i].nome_paciente) == 0){
+//             return 1;
+//         }
+//     }return 0;
+// }
 int procura_string(char string[],char vetor[][40],int tamanho){
     for(int i = 0; i < tamanho; i++){
         if(strcmp(string,vetor[i]) == 0){
@@ -165,6 +166,30 @@ void receber_data(char vetor[][40],int indice_livre) {
         }
 
         sprintf(vetor[indice_livre],"%02d/%02d/%04d", dia, mes, ano);
+
+        break;
+    }
+
+}
+void receber_data2(char* data) {
+    int dia, mes, ano;
+    while(1){
+        printf(BLUE"Digite o dia: "RESET);
+        scanf("%d", &dia);
+
+        printf(BLUE"Digite o mês: "RESET);
+        scanf("%d", &mes);
+
+        printf(BLUE"Digite o ano (ex. 2023): "RESET);
+        scanf("%d", &ano);
+        
+        if (!(dia >= 1 && dia <= 31 && mes >= 1 && mes <= 12 && ano >= 1900)){
+        printf("Data inválida!\n");
+        if(coletar_opcao("Voltar","Tentar novamente"))continue;
+        return;
+        }
+
+        sprintf(data,"%02d/%02d/%04d", dia, mes, ano);
 
         break;
     }
@@ -283,16 +308,17 @@ void* ler(const char* nomeArquivo, size_t* numero_structs,size_t tamanho_struct)
 
     return vetorStructs;
 }
-void adicionar(const char* nomeArquivo, void* novopaciente,int qnd_novos_pacientes) {
-    FILE* arquivo = fopen(nomeArquivo, "a+b");  // Abre o arquivo em modo de leitura e escrita no final
-
+void adicionar(const char* nomeArquivo, void* novospaciente,int qnd_novos_pacientes,size_t tam_struct) {
+    FILE* arquivo = fopen(nomeArquivo, "ab+");  // Abre o arquivo em modo de leitura e escrita no final
+    printf("4");
     if (arquivo == NULL) {
         perror("Erro ao abrir o arquivo");
         exit(EXIT_FAILURE);
     }
 
     // Escreve os novos structs no final do arquivo
-    fwrite(novopaciente, sizeof(paciente), qnd_novos_pacientes, arquivo);
+    fseek(arquivo, 0, SEEK_END);  // Move o ponteiro para o final do arquivo
+    fwrite(novospaciente, tam_struct, qnd_novos_pacientes, arquivo);
     
     fclose(arquivo);
 }
@@ -312,24 +338,40 @@ void alterar(const char* nomeArquivo, size_t indice, void* novainformacao, size_
     fclose(arquivo);
 }
 
-void* salvar(void* pacientes,void* atendimentos, int* alteracoes_pacientes, int* alteracoes_atendimentos, size_t qnd_pacientes,size_t qnd_atendimentos){
-    for(int i=0; i< qnd_pacientes;i++){
-        if(alteracoes_pacientes[i]==1) alterar("pacientes.bin",i,&pacientes[i],sizeof(paciente));
-    }
-    for(int i=0; i< qnd_pacientes;i++){
-        if(alteracoes_atendimentos[i]==1) alterar("atendimentos.bin",i,&atendimentos[i],sizeof(atendimento));
-    }
-}
-void* salvar_novos(void* novos_pacientes,void*novos_atendimentos,int* qnt_novos_pacientes, int* qnt_novos_atendimentos){
-    adicionar("pacientes.bin",novos_pacientes,*qnt_novos_pacientes);
-    adicionar("atendimentos.bin",novos_atendimentos,*qnt_novos_atendimentos);
-    qnt_novos_pacientes = 0;
-    qnt_novos_atendimentos= 0;
-}
-// int procura_paciente(const char* nome, paciente*pacientes , int qnt_pacientes){
-//     for(int i=0; i <qnt_pacientes; i++){
-//         if(!strcmp(pacientes[i].nome,nome))
-//         return i;
+// void salvar(paciente* pacientes,atendimento* atendimentos, int* alteracoes_pacientes, int* alteracoes_atendimentos, int qnd_pacientes,int qnd_atendimentos){
+//     for(int i=0; i< qnd_pacientes;i++){
+//         if(alteracoes_pacientes[i]==1) alterar("pacientes.bin",i,&pacientes[i],sizeof(paciente));
 //     }
-//     return -1;
+//     for(int i=0; i< qnd_pacientes;i++){
+//         if(alteracoes_atendimentos[i]==1) alterar("atendimentos.bin",i,&atendimentos[i],sizeof(atendimento));
+//     }
 // }
+// void salvar_novos(paciente* pacientes,atendimento* atendimentos,void* novos_pacientes,void*novos_atendimentos,int qnt_novos_pacientes, int qnt_novos_atendimentos, int qnt_pacientes,int qnt_atendimentos){
+//     // for(int i =0;i< qnt_pacientes;i++){
+//     //     if(qnt_novos_pacientes==0)break;
+//     //     if(pacientes[i].ativo == 0){
+//     //         alterar("pacientes.bin",i,novos_pacientes,sizeof(paciente));
+//     //         qnt_novos_pacientes--;
+//     //     }
+//     // }
+//     // for(int i =0;i< qnt_atendimentos;i++){
+//     //     if(qnt_novos_atendimentos==0)break;
+//     //     if(atendimentos[i].ativo == 0){
+//     //         alterar("atendimentos.bin",i,novos_atendimentos,sizeof(atendimento));
+//     //         qnt_novos_atendimentos--;
+//     //     }
+//     // }
+//     //if(qnt_novos_pacientes)s
+//     adicionar("pacientes.bin",novos_pacientes,qnt_novos_pacientes,sizeof(paciente));
+//     // if(qnt_novos_atendimentos)
+//     adicionar("atendimentos.bin",novos_atendimentos,qnt_novos_atendimentos,sizeof(atendimento));
+//     qnt_novos_pacientes = 0;
+//     qnt_novos_atendimentos= 0;
+// }
+// // int procura_paciente(const char* nome, paciente*pacientes , int qnt_pacientes){
+// //     for(int i=0; i <qnt_pacientes; i++){
+// //         if(!strcmp(pacientes[i].nome,nome))
+// //         return i;
+// //     }
+// //     return -1;
+// // }

@@ -2,7 +2,6 @@
 #define ATENDIMENTOS_H
 
 #include "pacientes.h"
-#include "util.h"
 
 typedef struct
 {   char paciente_do_atendimento[40];
@@ -34,5 +33,7 @@ void receber_tipo_atendimento(char tipo_atendimentos[][40],int espaco_livre);
 float receber_preco();
 int compara_data(char data1[],char data2[]);
 void ordenar_datas(char datas[][40],int ordem_datas[],int tamanho,int atendimentos_ativos[]);
-
+void adicionar_atendimentos(const char* nomeArquivo, atendimento* novosatendimentos,int qnd_novos_atendimentos,size_t tam_struct);
+void salvar(paciente* pacientes,atendimento* atendimentos, int* alteracoes_pacientes, int* alteracoes_atendimentos, int qnd_pacientes,int qnd_atendimentos);
+void salvar_novos(paciente* pacientes,atendimento* atendimentos,paciente* novos_pacientes,atendimento*novos_atendimentos,int qnt_novos_pacientes, int qnt_novos_atendimentos, int qnt_pacientes,int qnt_atendimentos);
 #endif

@@ -20,10 +20,14 @@ atendimento* atendimentos;
 paciente novospacientes[10];
 atendimento novosatendimentos[10];
 
-
-int qnt_pacientes;
-int qnt_atendimentos;
-int qnt_alterados=0;
+size_t qnt_pacientes=0;
+size_t qnt_atendimentos=0;
+int qnt_novos_pacientes=0;
+int qnt_novos_atendimentos=0;
+int qnt_pacientes_alterados=0;
+int qnt_atendimentos_alterados=0;
+int *pacientes_alterados;
+int *atendimentos_alterados;
 
 
 int pacientes_ativos[QNTD_PACIENTES];
@@ -53,10 +57,20 @@ int main(void) {
     preenche_vetor_ativos(atendimentos_ativos, QNTD_ATENDIMENTOS);
     
     pacientes = ler("pacientes.bin",&qnt_pacientes,sizeof(paciente));
+    pacientes_alterados= malloc(qnt_pacientes * sizeof(int));
+    preenche_vetor_ativos(pacientes_alterados,qnt_pacientes);
+    
     atendimentos = ler("atendimentos.bin",&qnt_atendimentos,sizeof(atendimento));
+    atendimentos_alterados= malloc(qnt_atendimentos * sizeof(int));
+    preenche_vetor_ativos(atendimentos_alterados,qnt_atendimentos);
+    printf("qnt pacientes= %d\n",qnt_pacientes);
+    //strcpy(pacientes[0].nome_paciente,"joao");
+    printf("nome paciente [0]%s\n",pacientes[0].nome_paciente);
+    printf("codigo paciente[0]%s\n",pacientes[0].codigo_paciente);
+    printf("tamando atruct paciente =%zu\n",sizeof(pacientes));
 
+    int qnt_adicionados=0;
     while(1) {
-        system("clear");
         
         int interacao_menu_principal = menu_principal();
 
@@ -73,21 +87,21 @@ int main(void) {
 
                     switch (interacao_menu_pacientes) {
                         case 1:
-                            system("clear");
                             printf("\nOpção -> "BLUE"[1], \"Inserir um Novo Paciente\" "RESET"Selecionada...\n\n");
                             while (1) {
 
                                 paciente* novopaciente = procura_paciente_livre(pacientes, qnt_pacientes);
                                 
                                 if(espaco_livre == NULL) {
-                                    novopaciente = &novospacientes[qnt_alterados];
+                                    novopaciente = &novospacientes[qnt_novos_pacientes];
                                 }
                                 
-                                if(cadastra_nome_paciente(novopaciente, pacientes, qnt_pacientes)) {
+                                if(cadastra_nome_paciente2(novopaciente->nome_paciente, pacientes, qnt_pacientes)) {
                                     if(!coletar_opcao("Inserir outro paciente", "Ir para o Menu Pacientes")) {continue;}
                                     else {break;}
                                 }
                                 printf("%s\n",novopaciente->nome_paciente);
+                                printf("%s\n",novospacientes[0].nome_paciente);
                                 
                                 for(;;){
                                     int k=0;
@@ -102,67 +116,72 @@ int main(void) {
                                 
                                 printf("%s\n",novopaciente->codigo_paciente);
 
-                                cadastra_documento("RG", RG_pacientes[espaco_livre], espaco_livre);
-                                if(procura_informacao(RG_pacientes[espaco_livre], RG_pacientes, 12, espaco_livre)) { 
+                                cadastra_documento2("RG", novopaciente->RG_paciente);
+                                if(procura_informacao2(novopaciente->RG_paciente, pacientes, qnt_pacientes)) { 
                                     printf(RED"RG já cadastrado --> Impossível Inserir este Paciente!\n"RESET);
 
                                     if(!coletar_opcao("Inserir outro paciente", "Ir para o Menu Pacientes")) {continue;}
                                     else {break;}
                                 }
+                                printf("%s\n",novopaciente->RG_paciente);
 
-
-                                cadastra_documento("CPF", CPF_pacientes[espaco_livre], espaco_livre);
-                                if(procura_informacao(CPF_pacientes[espaco_livre], CPF_pacientes, 12, espaco_livre)) { 
+                                cadastra_documento2("CPF", novopaciente->CPF_paciente);
+                                if(procura_informacao2(novopaciente->CPF_paciente, pacientes, qnt_pacientes)) { 
                                     printf(RED"CPF já cadastrado --> Impossível Inserir este Paciente!\n"RESET);
                                     
                                     if(!coletar_opcao("Inserir outro paciente", "Ir para o Menu Pacientes")) {continue;}
                                     else {break;}
 
                                 }
+                                printf("%s\n",novopaciente->CPF_paciente);
 
                                 while (1) {
                                     printf("Selecione o seu Tipo Sanguíneo (Sem o Fator RH) ou ENTER para pular:\n");
                                     printf(BLUE"[1] A     [2] B     [3] AB     [4] O\n"RESET);  
-                                    ler_str(tipo_sanguineo_pacientes[espaco_livre]);
+                                    ler_str(novopaciente->tipo_sanguineo_paciente);
 
-                                    informacao_nao_obrigatoria = cadastro_informacao_nao_obrigatorio(tipo_sanguineo_pacientes[espaco_livre]);
+                                    informacao_nao_obrigatoria = cadastro_informacao_nao_obrigatorio(novopaciente->tipo_sanguineo_paciente);
                                     if(informacao_nao_obrigatoria) {break;}
                                     
-                                    formatacao_incorreta = valida_tipo_sanguineo(tipo_sanguineo_pacientes[espaco_livre]);
+                                    formatacao_incorreta = valida_tipo_sanguineo(novopaciente->tipo_sanguineo_paciente);
                                     if(formatacao_incorreta) {
                                         printf(RED"Tipo Sanguíneo Inválido, Digite Novamente!\n"RESET);
                                         continue;
                                     }
                                     break;
                                 }
+                                printf("%s\n",novopaciente->tipo_sanguineo_paciente);
 
                                 while(1) {
                                     printf("Selecione o Fator RH do Paciente (Positivo ou Negativo) ou ENTER para pular:\n");
                                     printf(BLUE"[1] Positivo     [2] Negativo\n"RESET);
-                                    ler_str(fator_RH_pacientes[espaco_livre]);
+                                    ler_str(novopaciente->fator_RH_paciente);
 
-                                    informacao_nao_obrigatoria = cadastro_informacao_nao_obrigatorio(fator_RH_pacientes[espaco_livre]);
+                                    informacao_nao_obrigatoria = cadastro_informacao_nao_obrigatorio(novopaciente->fator_RH_paciente);
                                     if(informacao_nao_obrigatoria) {break;}
                                         
-                                    formatacao_incorreta = valida_fato_rh(fator_RH_pacientes[espaco_livre]);
+                                    formatacao_incorreta = valida_fato_rh(novopaciente->fator_RH_paciente);
                                     if(formatacao_incorreta) {
                                         printf(RED"Fator RH Inválido, Digite Novamente!\n"RESET);
                                         continue;
                                     }
                                         break;
                                 }
+                                printf("%s\n",novopaciente->fator_RH_paciente);
 
                                 printf("Digite seu Endereço ou ENTER para pular:\n");
-                                ler_str(endereco_pacientes[espaco_livre]);
-                                informacao_nao_obrigatoria = cadastro_informacao_nao_obrigatorio(endereco_pacientes[espaco_livre]);
+                                ler_str(novopaciente->endereco_paciente);
+                                informacao_nao_obrigatoria = cadastro_informacao_nao_obrigatorio(novopaciente->endereco_paciente);
+                                
+                                printf("%s\n",novopaciente->endereco_paciente);
 
                                 printf("Digite a Data de Nascimento do Paciente:\n");
-                                receber_data(datas_nascimento_pacientes, espaco_livre);
-
-                                system("clear");
-                                exibe_informacoes_paciente(nomes_pacientes, codigo_pacientes, RG_pacientes, CPF_pacientes, tipo_sanguineo_pacientes, fator_RH_pacientes, endereco_pacientes, datas_nascimento_pacientes, espaco_livre);
-
-                                pacientes_ativos[espaco_livre] = 1;
+                                receber_data2(novopaciente->data_nascimento_paciente);
+                                printf("%s\n",novopaciente->data_nascimento_paciente);
+                                //system("clear");
+                                qnt_novos_pacientes++;
+                                novopaciente->ativo=1;
+                                exibe_informacoes_paciente2(novopaciente);
                                 
                                 if(!coletar_opcao("Incluir novo paciente", "Voltar ao Menu Pacientes")) {continue;}
                                 else {break;}                   
@@ -445,7 +464,7 @@ int main(void) {
                             while(1) {
                                 printf("\nOpção -> "BLUE"[7], \"Exibir Todos os Pacientes\""RESET" Selecionada...\n\n");
 
-                                exibir_todos_pacientes(nomes_pacientes, pacientes_ativos, QNTD_ATENDIMENTOS);
+                                exibir_todos_pacientes2(pacientes,qnt_pacientes);
 
                                 if(!coletar_opcao("Exibir todos os Pacientes Novamente", "Ir para o Menu Pacientes")) {continue;}
                                 else {break;}
@@ -499,6 +518,28 @@ int main(void) {
                             break;
                         case 10:
                             printf("\nOpção -> "BLUE"[10], \"Voltar para o Menu Anterior\""RESET" Selecionada...\n\n");
+                            break;
+                        case 11:
+                            salvar(pacientes,atendimentos,&pacientes_alterados,&atendimentos_alterados,qnt_pacientes,qnt_atendimentos);
+                            salvar_novos(pacientes,atendimentos,&novospacientes,&novosatendimentos,qnt_novos_pacientes,qnt_novos_atendimentos,qnt_pacientes,qnt_atendimentos);
+                            
+                            free(pacientes);
+                            free(pacientes_alterados);
+                            qnt_novos_pacientes=0;
+                            
+                            pacientes = ler("pacientes.bin",&qnt_pacientes,sizeof(paciente));
+                            pacientes_alterados= malloc(qnt_pacientes * sizeof(int));
+                            preenche_vetor_ativos(pacientes_alterados,qnt_pacientes);
+                            
+                            free(atendimentos);
+                            free(atendimentos_alterados);
+                            qnt_novos_atendimentos=0;
+    
+                            atendimentos = ler("atendimentos.bin",&qnt_atendimentos,sizeof(atendimento));
+                            atendimentos_alterados= malloc(qnt_atendimentos * sizeof(int));
+                            preenche_vetor_ativos(atendimentos_alterados,qnt_atendimentos);
+                            
+                            printf(GREEN"Alterações Salvas! \n"RESET);
                             break;
                         default:
                             printf(RED"\nSelecione alguma das opções anteriores!\n"RESET);

@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <string.h>
 #include "pacientes.h"
-#include "util.h"
 
 
 
@@ -15,6 +14,8 @@ int menu_pacientes() {
     printf("\n"BLUE"[6]"RESET" Exibir os Dados de Pacientes pelo Dia de Consulta\n"BLUE"[7]"RESET" Exibir Todos os Pacientes");
     printf("\n"BLUE"[8]"RESET"Exibir Todos os Pacientes em Ordem Alfabética\n"BLUE"[9]"RESET"Exibir a Soma das Consultas Pagas por um Determinado Paciente");
     printf(BLUE"\n[10]"RESET"Voltar para o Menu Principal");
+    printf(BLUE"\n[11]"RESET"Salvar");
+
     printf("\n------------------------------------------------------------------------\n");
 
     while(1) {
@@ -25,7 +26,7 @@ int menu_pacientes() {
         fflush(stdin);
         scanf("%d", &interacao_menu_pacientes);
 
-        if(interacao_menu_pacientes < 1 || interacao_menu_pacientes > 10){
+        if(interacao_menu_pacientes < 1 || interacao_menu_pacientes > 11){
             printf(RED"Selecione uma das Opções Anteriores!\n"RESET);
             continue;
         }
@@ -39,14 +40,27 @@ int menu_pacientes() {
 
 void exibe_informacoes_paciente(char nomes_pacientes[][40], char codigo_pacientes[][8], char RG_pacientes[][12], char CPF_pacientes[][12], char tipo_sanguineo_pacientes[][3], char fator_RH_pacientes[][9], char endereco_pacientes[][40], char datas_nascimento_pacientes[][40], int espaco_livre) {
     printf("\n-----------"GREEN"Paciente"RESET"-----------\n");
-    printf("-> "BLUE"Nome:"RESET" "GREEN"%s\n"RESET, &nomes_pacientes[espaco_livre]);
-    printf("-> "BLUE"Código do Paciente:"RESET" "GREEN"%s\n"RESET, &codigo_pacientes[espaco_livre]);
-    printf("-> "BLUE"RG do Paciente:"RESET" "GREEN"%s\n"RESET, &RG_pacientes[espaco_livre]);
-    printf("-> "BLUE"CPF do Paciente:"RESET" "GREEN"%s\n"RESET, &CPF_pacientes[espaco_livre]);
-    printf("-> "BLUE"Tipo Sanguíneo do Paciente:"RESET" "GREEN"%s\n"RESET, &tipo_sanguineo_pacientes[espaco_livre]);
-    printf("-> "BLUE"Fator RH  do Paciente:"RESET" "GREEN"%s\n"RESET, &fator_RH_pacientes[espaco_livre]);
-    printf("-> "BLUE"Endereço do Paciente:"RESET" "GREEN"%s\n"RESET, &endereco_pacientes[espaco_livre]);
-    printf("-> "BLUE"Data de Nascimento do Paciente:"RESET GREEN"%s\n"RESET, &datas_nascimento_pacientes[espaco_livre]);
+    printf("-> "BLUE"Nome:"RESET" "GREEN"%s\n"RESET, nomes_pacientes[espaco_livre]);
+    printf("-> "BLUE"Código do Paciente:"RESET" "GREEN"%s\n"RESET, codigo_pacientes[espaco_livre]);
+    printf("-> "BLUE"RG do Paciente:"RESET" "GREEN"%s\n"RESET, RG_pacientes[espaco_livre]);
+    printf("-> "BLUE"CPF do Paciente:"RESET" "GREEN"%s\n"RESET, CPF_pacientes[espaco_livre]);
+    printf("-> "BLUE"Tipo Sanguíneo do Paciente:"RESET" "GREEN"%s\n"RESET, tipo_sanguineo_pacientes[espaco_livre]);
+    printf("-> "BLUE"Fator RH  do Paciente:"RESET" "GREEN"%s\n"RESET, fator_RH_pacientes[espaco_livre]);
+    printf("-> "BLUE"Endereço do Paciente:"RESET" "GREEN"%s\n"RESET, endereco_pacientes[espaco_livre]);
+    printf("-> "BLUE"Data de Nascimento do Paciente:"RESET GREEN"%s\n"RESET, datas_nascimento_pacientes[espaco_livre]);
+    printf("--------------------------------------------\n");
+
+}
+void exibe_informacoes_paciente2(paciente *infopaciente){
+    printf("\n-----------"GREEN"Paciente"RESET"-----------\n");
+    printf("-> "BLUE"Nome:"RESET" "GREEN"%s\n"RESET, infopaciente->nome_paciente);
+    printf("-> "BLUE"Código do Paciente:"RESET" "GREEN"%s\n"RESET, infopaciente->codigo_paciente);
+    printf("-> "BLUE"RG do Paciente:"RESET" "GREEN"%s\n"RESET, infopaciente->RG_paciente);
+    printf("-> "BLUE"CPF do Paciente:"RESET" "GREEN"%s\n"RESET, infopaciente->CPF_paciente);
+    printf("-> "BLUE"Tipo Sanguíneo do Paciente:"RESET" "GREEN"%s\n"RESET, infopaciente->tipo_sanguineo_paciente);
+    printf("-> "BLUE"Fator RH  do Paciente:"RESET" "GREEN"%s\n"RESET, infopaciente->fator_RH_paciente);
+    printf("-> "BLUE"Endereço do Paciente:"RESET" "GREEN"%s\n"RESET, infopaciente->endereco_paciente);
+    printf("-> "BLUE"Data de Nascimento do Paciente:"RESET GREEN"%s\n"RESET, infopaciente->data_nascimento_paciente);
     printf("--------------------------------------------\n");
 
 }
@@ -118,8 +132,6 @@ int valida_documento(char documento[]) {
 
     return 0;
 }
-
-
 int cadastra_documento(char tipo_documento[], char str_documento[], int espaco_livre) {
     while(1) {
         printf("Digite o %s do Paciente", tipo_documento);
@@ -151,8 +163,39 @@ int cadastra_documento(char tipo_documento[], char str_documento[], int espaco_l
     return 0;
 }
 
+int cadastra_documento2(char* tipo_documento, char* str_documento) {
+    while(1) {
+        printf("Digite o %s do Paciente", tipo_documento);
 
-int cadastro_informacao_nao_obrigatorio(char str_documento[]) {
+        int documento_nao_obrigatorio = !(strcmp(tipo_documento, "RG"));
+        if(documento_nao_obrigatorio) {
+            printf(" ou ENTER para Não Informar:\n");
+        }
+        else {
+            printf(":\n");
+        }
+
+        ler_str(str_documento);
+
+        int enter_pressionado = cadastro_informacao_nao_obrigatorio(str_documento);
+        if(documento_nao_obrigatorio && enter_pressionado) {
+            return 1;
+        }
+    
+        int documento_invalido = valida_documento(str_documento);
+        if(documento_invalido) {
+            printf(RED"%s Inválido!\n"RESET, tipo_documento);
+            continue;
+        }
+
+        break;
+    }
+    
+    return 0;
+}
+
+
+int cadastro_informacao_nao_obrigatorio(char* str_documento) {
     int documento_nao_obrigatorio_vazio = str_documento[0] == '\0';
     if(documento_nao_obrigatorio_vazio) {
         strcpy(str_documento, "Não Informado");
@@ -160,7 +203,6 @@ int cadastro_informacao_nao_obrigatorio(char str_documento[]) {
     }
     return 0;
 }
-
 
 int procura_informacao(char informacao_paciente[], char matriz_informacao_paciente[][12], int tamanho_matriz, int indice_matriz) {  
         for(int i = 0; i < tamanho_matriz; i++){
@@ -173,22 +215,51 @@ int procura_informacao(char informacao_paciente[], char matriz_informacao_pacien
     
     return 0;
 }
-
-
-int cadastra_nome_paciente(paciente* novopaciente,paciente*pacientes, int qnt_pacientes) {
+int procura_informacao2(char* informacao_paciente, paciente*pacientes, int tamanho_matriz) {  
+    
+    for(int i = 0; i < tamanho_matriz; i++){
+        if(!(strcmp(informacao_paciente, pacientes[i].nome_paciente))) return 1;
+    }
+    return 0;
+}
+int cadastra_nome_paciente(char* novopaciente,paciente*pacientes, int qnt_pacientes) {
     while(1) {
         printf("Digite o Nome do Paciente:\n");
-        ler_str(novopaciente->nome_paciente);
+        ler_str(novopaciente);
         
-        int nome_incorreto = checar_string(novopaciente->nome_paciente);
+        int nome_incorreto = checar_string(novopaciente);
         if(nome_incorreto) {
             printf(RED"Digite o nome corretamente!\n"RESET);
             continue;
         }
 
-        formata_string_maisculo(novopaciente->nome_paciente);
+        formata_string_maisculo(novopaciente);
         
-        int ja_cadastrado = ja_existe(novopaciente->nome_paciente, pacientes,qnt_pacientes);
+        int ja_cadastrado = ja_existe(novopaciente, pacientes,qnt_pacientes);
+        if(ja_cadastrado) { 
+            printf(RED"Paciente já cadastrado!\n"RESET);
+            return 1;
+        }
+
+        break;
+    }
+
+    return 0;
+}
+int cadastra_nome_paciente2(char* novopaciente,paciente*pacientes, int qnt_pacientes) {
+    while(1) {
+        printf("Digite o Nome do Paciente:\n");
+        ler_str(novopaciente);
+        
+        int nome_incorreto = checar_string(novopaciente);
+        if(nome_incorreto) {
+            printf(RED"Digite o nome corretamente!\n"RESET);
+            continue;
+        }
+
+        formata_string_maisculo(novopaciente);
+        
+        int ja_cadastrado = ja_existe(novopaciente, pacientes,qnt_pacientes);
         if(ja_cadastrado) { 
             printf(RED"Paciente já cadastrado!\n"RESET);
             return 1;
@@ -238,6 +309,21 @@ void exibir_todos_pacientes(char matriz_pacientes[][40], int vetor_ativos[], int
     for(int i = 0; i < tamanho_matriz; i++) {
         if(vetor_ativos[i]) {
             printf("-> "GREEN"Paciente (%03d): %s"RESET"\n", i , matriz_pacientes[i]);
+            count++;;
+        }
+    }
+    if(!count){printf(RED"Sem Pacientes Cadastrados!\n"RESET);}
+
+    printf(BLUE"-----------------------------------------------\n\n"RESET);
+}
+void exibir_todos_pacientes2(paciente*pacientes, int tamanho) {
+    int count = 0;
+
+    printf(BLUE"----Pacientes cadastrados na Clinica Fátima----\n"RESET);
+    for(int i = 0; i < tamanho; i++) {
+        if(pacientes[i].ativo) {
+            printf("-> "GREEN"Paciente (%03d): %s"RESET"\n", i , pacientes[i].nome_paciente);
+            exibe_informacoes_paciente2(&pacientes[i]);
             count++;;
         }
     }
@@ -327,4 +413,34 @@ int verifica_cadastro_paciente(char matriz_nomes_paciente[][40], int tam_matriz_
         }
     }
     return 0;
+}
+void* procura_paciente_livre(paciente* vetordestructs, int tamanho_vetor) {
+    for (int i = 0; i < tamanho_vetor; i++) {
+
+        if(vetordestructs[i].ativo) {
+            return &vetordestructs[i];
+        }
+    }
+    return NULL;
+}
+int ja_existe(char* string,paciente*pacientes,int tamanho){
+    for(int i = 0; i < tamanho; i++){
+        if(strcmp(string,pacientes[i].nome_paciente) == 0){
+            return 1;
+        }
+    }return 0;
+}
+void adicionar_pacientes(const char* nomeArquivo, paciente* novospaciente,int qnd_novos_pacientes,size_t tam_struct) {
+    FILE* arquivo = fopen(nomeArquivo, "ab+");  // Abre o arquivo em modo de leitura e escrita no final
+    printf("4");
+    if (arquivo == NULL) {
+        perror("Erro ao abrir o arquivo");
+        exit(EXIT_FAILURE);
+    }
+
+    // Escreve os novos structs no final do arquivo
+    fseek(arquivo, 0, SEEK_END);  // Move o ponteiro para o final do arquivo
+    fwrite(novospaciente, tam_struct, qnd_novos_pacientes, arquivo);
+    
+    fclose(arquivo);
 }
