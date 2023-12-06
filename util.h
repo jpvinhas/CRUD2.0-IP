@@ -32,7 +32,7 @@ void receber_data(char vetor[][40],int indice_livre);
 
 void imprimir_vetor(char vetor[][40],int tamanho);
 void cria_codigo(char vetor[][8],int indice_livre);
-void cria_codigo2(void* codigo);
+void cria_codigo2(char* codigo);
 float soma_consultas_pagas_pacientes(char nome_paciente_desejado[], char matriz_nomes_paciente[][40], float vetor_preco_atendimentos[], int tamanho_vetores, int vetor_paciente_atendimento_indice[]);
 void copia_matriz(char matriz1[][40], char matriz2[][40], int tamanho);
 int varrer_datas(char data[][40], char matriz_datas_atendimentos_copia[][40], int tam_matriz_datas_atendimentos);

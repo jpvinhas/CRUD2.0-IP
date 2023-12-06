@@ -196,7 +196,7 @@ void cria_codigo(char vetor[][8],int indice_livre){
     novo_codigo[8]='\0';
     strcpy(vetor[indice_livre],novo_codigo);
 }
-void cria_codigo2(void* codigo) {
+void cria_codigo2(char* codigo) {
     char caracteres[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     char novo_codigo[9];
 

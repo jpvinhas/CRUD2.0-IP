@@ -33,9 +33,15 @@ int menu_atendimento() {
 
     return opcao;
 }
-void exibir_dados_atendimento(char codigo[][8],char paciente[][40],char codigo_paciente[][8],int indice_paciente,char data[][40],char tipo[][40],float preco[],char status[][40],int indice_atendimento){
-    printf("Código------Paciente------------Código do Paciente----------Data-----------Tipo----------Preço---------Status--------\n");
-    printf("%s   |   %s   |  %s   |   %s   |   %s   |   R$%.2f   |   %s  \n   ",codigo[indice_atendimento],paciente[indice_paciente],codigo_paciente[indice_paciente],data[indice_atendimento],tipo[indice_atendimento],preco[indice_atendimento],status[indice_atendimento]);
+void exibir_dados_atendimento(atendimento *novo_atendimento) {
+    printf("*--Código-----Código do Paciente------Data-------Tipo-----Preço-----Status----*\n");
+    printf("   %s  |       %s       |   22/22/2222  |   %s   |  R$%.2f  | %s\n\n",
+           novo_atendimento->codigo_atendimento,
+           novo_atendimento->codigo_paciente,
+           //novo_atendimento->data,
+           novo_atendimento->tipo,
+           novo_atendimento->preco,
+           novo_atendimento->status);
 }
 void receber_status_atendimento(atendimento *novo_atendimento){
     char opcao;
@@ -183,4 +189,14 @@ void ordenar_datas(char datas[][40],int ordem_datas[],int tamanho,int atendiment
             }
         }
     }
+}
+
+
+void* procura_atendimento_livre(atendimento* atendimentos_arquivados, int tamanho_vetor) {
+    for (int i = 0; i < tamanho_vetor; i++) {
+        if(atendimentos_arquivados[i].ativo) {
+            return &atendimentos_arquivados[i];
+        }
+    }
+    return NULL;
 }

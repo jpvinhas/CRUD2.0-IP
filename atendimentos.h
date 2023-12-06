@@ -5,8 +5,8 @@
 #include "util.h"
 
 typedef struct
-{   char codigo_paciente[8]; // da para colocar um ponteiro que aponte para esse codigo
-    char codigo_atendimento[8];
+{   char codigo_paciente[9]; // da para colocar um ponteiro que aponte para esse codigo
+    char codigo_atendimento[9];
     char tipo[40];
     char data[40];
     char status[40];
@@ -22,7 +22,7 @@ typedef struct
 
 
 int menu_atendimento();
-void exibir_dados_atendimento(char codigo[][8],char paciente[][40],char codigo_paciente[][8],int indice_paciente,char data[][40],char tipo[][40],float preco[],char status[][40],int indice_atendimento);
+void exibir_dados_atendimento(atendimento *novo_atendimento);
 void receber_status_atendimento(atendimento *novo_atendimento);
 int procura_paciente(paciente *todos_pacientes, int qntd_pacientes, char codigo_paciente[]);
 int procura_paciente_codigo(char codigo_pacientes[][8],int QNTD_PACIENTES,int pacientes_ativos[]);
@@ -32,5 +32,6 @@ void receber_tipo_atendimento(atendimento *novo_atendimento);
 float receber_preco();
 int compara_data(char data1[],char data2[]);
 void ordenar_datas(char datas[][40],int ordem_datas[],int tamanho,int atendimentos_ativos[]);
+void *procura_atendimento_livre(atendimento* atendimentos_arquivados, int tamanho_vetor);
 
 #endif

@@ -1,7 +1,8 @@
 /*
  * 1) Ordem Alfabetica Pacientes Errada
  * 2) Codigo Nao aleatorio, verificar ou altera-lo
- * 3) ...*/
+ * 3) Verificar se um paciente ja nao tem atendimento na data para salvar
+ * 4) administrar se o vetorde novos pacientes e atendimentos ja esta cheio*/
 
 #include <stdio.h>
 #include <string.h>
@@ -25,10 +26,14 @@ atendimento* atendimentos;
 paciente novospacientes[10];
 atendimento novos_atendimentos[10];
 
-
-int qnt_pacientes;
-int qnt_atendimentos;
-int qnt_alterados=0;
+size_t qnt_pacientes = 0;
+size_t qnt_atendimentos = 0;
+int qnt_novos_pacientes = 0;
+int qnt_novos_atendimentos = 2;
+int qnt_pacientes_alterados = 2;
+int qnt_atendimentos_alterados = 0;
+int *pacientes_alterados;
+int *atendimentos_alterados;
 
 
 int pacientes_ativos[QNTD_PACIENTES];
@@ -56,9 +61,14 @@ float preco_atendimentos[QNTD_ATENDIMENTOS];
 int main(void) {
     preenche_vetor_ativos(pacientes_ativos, QNTD_PACIENTES);
     preenche_vetor_ativos(atendimentos_ativos, QNTD_ATENDIMENTOS);
-    
+
     pacientes = ler("pacientes.bin",&qnt_pacientes,sizeof(paciente));
+    pacientes_alterados = malloc(qnt_pacientes * sizeof(int));
+    preenche_vetor_ativos(pacientes_alterados,qnt_pacientes);
+
     atendimentos = ler("atendimentos.bin",&qnt_atendimentos,sizeof(atendimento));
+    atendimentos_alterados= malloc(qnt_atendimentos * sizeof(int));
+    preenche_vetor_ativos(atendimentos_alterados,qnt_atendimentos);
 
     while(1) {
         system("clear");
@@ -83,11 +93,11 @@ int main(void) {
                             while (1) {
 
                                 paciente* novopaciente = procura_paciente_livre(pacientes, qnt_pacientes);
-                                
+                                /*
                                 if(espaco_livre == NULL) {
                                     novopaciente = &novospacientes[qnt_alterados];
                                 }
-                                
+                                */
                                 if(cadastra_nome_paciente(novopaciente, pacientes, qnt_pacientes)) {
                                     if(!coletar_opcao("Inserir outro paciente", "Ir para o Menu Pacientes")) {continue;}
                                     else {break;}
@@ -528,7 +538,12 @@ int main(void) {
                                 printf("\nOpção -> "BLUE"[1], \"Inserir um novo atendimento\""RESET" Selecionada...\n\n");
 
                                 atendimentos = ler("atendimentos.bin", &qnt_atendimentos, sizeof(atendimento));
-                                atendimento *novo_atendimento = malloc(sizeof(atendimento));
+                                //verifica na structs com todos os atendimentos se tem algum inativo pra sobrescrever ele!
+                                atendimento *novo_atendimento = procura_atendimento_livre(atendimentos, qnt_atendimentos);
+
+                                if(novo_atendimento == NULL) {
+                                    novo_atendimento = &novos_atendimentos[qnt_novos_atendimentos];
+                                }
 
                                 printf("Digite o Codigo do Paciente: \n");
                                 ler_str(novo_atendimento->codigo_paciente);
@@ -553,23 +568,26 @@ int main(void) {
                                 int data_ja_cadastrada=atendimento_ja_cadastrado(data_atendimentos,paciente_do_atendimento,espaco_livre,QNTD_ATENDIMENTOS);
                                 if(data_ja_cadastrada)continue;
                                 */
-                                receber_tipo_atendimento(novo_atendimento);
 
                                 novo_atendimento->preco = receber_preco();
 
                                 receber_status_atendimento(novo_atendimento);
 
-                                //cria_codigo(codigo_atendimentos,espaco_livre);
+                                cria_codigo2(novo_atendimento->codigo_atendimento);
 
-                                //adicionar("atendimentos.bin", );
+                                receber_tipo_atendimento(novo_atendimento);
 
-                                system("clear");
-                                printf(GREEN"Atendimento Cadastrado com sucesso!\n"RESET);
-                                //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,espaco_livre);
-                                
+                                novo_atendimento->ativo = 1;
+                                qnt_novos_atendimentos++;
+
+                                system("cls");
+                                exibir_dados_atendimento(novo_atendimento);
+                                printf(GREEN"* Atendimento Cadastrado com sucesso! *\n"RESET);
+
                                 if(coletar_opcao("Voltar","Inserir outro Atendimento"))continue;
-                                else break;
-                            }break;
+                                else {break;}
+                            }
+                            break;
                         case 2:
                             system("clear");
                             while(1){
@@ -583,7 +601,7 @@ int main(void) {
                                 indice_do_paciente = paciente_do_atendimento[indice_do_atendimento];
                                 
                                 system("clear");
-                                exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_do_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,indice_do_atendimento); 
+                                //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_do_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,indice_do_atendimento);
                                 int opcao;
                                 
                                 printf("Qual dado deseja alterar?\n");
@@ -639,7 +657,7 @@ int main(void) {
                                 if(indice_do_atendimento == -1)continue;
                                 if(indice_do_atendimento == -2)break;
                                 indice_do_paciente = paciente_do_atendimento[indice_do_atendimento];
-                                exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_do_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,indice_do_atendimento);
+                                //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_do_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,indice_do_atendimento);
                                 
                                 printf("Tem certeza?\n");
                                 if(coletar_opcao("Cancelar Operação","Excluir")) {
@@ -660,7 +678,7 @@ int main(void) {
                                 if(indice_do_atendimento == -2)break;
 
                                 indice_do_paciente = paciente_do_atendimento[indice_do_atendimento];
-                                exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_do_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,indice_do_atendimento);
+                                //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_do_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,indice_do_atendimento);
                                 
                                 if(coletar_opcao("Voltar","Exibir outro Atendimento"))continue;
                                 else break; 
@@ -679,7 +697,7 @@ int main(void) {
                                     if(paciente_do_atendimento[i] == indice_do_paciente){
                                         if(atendimentos_ativos[i]==0) continue;
                                         int indice_do_atendimento=i;
-                                        exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_do_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,indice_do_atendimento);
+                                        //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_do_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,indice_do_atendimento);
                                     }
                                 }
                                 
@@ -703,7 +721,7 @@ int main(void) {
                                     if(atendimentos_ativos[i]==0) continue;
                                     if(paciente_do_atendimento[i] == indice_do_paciente){  
                                         int indice_do_atendimento=i;
-                                        exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_do_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,indice_do_atendimento);
+                                        //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_do_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,indice_do_atendimento);
                                     }
                                 }
                                 if(coletar_opcao("Voltar","Exibir Atendimentos de outro paciente"))continue;
@@ -725,7 +743,7 @@ int main(void) {
                                     if(strcmp(atendimentos_do_dia[0],data_atendimentos[i]) == 0){
                                         int indice_do_atendimento=i;
                                         int indice_do_paciente= paciente_do_atendimento[indice_do_atendimento];
-                                        exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_do_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,indice_do_atendimento);
+                                        //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_do_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,indice_do_atendimento);
                                         soma+=preco_atendimentos[i];
                                         cont++;
                                     }
@@ -757,7 +775,7 @@ int main(void) {
                                 for(int i=0;i < qnd_atend_ativos;i++){
                                 int atendimento=ordem_datas[i];
                                 int paciente = paciente_do_atendimento[i];
-                                exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,atendimento);
+                                //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,atendimento);
                                 }
                                 if(coletar_opcao("Sair","Exibir Atendimentos Novamente"))continue;
                                 else break;
