@@ -5,8 +5,6 @@
 #define GREEN   "\x1b[32m"
 #define YELLOW  "\x1b[33m"
 #define BLUE    "\x1b[34m"
-#define MAGENTA "\x1b[35m"
-#define CIANO   "\x1b[36m"
 #define RESET   "\x1b[0m"
 
 
@@ -40,7 +38,7 @@ void copia_matriz(char matriz1[][40], char matriz2[][40], int tamanho);
 int varrer_datas(char data[][40], char matriz_datas_atendimentos_copia[][40], int tam_matriz_datas_atendimentos);
 FILE* abrir_arquivo(const char nome[], const char modo[]);
 void* ler(const char* nomeArquivo, size_t* numero_structs,size_t tamanho_struct);
-void adicionar(const char* nomeArquivo, void* novopaciente,int qnd_novos_pacientes);
+void adicionar(const char* nomeArquivo, void* novo_add,int qnd_novos);
 void alterar(const char* nomeArquivo, size_t indice, void* novainformacao, size_t tamanho_struct);
 void* salvar(void*pacientes,void*atendimentos, int* alteracoes_pacientes, int* alteracoes_atendimentos, size_t qnd_pacientes,size_t qnd_atendimentos);
 void* salvar_novos(void*novos_pacientes,void*novos_atendimentos,int* qnt_novos_pacientes, int* qnt_novos_atendimentos);

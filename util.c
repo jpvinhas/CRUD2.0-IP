@@ -54,7 +54,7 @@ int coletar_opcao(char opcao1[],char opcao2[]){
         
         printf(BLUE);
         fflush(stdin);  
-        opcao=getchar();
+        opcao = getchar();
         printf(RESET);
         
         switch(opcao){
@@ -67,7 +67,7 @@ int coletar_opcao(char opcao1[],char opcao2[]){
             case '\n':
                 break;
             default:
-                printf("Digite Apenas 0 ou 1\n");                            
+                printf(RED"Digite Apenas 0 ou 1\n"RESET);
                 break;
         }
     }
@@ -244,6 +244,7 @@ int varrer_datas(char data[][40], char matriz_datas_atendimentos_copia[][40], in
     }
     return -1;
 }
+
 FILE* abrir_arquivo(const char nome[], const char modo[]){
     FILE *arquivo = fopen(nome,modo);
     if(arquivo == NULL){
@@ -253,6 +254,7 @@ FILE* abrir_arquivo(const char nome[], const char modo[]){
     printf("Arquivo %s aberto! \n",nome);
     return arquivo;
 }
+
 void* ler(const char* nomeArquivo, size_t* numero_structs,size_t tamanho_struct) {
     FILE* arquivo = abrir_arquivo(nomeArquivo, "rb+");
 
@@ -283,8 +285,8 @@ void* ler(const char* nomeArquivo, size_t* numero_structs,size_t tamanho_struct)
 
     return vetorStructs;
 }
-void adicionar(const char* nomeArquivo, void* novopaciente,int qnd_novos_pacientes) {
-    FILE* arquivo = fopen(nomeArquivo, "a+b");  // Abre o arquivo em modo de leitura e escrita no final
+void adicionar(const char* nomeArquivo, void* novo_add,int qnd_novos) {
+    FILE* arquivo = fopen(nomeArquivo, "ab+");  // Abre o arquivo em modo de leitura e escrita no final
 
     if (arquivo == NULL) {
         perror("Erro ao abrir o arquivo");
@@ -292,10 +294,11 @@ void adicionar(const char* nomeArquivo, void* novopaciente,int qnd_novos_pacient
     }
 
     // Escreve os novos structs no final do arquivo
-    fwrite(novopaciente, sizeof(paciente), qnd_novos_pacientes, arquivo);
+    fwrite(novo_add, sizeof(paciente), qnd_novos, arquivo);
     
     fclose(arquivo);
 }
+
 void alterar(const char* nomeArquivo, size_t indice, void* novainformacao, size_t tamanho_struct) {
     FILE* arquivo = fopen(nomeArquivo, "rb+");  // Abre o arquivo em modo de leitura e escrita
 

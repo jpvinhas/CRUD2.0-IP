@@ -1,4 +1,11 @@
+/*
+ * 1) Ordem Alfabetica Pacientes Errada
+ * 2) Codigo Nao aleatorio, verificar ou altera-lo
+ * 3) ...*/
+
 #include <stdio.h>
+#include <string.h>
+
 #include "pacientes.h"
 #include "atendimentos.h"
 #include "util.h"
@@ -10,15 +17,13 @@
 #define GREEN   "\x1b[32m"
 #define YELLOW  "\x1b[33m"
 #define BLUE    "\x1b[34m"
-#define MAGENTA "\x1b[35m"
-#define CIANO   "\x1b[36m"
 #define RESET   "\x1b[0m"
 
 paciente* pacientes;
 atendimento* atendimentos;
 
 paciente novospacientes[10];
-atendimento novosatendimentos[10];
+atendimento novos_atendimentos[10];
 
 
 int qnt_pacientes;
@@ -194,12 +199,12 @@ int main(void) {
 
                                             char nome_antigo[40];
                                             strcpy(nome_antigo ,nomes_pacientes[index_paciente]);                               
-
+                                            /*
                                             if(cadastra_nome_paciente(nomes_pacientes, espaco_livre, QNTD_PACIENTES)) {
                                                 if(!coletar_opcao("Inserir outro paciente", "Ir para o Menu Pacientes")) {continue;}
                                                 else {break;}
                                             }
-                                    
+                                            */
                                             printf(GREEN"\nNome Alterado com Sucesso!\n"RESET);
                                             printf("De: %s ---> Para: %s\n", nome_antigo, nomes_pacientes[index_paciente]);
 
@@ -520,36 +525,47 @@ int main(void) {
                         case 1:
                             system("clear");
                             while (1){
-                                printf("\n-----------------"BLUE"Inserir um Novo Atendimento"RESET"------------------\n");
-                                
-                                espaco_livre = procura_espaco_livre(atendimentos_ativos, QNTD_ATENDIMENTOS);
-                                
-                                int indice_paciente=procura_paciente(nomes_pacientes,QNTD_PACIENTES);
-                                if( indice_paciente == -1)break;
-                                
-                                paciente_do_atendimento[espaco_livre]=indice_paciente;
-                                
-                                system("clear");
-                                printf("Paciente "GREEN" %s"RESET"  Selecionado...\n",nomes_pacientes[indice_paciente]);
-                                
+                                printf("\nOpção -> "BLUE"[1], \"Inserir um novo atendimento\""RESET" Selecionada...\n\n");
+
+                                atendimentos = ler("atendimentos.bin", &qnt_atendimentos, sizeof(atendimento));
+                                atendimento *novo_atendimento = malloc(sizeof(atendimento));
+
+                                printf("Digite o Codigo do Paciente: \n");
+                                ler_str(novo_atendimento->codigo_paciente);
+
+                                paciente *teste_paciente = malloc(sizeof(pacientes) * 2);
+                                strcpy(teste_paciente[0].codigo_paciente, "G6H8D0D");
+                                strcpy(teste_paciente[1].codigo_paciente, "G6H8DOL");
+
+                                //trocar "teste_paciente" por pacientes e 2 por qntd_pacientes na funcao abaixo!
+                                if(!procura_paciente(teste_paciente, 2, novo_atendimento->codigo_paciente)) {
+                                    printf(RED"Paciente nao cadastrado!\n"RESET);
+                                    if(coletar_opcao("Inserir outro paciente", "Voltar ao menu de atendimentos")) {
+                                        break;
+                                    }else {continue;}
+                                }
+
+                                printf("\nPaciente "GREEN" %s"RESET"  Selecionado...\n", novo_atendimento->codigo_paciente);
+                                /*
                                 printf(BLUE"Dados da consulta:\n"RESET);
                                 receber_data(data_atendimentos,espaco_livre);
                                 
                                 int data_ja_cadastrada=atendimento_ja_cadastrado(data_atendimentos,paciente_do_atendimento,espaco_livre,QNTD_ATENDIMENTOS);
                                 if(data_ja_cadastrada)continue;
-                                
-                                receber_tipo_atendimento(tipo_atendimentos,espaco_livre);
+                                */
+                                receber_tipo_atendimento(novo_atendimento);
 
-                                preco_atendimentos[espaco_livre] = receber_preco();
+                                novo_atendimento->preco = receber_preco();
 
-                                receber_status_atendimento(status_atendimentos,espaco_livre);
-                                
-                                atendimentos_ativos[espaco_livre]=1;
-                                cria_codigo(codigo_atendimentos,espaco_livre); 
-                                
+                                receber_status_atendimento(novo_atendimento);
+
+                                //cria_codigo(codigo_atendimentos,espaco_livre);
+
+                                //adicionar("atendimentos.bin", );
+
                                 system("clear");
                                 printf(GREEN"Atendimento Cadastrado com sucesso!\n"RESET);
-                                exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,espaco_livre);
+                                //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,espaco_livre);
                                 
                                 if(coletar_opcao("Voltar","Inserir outro Atendimento"))continue;
                                 else break;
@@ -577,7 +593,7 @@ int main(void) {
                                 switch(opcao){
                                     case 1: 
                                         printf("Paciente anterior : %s \n",nomes_pacientes[indice_do_paciente]);
-                                        int indice_novo_paciente = procura_paciente(nomes_pacientes,QNTD_PACIENTES);
+                                        /*int indice_novo_paciente = procura_paciente(nomes_pacientes,QNTD_PACIENTES);
 
                                         int data_ja_cadastrada=atendimento_ja_cadastrado(data_atendimentos,indice_novo_paciente,espaco_livre,QNTD_ATENDIMENTOS);
                                         if(data_ja_cadastrada)continue;
@@ -607,7 +623,7 @@ int main(void) {
                                         break;
                                     default:
                                         printf("digite apenas 1,2,3,4 ou 5");
-                                        break;
+                                        break;*/
                                 }break;
                                 if(coletar_opcao("Voltar","Alterar outro Atendimento"))continue;
                                 else break;
@@ -678,7 +694,7 @@ int main(void) {
                                 
                                 char nome_paciente[40];
                                 //printf("Digite o nome do Paciente que deseja exibir:\n");
-                                int indice_do_paciente = procura_paciente(nomes_pacientes,QNTD_PACIENTES);
+                                //int indice_do_paciente = procura_paciente(nomes_pacientes,QNTD_PACIENTES);
                                 if(indice_do_paciente == -1)break;
                                 
                                 system("clear");
