@@ -90,6 +90,7 @@ int main(void) {
                                 if(index<0) {
                                     novopaciente = &novospacientes[qnt_novos_pacientes];
                                 }else{novopaciente=&pacientes[index];}
+                                printf("%d",index);
                                 
                                 if(cadastra_nome_paciente2(novopaciente->nome, pacientes, qnt_pacientes)) {
                                     if(!coletar_opcao("Inserir outro paciente", "Ir para o Menu Pacientes")) {continue;}
@@ -100,6 +101,7 @@ int main(void) {
                                     int k=0;
                                     cria_codigo2(novopaciente->codigo);
                                     for(int i=0;i < qnt_pacientes;i++){
+                                        if(pacientes[i].ativo == 0 )continue;
                                         if(!strcmp(novopaciente->codigo,pacientes[i].codigo)) k=1;
                                         break;
                                     }
@@ -108,7 +110,7 @@ int main(void) {
                                 }
 
                                 cadastra_documento2("RG", novopaciente->RG);
-                                if(procura_informacao2(novopaciente->RG, pacientes, qnt_pacientes,2)) { 
+                                if(procura_informacao2(novopaciente->RG, pacientes, qnt_pacientes,3)) { 
                                     printf(RED"RG já cadastrado --> Impossível Inserir este Paciente!\n"RESET);
 
                                     if(!coletar_opcao("Inserir outro paciente", "Ir para o Menu Pacientes")) {continue;}
@@ -153,7 +155,7 @@ int main(void) {
                                         printf(RED"Fator RH Inválido, Digite Novamente!\n"RESET);
                                         continue;
                                     }
-                                        break;
+                                    break;
                                 }
 
                                 printf("Digite seu Endereço ou ENTER para pular:\n");
@@ -174,30 +176,34 @@ int main(void) {
                             break;
                         case 2:
                             system("clear");
+                            printf("\nOpção -> "BLUE"[2], \"Alterar um Paciente Existente\""RESET" Selecionada...\n\n");
                             while(1) {
-                                printf("\nOpção -> "BLUE"[2], \"Alterar um Paciente Existente\""RESET" Selecionada...\n\n");
-
                                 printf("Digite o Código do Paciente que Deseja Alterar: \n\n");
 
                                 printf("-> Código: ");
                                 char alterar_paciente_codigo[9];
                                 scanf("%s", &alterar_paciente_codigo);
+                                paciente * paciente_a_alterar;
+                                int index = 0;
+                                index = procura_codigo_paciente2(alterar_paciente_codigo,pacientes, qnt_pacientes);
 
-                                int index_paciente = procura_codigo_paciente2(alterar_paciente_codigo,pacientes,qnt_pacientes);
-                                if(index_paciente<0)continue;
-                                paciente * paciente_a_alterar = &pacientes[index_paciente];
-
-                                if(paciente_a_alterar == NULL) {
-                                    printf(RED"Paciente de Código %s NÃO Encontrado Verifique o Código Inserido!\n\n"RESET, alterar_paciente_codigo);
-
+                                if(index<0) {
+                                    index =procura_codigo_paciente2(alterar_paciente_codigo,novospacientes,qnt_novos_pacientes);
+                                    if(index < 0){
+                                        printf(RED"\nPaciente de Código %s NÃO Encontrado Verifique o Código Inserido!\n"RESET, alterar_paciente_codigo);
+                                        if(!coletar_opcao("Inserir Novo Código", "Ir para o Menu Pacientes")) {continue;}
+                                        else {break;}
+                                    }
+                                    printf("Paciente %s encontrado, mas ainda não salvo no arquivo");  
                                     if(!coletar_opcao("Inserir Novo Código", "Ir para o Menu Pacientes")) {continue;}
                                     else {break;}
-                                }
+                                }else{paciente_a_alterar = &pacientes[index];}
+                                
                                 printf(GREEN" ---> Paciente %s de Código %s Encontrado\n"RESET, paciente_a_alterar->nome,paciente_a_alterar->codigo);
-
                                 printf("\nQual Informação Você deseja alterar?\n");
                                 printf(BLUE"[1] Nome     [2] RG     [3] CPF     [4] Tipo Sanguíneo     [5] Fator RH     [6] Endereço     [7] Data de Nascimento\n"RESET);
                                 int alteracao_desejada;
+                                int saida=0;
                                 scanf("%d", &alteracao_desejada);
 
                                 switch (alteracao_desejada) {  
@@ -205,8 +211,9 @@ int main(void) {
                                         printf(BLUE"\nOpção -> [1], \"Alterar Nome\""RESET" Selecionada...\n\n");
                                         char novo_nome[40];    
                                         if(cadastra_nome_paciente2(novo_nome, pacientes, qnt_pacientes)) {
-                                            if(!coletar_opcao("Inserir outro paciente", "Ir para o Menu Pacientes")) {continue;}
-                                            else {break;}
+                                            if(!coletar_opcao("Alterar outro paciente", "Ir para o Menu Pacientes")) {saida=1;}
+                                            else {saida=2;}
+                                            break;
                                         }
                                         strcpy(paciente_a_alterar->nome,novo_nome);
                                 
@@ -219,8 +226,9 @@ int main(void) {
                                         if(procura_informacao2(novo_rg, pacientes, qnt_pacientes, 2)) { 
                                             printf(RED"RG já cadastrado --> Impossível Inserir este Paciente!\n"RESET);
 
-                                            if(!coletar_opcao("Inserir outro paciente", "Ir para o Menu Pacientes")) {continue;}
-                                            else {break;}
+                                            if(!coletar_opcao("Alterar outro paciente", "Ir para o Menu Pacientes")) {saida=1;}
+                                            else {saida=2;}
+                                            break;
                                         }
                                         strcpy(paciente_a_alterar->RG,novo_rg);
                                         printf(GREEN"\nRG Alterado com Sucesso!\n"RESET);
@@ -232,8 +240,9 @@ int main(void) {
                                         if(procura_informacao2(novo_cpf, pacientes, qnt_pacientes,3)) { 
                                             printf(RED"CPF já cadastrado --> Impossível Inserir este Paciente!\n"RESET);
                                             
-                                            if(!coletar_opcao("Inserir outro paciente", "Ir para o Menu Pacientes")) {continue;}
-                                            else {break;}
+                                            if(!coletar_opcao("Alterar outro paciente", "Ir para o Menu Pacientes")) {saida=1;}
+                                            else {saida=2;}
+                                            break;
                                         }
                                         strcpy(paciente_a_alterar->CPF,novo_cpf);
                                         printf(GREEN"\nCPF Alterado com Sucesso!\n"RESET);
@@ -270,7 +279,7 @@ int main(void) {
                                                 printf("Fator RH Inválido, Digite Novamente!\n");
                                                 continue;
                                             }
-                                                break;
+                                            break;
                                         }
 
                                         printf(GREEN"Fator RH Alterado com Sucesso!\n"RESET);
@@ -296,7 +305,9 @@ int main(void) {
                                         break;
                 
                                 }
-                                pacientes_alterados[index_paciente]=1;
+                                if(saida == 1)continue;
+                                if(saida == 2)break;
+                                pacientes_alterados[index]=1;
                                 qnt_pacientes_alterados++;
                                 if(!coletar_opcao("Alterar Informação Novamente", "Ir para o Menu Pacientes")) {continue;}
                                 else {break;}
@@ -308,29 +319,34 @@ int main(void) {
                                 printf("Digite o Código do Paciente que deseja excluir: ");
                                 char codigo_paciente_excluido[8];
                                 scanf("%s", &codigo_paciente_excluido);
+                                paciente* paciente_a_excluir;
+                                int index = 0;
+                                index = procura_codigo_paciente2(codigo_paciente_excluido,pacientes, qnt_pacientes);
 
-                                int index_paciente = procura_codigo(codigo_paciente_excluido, codigo_pacientes, QNTD_ATENDIMENTOS);
-
-                                if(index_paciente >= 0) {
-                                    printf(GREEN"---> Paciente de Código %s Encontrado\n"RESET, codigo_paciente_excluido);
-                                    exibe_informacoes_paciente(nomes_pacientes, codigo_pacientes, RG_pacientes, CPF_pacientes, tipo_sanguineo_pacientes, fator_RH_pacientes, endereco_pacientes, datas_nascimento_pacientes, index_paciente);
-
-                                    printf(RED"\nDeseja Realmente Excluir esse paciente?\n"RESET);
-                                    if(!coletar_opcao("Confirmar Exclusão", "Voltar para o Menu Pacientes")) {
-                                        pacientes_ativos[index_paciente] = 0;
-                                        strcpy(codigo_pacientes, "Espaco Livre");
-
-                                        printf(GREEN"Paciente Excluído com Sucesso!"RESET);
-                                        break;
+                                if(index<0) {
+                                    index =procura_codigo_paciente2(codigo_paciente_excluido,novospacientes,qnt_novos_pacientes);
+                                    if(index < 0){
+                                        printf(RED"\nPaciente de Código %s NÃO Encontrado Verifique o Código Inserido!\n"RESET, codigo_paciente_excluido);
+                                        if(!coletar_opcao("Inserir Novo Código", "Ir para o Menu Pacientes")) {continue;}
+                                        else {break;}
                                     }
-                                    else {break;}
-
-                                }
-                                else {
-                                    printf(RED"\nPaciente de Código %s NÃO Encontrado Verifique o Código Inserido!\n"RESET, codigo_paciente_excluido);
+                                    printf("Paciente %s encontrado, mas ainda não salvo no arquivo");  
                                     if(!coletar_opcao("Inserir Novo Código", "Ir para o Menu Pacientes")) {continue;}
                                     else {break;}
+                                }else{paciente_a_excluir = &pacientes[index];}
+                                
+                                printf(GREEN"---> Paciente de Código %s Encontrado\n"RESET, codigo_paciente_excluido);
+                                exibe_informacoes_paciente2(paciente_a_excluir);
+
+                                printf(RED"\nDeseja Excluir esse paciente?\n"RESET);
+                                if(!coletar_opcao("Confirmar Exclusão", "Voltar para o Menu Pacientes")) {
+                                    paciente_a_excluir->ativo = 0;
+                                    printf(GREEN"Paciente Excluído com Sucesso! Salve as alterações para confirmar!\n"RESET);
+                                    pacientes_alterados[index]=1;
+                                    qnt_pacientes_alterados++;
                                 }
+                                if(!coletar_opcao("Excluir outro paciente", "Ir para o Menu Pacientes")) {continue;}
+                                else {break;}
                             }
                             break;
                         case 4:

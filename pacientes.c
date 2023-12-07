@@ -230,11 +230,13 @@ int procura_informacao2(char* informacao_paciente, paciente*pacientes, int taman
             break;
         case 3:
             for(int i = 0; i < tamanho_matriz; i++){
+                if(strcmp(informacao_paciente, "Não Informado") == 0) break;
                 if(!(strcmp(informacao_paciente, pacientes[i].RG))) return 1;
             }
             break;
         case 4:
             for(int i = 0; i < tamanho_matriz; i++){
+                if(pacientes[i].ativo == 0)continue;
                 if(!(strcmp(informacao_paciente, pacientes[i].CPF))) return 1;
             }
             break;
@@ -445,6 +447,7 @@ int procura_paciente_livre(paciente* vetordestructs, int tamanho_vetor) {
 }
 int ja_existe(char* string,paciente*pacientes,int tamanho){
     for(int i = 0; i < tamanho; i++){
+        if(pacientes[i].ativo == 0)continue;
         if(strcmp(string,pacientes[i].nome) == 0){
             return 1;
         }
@@ -466,6 +469,7 @@ void adicionar_pacientes(const char* nomeArquivo, paciente* novospaciente,int qn
 }
 int procura_codigo_paciente2(char*codigo,paciente*pacientes,int tamanho) {
     for(int i = 0; i < tamanho; i++){
+        if(pacientes[i].ativo == 0)break;
         if(strcmp(codigo,pacientes[i].codigo) == 0) {
             return i;
         }
