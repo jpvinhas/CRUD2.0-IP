@@ -322,7 +322,7 @@ void adicionar(const char* nomeArquivo, void* novospaciente,int qnd_novos_pacien
     
     fclose(arquivo);
 }
-void alterar(const char* nomeArquivo, size_t indice, void* novainformacao, size_t tamanho_struct) {
+void alterar(const char* nomeArquivo, int indice, void* novainformacao, size_t tamanho_struct) {
     FILE* arquivo = fopen(nomeArquivo, "rb+");  // Abre o arquivo em modo de leitura e escrita
 
     if (arquivo == NULL) {

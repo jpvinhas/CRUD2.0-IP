@@ -20,7 +20,6 @@
 int menu_principal();
 int coletar_opcao(char opcao1[],char opcao2[]);
 int preenche_vetor_ativos(int vetor_ativos[], int tamanho_vetor);
-int preenche_matriz_bidimensional(char vetor_ativos[][40], int tamanho_vetor);
 void ler_str(char* string);
 int checar_string(char string[]);
 void formata_string_maisculo(char string[]);
@@ -40,7 +39,7 @@ int varrer_datas(char data[][40], char matriz_datas_atendimentos_copia[][40], in
 FILE* abrir_arquivo(const char nome[], const char modo[]);
 void* ler(const char* nomeArquivo, size_t* numero_structs,size_t tamanho_struct);
 void adicionar(const char* nomeArquivo, void* novospaciente,int qnd_novos_pacientes,size_t tam);
-void alterar(const char* nomeArquivo, size_t indice, void* novainformacao, size_t tamanho_struct);
+void alterar(const char* nomeArquivo, int indice, void* novainformacao, size_t tamanho_struct);
 // void salvar(paciente*pacientes,atendimento*atendimentos, int* alteracoes_pacientes, int* alteracoes_atendimentos, int qnd_pacientes,int qnd_atendimentos);
 // void salvar_novos(paciente* pacientes,atendimento* atendimentos,void* novos_pacientes,void*novos_atendimentos,int qnt_novos_pacientes, int qnt_novos_atendimentos, int qnt_pacientes,int qnt_atendimentos);
 #endif

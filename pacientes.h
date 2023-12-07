@@ -9,14 +9,14 @@
 #define RESET   "\x1b[0m"
 
 typedef struct {
-    char nome_paciente[40];
-    char codigo_paciente[9]; 
-    char RG_paciente[20]; 
-    char CPF_paciente[12];
-    char tipo_sanguineo_paciente[20];
-    char fator_RH_paciente[20];  
-    char endereco_paciente[40];
-    char data_nascimento_paciente[40];
+    char nome[40];
+    char codigo[9]; 
+    char RG[20]; 
+    char CPF[12];
+    char tipo_sanquineo[20];
+    char fator_RH[20];  
+    char endereco[40];
+    char data_nascimento[40];
     int ativo;
 }paciente;
 #include "util.h"
@@ -31,7 +31,7 @@ int cadastra_documento(char tipo_documento[], char str_documento[], int espaco_l
 int cadastra_documento2(char* tipo_documento, char* str_documento);
 int cadastro_informacao_nao_obrigatorio(char* str_documento);
 int procura_informacao(char informacao_paciente[], char matriz_informacao_paciente[][12], int tamanho_matriz, int indice_matriz);
-int procura_informacao2(char* informacao_paciente, paciente*pacientes, int tamanho_matriz);
+int procura_informacao2(char* informacao_paciente, paciente*pacientes, int tamanho_matriz,int opcao);
 int cadastra_nome_paciente(char* novopaciente,paciente*pacientes, int qnt_pacientes);
 int cadastra_nome_paciente2(char* novopaciente,paciente*pacientes, int qnt_pacientes);
 void exibe_tipo_sanguineo_pacientes(char tipo_sanguineo[], char matriz_tipo_sanguineo[][3], char matriz_fator_RH[][9], int tam_matriz_tp_sanguineo,char matriz_pacientes[][40]);
@@ -44,9 +44,8 @@ void ordena_pacientes_ordem_alfabetica(char nomes_pacientes[][40], int tamanho_n
 void exibe_pacientes_ordem_alfabetica(char nomes_pacientes[][40], int vetor_limitando_ativos[], int tamanho_vetor_limitando_ativos);
 int verifica_pacientes_ativos(int vetor_pacientes_ativos[], int tam_vetor_pacientes_ativos);
 int verifica_cadastro_paciente(char matriz_nomes_paciente[][40], int tam_matriz_nomes_paciente, char nome_paciente_verificado[]);
-void* procura_paciente_livre(paciente* vetordestructs, int tamanho_vetor);
+int procura_paciente_livre(paciente* vetordestructs, int tamanho_vetor);
 int ja_existe(char* string,paciente*pacientes,int tamanho);
 void adicionar_pacientes(const char* nomeArquivo, paciente* novospaciente,int qnd_novos_pacientes,size_t tam_struct);
- 
-    
+int procura_codigo_paciente2(char*codigo,paciente*pacientes,int tamanho);    
 #endif
