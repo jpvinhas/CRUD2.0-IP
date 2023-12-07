@@ -60,7 +60,7 @@ int coletar_opcao(char opcao1[],char opcao2[]){
         
         switch(opcao){
             case '0':
-                printf("\nOpção -> "BLUE"[0], \"%s\""RESET"Selecionada...\n", opcao1); 
+                printf("\nOpção -> "BLUE"[0], \"%s\""RESET" Selecionada...\n", opcao1);
                 return 0;
             case '1':
                 printf("\nOpção -> "BLUE"[1], \"%s\""RESET" Selecionada...\n", opcao2); 

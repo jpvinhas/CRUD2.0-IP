@@ -122,9 +122,11 @@ int procura_atendimento2(atendimento *todos_atendimentos, size_t qnt_atendimento
 
 
         status_procura = procura_codigo_atendimento(todos_atendimentos[i].codigo_atendimento, qnt_atendimentos, codigo_atendimento);
-
+        printf("Status da procura = %d\n", status_procura);
         if(status_procura  && todos_atendimentos[i].ativo) {
+            printf("[i]= %d\n", i);
             return i;
+
         }
     }
 
