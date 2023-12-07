@@ -4,7 +4,8 @@
  * 3) Verificar se um paciente ja nao tem atendimento na data para salvar
  * 4) administrar se o vetorde novos pacientes e atendimentos ja esta cheio
  * 5) nao estou conseguindo colocar atendimentos nem pacientes na util.h
- * 6) APAGAR COEMNTARIOS DO CODIGO*/
+ * 6) APAGAR COEMNTARIOS DO CODIGO
+ * 7) Fazer opcao de descartar salvos*/
 
 #include <stdio.h>
 #include <string.h>
@@ -522,7 +523,7 @@ int main(void) {
                             break;
                     }
                     if(interacao_menu_pacientes== 10){break;}
-                    continue;
+                    //continue;
                 }break;
 
             case 2:
@@ -560,7 +561,7 @@ int main(void) {
                                     printf(RED"Paciente nao cadastrado!\n"RESET);
                                     if (coletar_opcao("Inserir outro paciente", "Voltar ao menu de atendimentos")) {
                                         break;
-                                    } else { continue; }
+                                    } else {continue;}
                                 }
 
                                 printf("\nPaciente "GREEN" %s"RESET"  Selecionado...\n",
@@ -621,13 +622,11 @@ int main(void) {
                                 }
 
                                 atendimento *atendimento_alterado = &novos_atendimentos[indice_do_atendimento];
+                                exibir_dados_atendimento(atendimento_alterado);
 
-                                //system("cls");
-                                //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_do_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,indice_do_atendimento);
                                 int opcao;
-
                                 printf("Qual dado deseja alterar?\n");
-                                printf(BLUE"[1]"RESET"Paciente "BLUE"[2] "RESET"Data \n"BLUE"[3] "RESET"Tipo "BLUE"[4]"RESET" Preço "BLUE"[5]"RESET"Status\n");
+                                printf(BLUE"[1]"RESET"Paciente "BLUE"[2] "RESET"Data "BLUE"[3] "RESET"Tipo "BLUE"[4]"RESET" Preço "BLUE"[5]"RESET"Status\n");
                                 scanf("%d", &opcao);
 
                                 switch (opcao) {
@@ -653,7 +652,7 @@ int main(void) {
                                         int data_ja_cadastrada=atendimento_ja_cadastrado(data_atendimentos,indice_novo_paciente,espaco_livre,QNTD_ATENDIMENTOS);
                                         if(data_ja_cadastrada)continue;
                                         */
-                                        printf("Paciente anterior = %s --> Novo paciente = %s\n", paciente_antigo,
+                                        printf("Paciente anterior = %s --> Novo paciente = \"GREEN\"%s\"RESET\"\n", paciente_antigo,
                                                atendimento_alterado->codigo_paciente);
                                         printf(GREEN"* Paciente do atendimento Alterado com Sucesso! *\n"RESET);
 
@@ -669,7 +668,7 @@ int main(void) {
                                     case 3:
                                         receber_tipo_atendimento(atendimento_alterado);
 
-                                        printf("\n--> Novo Tipo = %s\n", atendimento_alterado->tipo);
+                                        printf("\n--> Novo Tipo = \"GREEN\"%s\"RESET\"\n", atendimento_alterado->tipo);
                                         printf(GREEN"* Novo tipo cadastrado com Sucesso! *\n"RESET);
                                         break;
 
@@ -677,190 +676,200 @@ int main(void) {
                                         printf("Digite o novo preço da consulta:\n");
 
                                         atendimento_alterado->preco = receber_preco();
-                                        printf(GREEN"Novo preço cadastrado --> R$%.2f\n"RESET, atendimento_alterado->preco);
+                                        printf(GREEN"Novo preço cadastrado --> \"GREEN\"R$%.2f\"RESET\"\n"RESET, atendimento_alterado->preco);
                                         break;
                                     case 5:
-                                        printf("Digite o no\n",status_atendimentos[indice_do_atendimento]);
+                                        printf("Digite o novo status do atendimento:");
 
-                                        //receber_status_atendimento(status_atendimentos,indice_do_atendimento);
-                                        printf(GREEN"Status alterado\n"RESET);
+                                        receber_status_atendimento(atendimento_alterado);
+                                        printf("--> Novo Status = "GREEN"%s"RESET"\n", atendimento_alterado->status);
+                                        printf(GREEN"* Status alterado com Sucesso! *\n"RESET);
                                         break;
-                                }       /*
                                     default:
-                                        printf("digite apenas 1,2,3,4 ou 5");
+                                        printf("Selecione apenas as opções acima!\n");
                                         break;
-                                }break;
-                                if(coletar_opcao("Voltar","Alterar outro Atendimento"))continue;
-                                else break;
-                            }break;
-                                */case 3:
-                                    system("clear");
-                                while (1) {
-                                    printf("---------------------"BLUE"Excluir um Atendimento"RESET"-----------------------\n");
-
-                                    printf("Digite o código do atendimento que deseja excluir:\n");
-                                    int indice_do_atendimento = procura_atendimento(codigo_atendimentos,
-                                                                                    QNTD_ATENDIMENTOS,
-                                                                                    atendimentos_ativos);
-
-                                    if (indice_do_atendimento == -1)continue;
-                                    if (indice_do_atendimento == -2)break;
-                                    indice_do_paciente = paciente_do_atendimento[indice_do_atendimento];
-                                    //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_do_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,indice_do_atendimento);
-
-                                    printf("Tem certeza?\n");
-                                    if (coletar_opcao("Cancelar Operação", "Excluir")) {
-                                        atendimentos_ativos[indice_do_atendimento] = 0;
-                                        printf(GREEN"Atendimento Excluído\n"RESET);
-                                        break;
-                                    }
-                                    printf(GREEN"Operacão Cancelada!"RESET);
                                 }
-                                break;
-                                case 4:
-                                    while (1) {
-                                        system("clear");
-                                        printf("---------------------"BLUE"Exibir Atendimento(Código)"RESET"-------------------\n");
+                                if(coletar_opcao("Voltar","Alterar outro Atendimento")){continue;}
+                                else {break;}
+                            }
+                            break;
+                        case 3:
+                            while (1) {
+                                printf("\nOpção -> "BLUE"[3], \"Excluir Atendimento\""RESET" Selecionada...\n\n");
 
-                                        printf("Digite o código do atendimento que deseja consultar:\n");
-                                        int indice_do_atendimento = procura_atendimento(codigo_atendimentos,
-                                                                                        QNTD_ATENDIMENTOS,
-                                                                                        atendimentos_ativos);
-                                        if (indice_do_atendimento == -1)continue;
-                                        if (indice_do_atendimento == -2)break;
+                                //apagardepois
+                                paciente *teste_paciente = malloc(sizeof(pacientes) * 2);
+                                strcpy(teste_paciente[0].codigo_paciente, "XXXXXXX");
+                                strcpy(teste_paciente[1].codigo_paciente, "ZZZZZZZ");
+                                //----------------------
+                                printf("-> Digite o Atendimento que você deseja Excluír:");
 
-                                        indice_do_paciente = paciente_do_atendimento[indice_do_atendimento];
-                                        //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_do_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,indice_do_atendimento);
+                                int indice_do_atendimento = procura_atendimento2(novos_atendimentos,
+                                                                                 3);//procura_atendimento2(atendimentos, qnt_atendimentos);
+                                if (indice_do_atendimento == -1) {
+                                    if (coletar_opcao("Tentar alterar outro atendimento",
+                                                      "Voltar ao menu atendimento")) {break;}
+                                    else {continue;}
+                                }
 
-                                        if (coletar_opcao("Voltar", "Exibir outro Atendimento"))continue;
-                                        else break;
-                                    }
-                                break;
-                                case 5:
-                                    while (1) {
-                                        char codigo_paciente[8];
-                                        system("clear");
-                                        printf("----------------------"BLUE"Exibir Atendimento (Código do Paciente)"RESET"-----------------\n");
+                                atendimento *atendimento_solicitado = &novos_atendimentos[indice_do_atendimento];
+                                exibir_dados_atendimento(atendimento_solicitado);
 
-                                        int indice_do_paciente = procura_paciente_codigo(codigo_pacientes,
-                                                                                         QNTD_PACIENTES,
-                                                                                         pacientes_ativos);
-                                        if (indice_do_paciente == -1)continue;
-                                        if (indice_do_paciente == -2)break;
+                                printf("Tem certeza que deseja"RED" Excluir este Atendimento?"RESET"\n");
+                                if (coletar_opcao("Cancelar Operação", "Excluir Atendimento")) {
+                                    atendimento_solicitado->ativo = 0;
+                                    strcpy(atendimento_solicitado->codigo_atendimento, "EXLUIDO");
+                                    strcpy(atendimento_solicitado->codigo_paciente, "EXLUIDO");
 
-                                        for (int i = 0; i < QNTD_ATENDIMENTOS; i++) {
-                                            if (paciente_do_atendimento[i] == indice_do_paciente) {
-                                                if (atendimentos_ativos[i] == 0) continue;
-                                                int indice_do_atendimento = i;
-                                                //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_do_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,indice_do_atendimento);
-                                            }
-                                        }
+                                    printf(GREEN"* Atendimento Excluído *\n"RESET);
+                                    break;
+                                }
+                                printf(GREEN"* Operacão Cancelada com Sucesso! *"RESET);
+                            }
+                            break;
+                        case 4:
+                            while (1) {
+                                system("clear");
+                                printf("\nOpção -> "BLUE"[3], \"Excluir Atendimento\""RESET" Selecionada...\n\n");
 
-                                        if (coletar_opcao("Voltar", "Exibir Atendimentos de outro paciente"))continue;
-                                        else break;
-                                    }
-                                break;
-                                case 6:
+                                printf("Digite o código do atendimento que deseja consultar:\n");
+                                int indice_do_atendimento = procura_atendimento(codigo_atendimentos,
+                                                                                QNTD_ATENDIMENTOS,
+                                                                                atendimentos_ativos);
+                                if (indice_do_atendimento == -1)continue;
+                                if (indice_do_atendimento == -2)break;
 
-                                    while (1) {
-                                        system("clear");
-                                        printf("-----------------------"BLUE"Exibir atendimento do paciente (Nome do Paciente)"RESET"------------------------\n");
+                                indice_do_paciente = paciente_do_atendimento[indice_do_atendimento];
+                                //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_do_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,indice_do_atendimento);
 
-                                        char nome_paciente[40];
-                                        //printf("Digite o nome do Paciente que deseja exibir:\n");
-                                        //int indice_do_paciente = procura_paciente(nomes_pacientes,QNTD_PACIENTES);
-                                        if (indice_do_paciente == -1)break;
+                                if (coletar_opcao("Voltar", "Exibir outro Atendimento"))continue;
+                                else break;
+                            }
+                            break;
+                            case 5:
+                                while (1) {
+                                    char codigo_paciente[8];
+                                    system("clear");
+                                    printf("----------------------"BLUE"Exibir Atendimento (Código do Paciente)"RESET"-----------------\n");
 
-                                        system("clear");
-                                        printf("Atendimentos do Paciente "BLUE"%s"RESET":\n",
-                                               nomes_pacientes[indice_do_paciente]);
-                                        for (int i = 0; i < QNTD_ATENDIMENTOS; i++) {
+                                    int indice_do_paciente = procura_paciente_codigo(codigo_pacientes,
+                                                                                     QNTD_PACIENTES,
+                                                                                     pacientes_ativos);
+                                    if (indice_do_paciente == -1)continue;
+                                    if (indice_do_paciente == -2)break;
+
+                                    for (int i = 0; i < QNTD_ATENDIMENTOS; i++) {
+                                        if (paciente_do_atendimento[i] == indice_do_paciente) {
                                             if (atendimentos_ativos[i] == 0) continue;
-                                            if (paciente_do_atendimento[i] == indice_do_paciente) {
-                                                int indice_do_atendimento = i;
-                                                //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_do_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,indice_do_atendimento);
-                                            }
+                                            int indice_do_atendimento = i;
+                                            //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_do_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,indice_do_atendimento);
                                         }
-                                        if (coletar_opcao("Voltar", "Exibir Atendimentos de outro paciente"))continue;
-                                        else break;
                                     }
-                                break;
-                                case 7:
 
-                                    while (1) {
-                                        system("clear");
-                                        printf("-------------------"BLUE"Exibir Todos os Atendimentos do Dia"RESET"--------------------\n");
+                                    if (coletar_opcao("Voltar", "Exibir Atendimentos de outro paciente"))continue;
+                                    else break;
+                                }
+                            break;
+                            case 6:
 
-                                        char atendimentos_do_dia[1][40];
-                                        float soma = 0, cont = 0;
-                                        printf("Digite a data que deseja buscar atendimentos:\n");
-                                        receber_data(atendimentos_do_dia, 0);
+                                while (1) {
+                                    system("clear");
+                                    printf("-----------------------"BLUE"Exibir atendimento do paciente (Nome do Paciente)"RESET"------------------------\n");
 
-                                        for (int i = 0; i < QNTD_ATENDIMENTOS; i++) {
-                                            if (atendimentos_ativos[i] == 0) continue;
-                                            if (strcmp(atendimentos_do_dia[0], data_atendimentos[i]) == 0) {
-                                                int indice_do_atendimento = i;
-                                                int indice_do_paciente = paciente_do_atendimento[indice_do_atendimento];
-                                                //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_do_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,indice_do_atendimento);
-                                                soma += preco_atendimentos[i];
-                                                cont++;
-                                            }
+                                    char nome_paciente[40];
+                                    //printf("Digite o nome do Paciente que deseja exibir:\n");
+                                    //int indice_do_paciente = procura_paciente(nomes_pacientes,QNTD_PACIENTES);
+                                    if (indice_do_paciente == -1)break;
+
+                                    system("clear");
+                                    printf("Atendimentos do Paciente "BLUE"%s"RESET":\n",
+                                           nomes_pacientes[indice_do_paciente]);
+                                    for (int i = 0; i < QNTD_ATENDIMENTOS; i++) {
+                                        if (atendimentos_ativos[i] == 0) continue;
+                                        if (paciente_do_atendimento[i] == indice_do_paciente) {
+                                            int indice_do_atendimento = i;
+                                            //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_do_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,indice_do_atendimento);
                                         }
-                                        if (cont == 0) {
-                                            printf("Nenhum atendimento neste dia\n");
-                                            if (coletar_opcao("Sair", "Exibir Atendimentos de Outro Dia"))continue;
-                                            else break;
-                                        }
-                                        printf("Total de Consultas Pagas no Dia[ %s ] = R$%.2f\n",
-                                               atendimentos_do_dia[1], soma);
+                                    }
+                                    if (coletar_opcao("Voltar", "Exibir Atendimentos de outro paciente"))continue;
+                                    else break;
+                                }
+                            break;
+                            case 7:
 
+                                while (1) {
+                                    system("clear");
+                                    printf("-------------------"BLUE"Exibir Todos os Atendimentos do Dia"RESET"--------------------\n");
+
+                                    char atendimentos_do_dia[1][40];
+                                    float soma = 0, cont = 0;
+                                    printf("Digite a data que deseja buscar atendimentos:\n");
+                                    receber_data(atendimentos_do_dia, 0);
+
+                                    for (int i = 0; i < QNTD_ATENDIMENTOS; i++) {
+                                        if (atendimentos_ativos[i] == 0) continue;
+                                        if (strcmp(atendimentos_do_dia[0], data_atendimentos[i]) == 0) {
+                                            int indice_do_atendimento = i;
+                                            int indice_do_paciente = paciente_do_atendimento[indice_do_atendimento];
+                                            //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_do_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,indice_do_atendimento);
+                                            soma += preco_atendimentos[i];
+                                            cont++;
+                                        }
+                                    }
+                                    if (cont == 0) {
+                                        printf("Nenhum atendimento neste dia\n");
                                         if (coletar_opcao("Sair", "Exibir Atendimentos de Outro Dia"))continue;
                                         else break;
                                     }
-                                break;
-                                case 8:
-                                    while (1) {
-                                        system("clear");
-                                        printf("-------------------"BLUE"Exibir Todos os Atendimentos(Data mais próxima)"RESET"--------------------\n");
+                                    printf("Total de Consultas Pagas no Dia[ %s ] = R$%.2f\n",
+                                           atendimentos_do_dia[1], soma);
 
-                                        int ordem_datas[100];
-                                        ordenar_datas(data_atendimentos, ordem_datas, QNTD_ATENDIMENTOS,
-                                                      atendimentos_ativos);
-                                        int qnd_atend_ativos = 0;
-                                        for (int i = 0; i < QNTD_ATENDIMENTOS - 1; i++) {
-                                            if (atendimentos_ativos[i] == 1)qnd_atend_ativos++;
-                                        }
-                                        if (qnd_atend_ativos == 0) {
-                                            printf(RED"Nenhum Atendimento Cadastrado"RESET);
-                                        }
-                                        for (int i = 0; i < qnd_atend_ativos; i++) {
-                                            int atendimento = ordem_datas[i];
-                                            int paciente = paciente_do_atendimento[i];
-                                            //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,atendimento);
-                                        }
-                                        if (coletar_opcao("Sair", "Exibir Atendimentos Novamente"))continue;
-                                        else break;
+                                    if (coletar_opcao("Sair", "Exibir Atendimentos de Outro Dia"))continue;
+                                    else break;
+                                }
+                            break;
+                            case 8:
+                                while (1) {
+                                    system("clear");
+                                    printf("-------------------"BLUE"Exibir Todos os Atendimentos(Data mais próxima)"RESET"--------------------\n");
+
+                                    int ordem_datas[100];
+                                    ordenar_datas(data_atendimentos, ordem_datas, QNTD_ATENDIMENTOS,
+                                                  atendimentos_ativos);
+                                    int qnd_atend_ativos = 0;
+                                    for (int i = 0; i < QNTD_ATENDIMENTOS - 1; i++) {
+                                        if (atendimentos_ativos[i] == 1)qnd_atend_ativos++;
                                     }
-                                break;
-                                case 9:
-                                    printf("\nOpção -> [9], \"Voltar para o Menu Anterior\" Selecionada...\n\n");
-                                break;
-                                default:
-                                    printf(RED"\nSelecione alguma das opções anteriores!\n"RESET);
-                                break;
-                            }
-                            if (interacao_menu_atendimentos == 9)break;
-                            continue;
-                    }
-                    continue;
-                    case 3:
-                        printf(GREEN"\nSaída do Sistema Confirmada!\n"RESET);
-                    return 0;
-                    default:
-                        printf(RED"Selecione alguma das opções anteriores!\n"RESET);
+                                    if (qnd_atend_ativos == 0) {
+                                        printf(RED"Nenhum Atendimento Cadastrado"RESET);
+                                    }
+                                    for (int i = 0; i < qnd_atend_ativos; i++) {
+                                        int atendimento = ordem_datas[i];
+                                        int paciente = paciente_do_atendimento[i];
+                                        //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,atendimento);
+                                    }
+                                    if (coletar_opcao("Sair", "Exibir Atendimentos Novamente"))continue;
+                                    else break;
+                                }
+                            break;
+                            case 9:
+                                printf("\nOpção -> [9], \"Voltar para o Menu Anterior\" Selecionada...\n\n");
+                            break;
+                            default:
+                                printf(RED"\nSelecione alguma das opções anteriores!\n"RESET);
+                            break;
+                        }
+                        if (interacao_menu_atendimentos == 9)break;
+                        continue;
                 }
+                    continue;
+            case 3:
+                printf(GREEN"\nSaída do Sistema Confirmada!\n"RESET);
+                return 0;
+            default:
+                printf(RED"Selecione alguma das opções anteriores!\n"RESET);
                 break;
-        }continue;
+        }
     }
     free(pacientes);
     free(atendimentos);

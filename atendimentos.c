@@ -114,24 +114,15 @@ int procura_atendimento2(atendimento *todos_atendimentos, size_t qnt_atendimento
     char codigo_atendimento[9];
 
     ler_str(codigo_atendimento);
-    printf("Codigo solicitado = %s\n", codigo_atendimento);
 
     for(int i = 0; i < qnt_atendimentos; i++) {
-        printf("Codigo de todos os atendimentos [i] = %s\n", todos_atendimentos[i].codigo_atendimento);
-        printf("atendimento ativo? [i] = %d\n", todos_atendimentos[i].ativo);
-
-
         status_procura = procura_codigo_atendimento(todos_atendimentos[i].codigo_atendimento, qnt_atendimentos, codigo_atendimento);
-        printf("Status da procura = %d\n", status_procura);
         if(status_procura  && todos_atendimentos[i].ativo) {
-            printf("[i]= %d\n", i);
             return i;
 
         }
     }
-
     printf(RED"Atendimento NÃO cadastrado ou ainda NÃO salvo!\n"RESET);
-
     return -1;
 }
 
