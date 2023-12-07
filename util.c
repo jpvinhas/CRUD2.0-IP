@@ -237,21 +237,6 @@ void cria_codigo2(void* codigo) {
     strcpy((char*)codigo, novo_codigo);
 }
 
-float soma_consultas_pagas_pacientes(char nome_paciente_desejado[], char matriz_nomes_paciente[][40], float vetor_preco_atendimentos[], int tamanho_vetores, int vetor_paciente_atendimento_indice[]) {
-    float soma_consultas = 0;
-
-    for(int i = 0; i < tamanho_vetores; i++) {
-        int paciente_com_atendimento = vetor_preco_atendimentos[i];
-        int compara_nomes = strcmp(nome_paciente_desejado, matriz_nomes_paciente[paciente_com_atendimento]);
-        if(compara_nomes) {
-            soma_consultas += vetor_preco_atendimentos[i];
-        }
-    }
-    
-    return soma_consultas;
-}
-
-
 void copia_matriz(char matriz1[][40], char matriz2[][40], int tamanho) {
     for(int i = 0; i < tamanho; i++) {
         strcpy(matriz1[i], matriz2[i]);
@@ -310,7 +295,6 @@ void* ler(const char* nomeArquivo, size_t* numero_structs,size_t tamanho_struct)
 }
 void adicionar(const char* nomeArquivo, void* novospaciente,int qnd_novos_pacientes,size_t tam_struct) {
     FILE* arquivo = fopen(nomeArquivo, "ab+");  // Abre o arquivo em modo de leitura e escrita no final
-    printf("4");
     if (arquivo == NULL) {
         perror("Erro ao abrir o arquivo");
         exit(EXIT_FAILURE);
@@ -337,41 +321,3 @@ void alterar(const char* nomeArquivo, int indice, void* novainformacao, size_t t
 
     fclose(arquivo);
 }
-
-// void salvar(paciente* pacientes,atendimento* atendimentos, int* alteracoes_pacientes, int* alteracoes_atendimentos, int qnd_pacientes,int qnd_atendimentos){
-//     for(int i=0; i< qnd_pacientes;i++){
-//         if(alteracoes_pacientes[i]==1) alterar("pacientes.bin",i,&pacientes[i],sizeof(paciente));
-//     }
-//     for(int i=0; i< qnd_pacientes;i++){
-//         if(alteracoes_atendimentos[i]==1) alterar("atendimentos.bin",i,&atendimentos[i],sizeof(atendimento));
-//     }
-// }
-// void salvar_novos(paciente* pacientes,atendimento* atendimentos,void* novos_pacientes,void*novos_atendimentos,int qnt_novos_pacientes, int qnt_novos_atendimentos, int qnt_pacientes,int qnt_atendimentos){
-//     // for(int i =0;i< qnt_pacientes;i++){
-//     //     if(qnt_novos_pacientes==0)break;
-//     //     if(pacientes[i].ativo == 0){
-//     //         alterar("pacientes.bin",i,novos_pacientes,sizeof(paciente));
-//     //         qnt_novos_pacientes--;
-//     //     }
-//     // }
-//     // for(int i =0;i< qnt_atendimentos;i++){
-//     //     if(qnt_novos_atendimentos==0)break;
-//     //     if(atendimentos[i].ativo == 0){
-//     //         alterar("atendimentos.bin",i,novos_atendimentos,sizeof(atendimento));
-//     //         qnt_novos_atendimentos--;
-//     //     }
-//     // }
-//     //if(qnt_novos_pacientes)s
-//     adicionar("pacientes.bin",novos_pacientes,qnt_novos_pacientes,sizeof(paciente));
-//     // if(qnt_novos_atendimentos)
-//     adicionar("atendimentos.bin",novos_atendimentos,qnt_novos_atendimentos,sizeof(atendimento));
-//     qnt_novos_pacientes = 0;
-//     qnt_novos_atendimentos= 0;
-// }
-// // int procura_paciente(const char* nome, paciente*pacientes , int qnt_pacientes){
-// //     for(int i=0; i <qnt_pacientes; i++){
-// //         if(!strcmp(pacientes[i].nome,nome))
-// //         return i;
-// //     }
-// //     return -1;
-// // }

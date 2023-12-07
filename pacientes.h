@@ -48,4 +48,6 @@ int procura_paciente_livre(paciente* vetordestructs, int tamanho_vetor);
 int ja_existe(char* string,paciente*pacientes,int tamanho);
 void adicionar_pacientes(const char* nomeArquivo, paciente* novospaciente,int qnd_novos_pacientes,size_t tam_struct);
 int procura_codigo_paciente2(char*codigo,paciente*pacientes,int tamanho);    
+int compara_nome(const char* nome1, const char* nome2);
+void ordenar_pacientes(paciente*pacientes,int* ordem_pacientes,int tamanho);
 #endif

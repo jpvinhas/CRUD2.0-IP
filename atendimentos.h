@@ -4,12 +4,12 @@
 #include "pacientes.h"
 
 typedef struct
-{   char paciente_do_atendimento[40];
-    char codigo_atendimento[8];
-    char tipo_atendimento[40];  
-    char data_atendimento[40];
-    char status_atendimento[40];  
-    float preco_atendimento;
+{   char paciente[40];
+    char codigo[9];
+    char tipo[40];  
+    char data[40];
+    char status[40];  
+    float preco;
     int ativo;
 }atendimento;
 
@@ -36,4 +36,5 @@ void ordenar_datas(char datas[][40],int ordem_datas[],int tamanho,int atendiment
 void adicionar_atendimentos(const char* nomeArquivo, atendimento* novosatendimentos,int qnd_novos_atendimentos,size_t tam_struct);
 void salvar(paciente* pacientes,atendimento* atendimentos, int* alteracoes_pacientes, int* alteracoes_atendimentos, size_t qnd_pacientes,size_t qnd_atendimentos);
 void salvar_novos(paciente* pacientes,atendimento* atendimentos,paciente* novos_pacientes,atendimento*novos_atendimentos,int qnt_novos_pacientes, int qnt_novos_atendimentos, int qnt_pacientes,int qnt_atendimentos);
+float soma_consultas_pagas_pacientes(char *nome,atendimento *atendimentos,int qnt_atendimentos);
 #endif

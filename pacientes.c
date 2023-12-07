@@ -217,7 +217,7 @@ int procura_informacao2(char* informacao_paciente, paciente*pacientes, int taman
     switch(opcao){
         case 1:
             for(int i = 0; i < tamanho_matriz; i++){
-                if(!(strcmp(informacao_paciente, pacientes[i].nome))) return 1;
+                if(!(strcmp(informacao_paciente, pacientes[i].nome))) return i;
             }
             break;
         case 2:
@@ -483,4 +483,25 @@ int procura_codigo_paciente2(char*codigo,paciente*pacientes,int tamanho) {
 
     }
     return -1;
+}
+int compara_nome(const char* nome1, const char* nome2) {
+    int resultado = strcmp(nome1, nome2);
+    if (resultado > 0)return 1;
+    return 0;
+}
+void ordenar_pacientes(paciente*pacientes,int* ordem_pacientes,int tamanho){
+    for (int i = 0; i < tamanho; i++) {
+        ordem_pacientes[i] = i;
+    }
+    for (int i = 0; i < tamanho - 1; i++) {
+        if(pacientes[i].ativo == 0) continue;
+        for (int j = i + 1; j < tamanho; j++) {
+            if(pacientes[j].ativo == 0) continue;
+            if (compara_nome(pacientes[ordem_pacientes[i]].nome, pacientes[ordem_pacientes[j]].nome)) {
+                int aux = ordem_pacientes[i];
+                ordem_pacientes[i] = ordem_pacientes[j];
+                ordem_pacientes[j] = aux;
+            }
+        }
+    }
 }

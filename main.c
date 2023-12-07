@@ -419,24 +419,16 @@ int main(void) {
 
                                 printf("Digite a Data da Consulta, para Exibir os Dados do(s) Paciente(s):\n");
 
-                                char exibir_dados_data[1][40];
-                                receber_data(exibir_dados_data, 0);
-
-                                char copia_data_atendimento[1][40];
-                                copia_matriz(copia_data_atendimento, data_atendimentos, QNTD_ATENDIMENTOS);
-
+                                char data[40];
+                                receber_data2(data);
+                                
                                 int count = 0;
-                                for(int i = 0; i < QNTD_ATENDIMENTOS; i++) {
-                                    int indice_paciente_do_atendimento = varrer_datas(exibir_dados_data, copia_data_atendimento, QNTD_ATENDIMENTOS);
-                                    
-                                    if(indice_paciente_do_atendimento >= 0) {
-                                        strcpy(copia_data_atendimento[indice_paciente_do_atendimento], "JA EXIBIDO"); 
-
-                                        int indice_nomes_paciente = paciente_do_atendimento[indice_paciente_do_atendimento];
-
-                                        printf(YELLOW"\n---> Data com Consulta do Paciente: %s"RESET, nomes_pacientes[indice_nomes_paciente]);
-                                        exibe_informacoes_paciente(nomes_pacientes, codigo_pacientes, RG_pacientes, CPF_pacientes, tipo_sanguineo_pacientes, fator_RH_pacientes, endereco_pacientes, datas_nascimento_pacientes, indice_nomes_paciente);
-                                        
+                                for(int i = 0; i < qnt_atendimentos; i++) {                                    
+                                    if(strcmp(atendimentos[i].data,data)) {
+                                        paciente *paciente_atendimento;
+                                        paciente_atendimento = &pacientes[procura_informacao2(atendimentos[i].paciente,pacientes,qnt_pacientes,1,-1)];
+                                        printf(YELLOW"\n---> Data com Consulta do Paciente: %s"RESET, paciente_atendimento->nome);
+                                        exibe_informacoes_paciente2(paciente_atendimento);
                                         count++;
                                     }                        
                                 }
@@ -446,7 +438,7 @@ int main(void) {
 
                                 if(!coletar_opcao("Inserir Outra Data", "Ir para o Menu Pacientes")) {continue;}
                                 else {break;}
-                            }
+                            }  //precisa testar
                             break;
                         case 7:
                             while(1) {
@@ -462,42 +454,43 @@ int main(void) {
                             printf("\nOpção -> "BLUE"[8], \"Exibir Todos os Pacientes em Ordem"
                                 " Alfabética\""RESET" Selecionada...\n\n");
 
-                            int index_paciente = verifica_pacientes_ativos(pacientes_ativos, QNTD_PACIENTES);
-                            if(!index_paciente) {
-
-                                const int TAM_VETOR = cria_tamanho_limitando_ativos(pacientes_ativos, QNTD_PACIENTES);
-                                int limitando_ativos[TAM_VETOR]; 
-
-                                completa_vetor_limitando_ativos(pacientes_ativos, TAM_VETOR, nomes_pacientes, QNTD_ATENDIMENTOS, limitando_ativos);
-                                ordena_pacientes_ordem_alfabetica(nomes_pacientes, QNTD_PACIENTES, limitando_ativos);
-                                exibe_pacientes_ordem_alfabetica(nomes_pacientes, limitando_ativos, TAM_VETOR);
-
-                                break;
+                            int* ordem_pacientes = malloc(qnt_pacientes * sizeof(int));
+                            ordenar_pacientes(pacientes,ordem_pacientes,qnt_pacientes);
+                            int qnd_pac_ativos=0;
+                            for(int i=0;i<qnt_pacientes;i++){
+                                if(pacientes[i].ativo==1)qnd_pac_ativos++;
                             }
-                            else {
-                                printf(RED"Sem Pacientes Cadastrados!\n\n"RESET);
-                                break;   
+                            if(qnd_pac_ativos==0){
+                                printf(RED"Nenhum Atendimento Cadastrado"RESET);
                             }
+                            for(int i=0;i < qnd_pac_ativos;i++){
+                            int index = ordem_pacientes[i];
+                            exibe_informacoes_paciente2(&pacientes[index]);
+
+                            }
+                            if(coletar_opcao("Sair","Exibir Atendimentos Novamente"))continue;
+                            else break;
                         case 9:
                             while(1) {                         
                                 printf("\nOpção -> "BLUE"[9], \"Exibir a Soma das Consultas Pagas por um Determinado Paciente\""RESET" Selecionada...\n\n");
 
                                 printf("Digite o Nome do Paciente, para ver a soma das suas Consultas Pagas: "); 
 
-                                char nome_paciente_consultas_pagas[40];
-                                ler_str(nome_paciente_consultas_pagas);
+                                char nome[40];
+                                ler_str(nome);
+                                formata_string_maisculo(nome);
+                                float soma_consultas = 0;
 
-                                if(verifica_cadastro_paciente(nomes_pacientes, QNTD_PACIENTES, nome_paciente_consultas_pagas)) {
+                                if(ja_existe(nome,pacientes,qnt_pacientes)) {
 
-                                    float soma_consultas = soma_consultas_pagas_pacientes(nome_paciente_consultas_pagas, nomes_pacientes, preco_atendimentos, QNTD_PACIENTES, paciente_do_atendimento);
-                                    
-                                    printf(GREEN"--> Soma das Consultas do Paciente %s = %.2f\n"RESET, nome_paciente_consultas_pagas, soma_consultas);
+                                    soma_consultas = soma_consultas_pagas_pacientes(nome,atendimentos,qnt_atendimentos);
+                                    printf(GREEN"--> Soma das Consultas do Paciente %s = %.2f\n"RESET, nome, soma_consultas);
 
                                     if(!coletar_opcao("Selecionar Outro Paciente", "Ir para o Menu Pacientes")) {continue;}
                                     else {break;}
                                 }
                                 else {
-                                    printf(RED"Paciente %s NÃO Cadastrado\n"RESET, nome_paciente_consultas_pagas);
+                                    printf(RED"Paciente %s NÃO Cadastrado\n"RESET, nome);
 
                                     if(!coletar_opcao("Selecionar Outro Paciente", "Ir para o Menu Pacientes")) {continue;}
                                     else {break;}

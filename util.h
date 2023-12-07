@@ -33,13 +33,10 @@ void receber_data2(char* data);
 void imprimir_vetor(char vetor[][40],int tamanho);
 void cria_codigo(char vetor[][8],int indice_livre);
 void cria_codigo2(void* codigo);
-float soma_consultas_pagas_pacientes(char nome_paciente_desejado[], char matriz_nomes_paciente[][40], float vetor_preco_atendimentos[], int tamanho_vetores, int vetor_paciente_atendimento_indice[]);
 void copia_matriz(char matriz1[][40], char matriz2[][40], int tamanho);
 int varrer_datas(char data[][40], char matriz_datas_atendimentos_copia[][40], int tam_matriz_datas_atendimentos);
 FILE* abrir_arquivo(const char nome[], const char modo[]);
 void* ler(const char* nomeArquivo, size_t* numero_structs,size_t tamanho_struct);
 void adicionar(const char* nomeArquivo, void* novospaciente,int qnd_novos_pacientes,size_t tam);
 void alterar(const char* nomeArquivo, int indice, void* novainformacao, size_t tamanho_struct);
-// void salvar(paciente*pacientes,atendimento*atendimentos, int* alteracoes_pacientes, int* alteracoes_atendimentos, int qnd_pacientes,int qnd_atendimentos);
-// void salvar_novos(paciente* pacientes,atendimento* atendimentos,void* novos_pacientes,void*novos_atendimentos,int qnt_novos_pacientes, int qnt_novos_atendimentos, int qnt_pacientes,int qnt_atendimentos);
 #endif

@@ -190,7 +190,6 @@ void ordenar_datas(char datas[][40],int ordem_datas[],int tamanho,int atendiment
 }
 void adicionar_atendimentos(const char* nomeArquivo, atendimento* novosatendimentos,int qnd_novos_atendimentos,size_t tam_struct) {
     FILE* arquivo = fopen(nomeArquivo, "ab+");  // Abre o arquivo em modo de leitura e escrita no final
-    printf("4");
     if (arquivo == NULL) {
         perror("Erro ao abrir o arquivo");
         exit(EXIT_FAILURE);
@@ -205,39 +204,26 @@ void adicionar_atendimentos(const char* nomeArquivo, atendimento* novosatendimen
 void salvar(paciente* pacientes,atendimento* atendimentos, int* alteracoes_pacientes, int* alteracoes_atendimentos, size_t qnd_pacientes,size_t qnd_atendimentos){
     for(int i=0; i< qnd_pacientes;i++){
         if(alteracoes_pacientes[i]==1) alterar("pacientes.bin",i,&pacientes[i],sizeof(paciente));
-        printf("1");
     }
     for(int i=0; i< qnd_atendimentos;i++){
         if(alteracoes_atendimentos[i]==1) alterar("atendimentos.bin",i,&atendimentos[i],sizeof(atendimento));
-        printf("2");
     }
 }
 void salvar_novos(paciente* pacientes,atendimento* atendimentos,paciente* novos_pacientes,atendimento*novos_atendimentos,int qnt_novos_pacientes, int qnt_novos_atendimentos, int qnt_pacientes,int qnt_atendimentos){
-    // for(int i =0;i< qnt_pacientes;i++){
-    //     if(qnt_novos_pacientes==0)break;
-    //     if(pacientes[i].ativo == 0){
-    //         alterar("pacientes.bin",i,novos_pacientes,sizeof(paciente));
-    //         qnt_novos_pacientes--;
-    //     }
-    // }
-    // for(int i =0;i< qnt_atendimentos;i++){
-    //     if(qnt_novos_atendimentos==0)break;
-    //     if(atendimentos[i].ativo == 0){
-    //         alterar("atendimentos.bin",i,novos_atendimentos,sizeof(atendimento));
-    //         qnt_novos_atendimentos--;
-    //     }
-    // }
-    //if(qnt_novos_pacientes)s
     adicionar_pacientes("pacientes.bin",novos_pacientes,qnt_novos_pacientes,sizeof(paciente));
-    // if(qnt_novos_atendimentos)
-    adicionar_atendimentos("atendimentos.bin",&novos_atendimentos,qnt_novos_atendimentos,sizeof(atendimento));
+    adicionar_atendimentos("atendimentos.bin",novos_atendimentos,qnt_novos_atendimentos,sizeof(atendimento));
     qnt_novos_pacientes = 0;
     qnt_novos_atendimentos= 0;
 }
-// int procura_paciente(const char* nome, paciente*pacientes , int qnt_pacientes){
-//     for(int i=0; i <qnt_pacientes; i++){
-//         if(!strcmp(pacientes[i].nome,nome))
-//         return i;
-//     }
-//     return -1;
-// }
+float soma_consultas_pagas_pacientes(char *nome,atendimento *atendimentos,int qnt_atendimentos) {
+    float soma_consultas = 0;
+
+    for(int i = 0; i < qnt_atendimentos; i++) {
+        int compara_nomes = strcmp(nome, atendimentos[i].paciente);
+        if(compara_nomes == 0) {
+            soma_consultas += atendimentos[i].preco;
+        }
+    }
+    
+    return soma_consultas;
+}
