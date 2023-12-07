@@ -207,7 +207,7 @@ void salvar(paciente* pacientes,atendimento* atendimentos, int* alteracoes_pacie
         if(alteracoes_pacientes[i]==1) alterar("pacientes.bin",i,&pacientes[i],sizeof(paciente));
         printf("1");
     }
-    for(int i=0; i< qnd_pacientes;i++){
+    for(int i=0; i< qnd_atendimentos;i++){
         if(alteracoes_atendimentos[i]==1) alterar("atendimentos.bin",i,&atendimentos[i],sizeof(atendimento));
         printf("2");
     }

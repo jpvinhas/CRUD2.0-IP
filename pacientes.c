@@ -213,8 +213,7 @@ int procura_informacao(char informacao_paciente[], char matriz_informacao_pacien
     
     return 0;
 }
-int procura_informacao2(char* informacao_paciente, paciente*pacientes, int tamanho_matriz,int opcao) {  
-    
+int procura_informacao2(char* informacao_paciente, paciente*pacientes, int tamanho_matriz,int opcao,int index) {  
     switch(opcao){
         case 1:
             for(int i = 0; i < tamanho_matriz; i++){
@@ -228,12 +227,14 @@ int procura_informacao2(char* informacao_paciente, paciente*pacientes, int taman
             break;
         case 3:
             for(int i = 0; i < tamanho_matriz; i++){
+                if(i == index) continue;
                 if(strcmp(informacao_paciente, "Não Informado") == 0) break;
                 if(!(strcmp(informacao_paciente, pacientes[i].RG))) return 1;
             }
             break;
         case 4:
             for(int i = 0; i < tamanho_matriz; i++){
+                if(i == index) continue;
                 if(pacientes[i].ativo == 0)continue;
                 if(!(strcmp(informacao_paciente, pacientes[i].CPF))) return 1;
             }
@@ -248,6 +249,7 @@ int cadastra_nome_paciente(char* novopaciente,paciente*pacientes, int qnt_pacien
     while(1) {
         printf("Digite o Nome do Paciente:\n");
         ler_str(novopaciente);
+        int index = -1;
         
         int nome_incorreto = checar_string(novopaciente);
         if(nome_incorreto) {
@@ -257,7 +259,7 @@ int cadastra_nome_paciente(char* novopaciente,paciente*pacientes, int qnt_pacien
 
         formata_string_maisculo(novopaciente);
         
-        int ja_cadastrado = procura_informacao2(novopaciente, pacientes,qnt_pacientes,1);
+        int ja_cadastrado = procura_informacao2(novopaciente, pacientes,qnt_pacientes,1,index);
         if(ja_cadastrado) { 
             printf(RED"Paciente já cadastrado!\n"RESET);
             return 1;
@@ -293,16 +295,23 @@ int cadastra_nome_paciente2(char* novopaciente,paciente*pacientes, int qnt_pacie
 }
 
 
-void exibe_tipo_sanguineo_pacientes(char tipo_sanguineo[], char matriz_tipo_sanguineo[][3], char matriz_fator_RH[][9], int tam_matriz_tp_sanguineo,char matriz_pacientes[][40]) {
-
+void exibe_tipo_sanguineo_pacientes(char * tipo_sanguineo,int tam,paciente*pacientes){
     printf("Tipo Selecionado %s:\n", tipo_sanguineo);
 
     printf(BLUE"\n--------------------------Grupo %s-----------------------\n"RESET, tipo_sanguineo);
-    printf(YELLOW"---> %s Positivo\n"RESET, tipo_sanguineo);
-    busca_tipo_sanguineo(tam_matriz_tp_sanguineo, tipo_sanguineo, matriz_tipo_sanguineo, matriz_fator_RH, "Positivo", matriz_pacientes);
-    printf(BLUE"\n---------------------------------------------------------"RESET);
-    printf(YELLOW"\n---> %s Negativo\n"RESET, tipo_sanguineo);
-    busca_tipo_sanguineo(tam_matriz_tp_sanguineo, tipo_sanguineo, matriz_tipo_sanguineo, matriz_fator_RH, "Negativo", matriz_pacientes);
+    int contador = 0;
+
+    for(int i = 0; i < tam; i++) {
+        if(pacientes[i].ativo == 0)continue;
+        if(!strcmp(tipo_sanguineo, pacientes[i].tipo_sanquineo)) {
+            printf("-> Paciente: %s\n", pacientes[i].nome);
+            contador++;
+        }
+    }
+
+    if(!contador) {
+        printf("Sem Pacientes!\n");
+    }
     printf(BLUE"\n---------------------------------------------------------\n"RESET);
 }
 
@@ -317,7 +326,7 @@ void busca_tipo_sanguineo(int tam_matriz_tp_sanguineo, char tipo_sanguineo[], ch
             }
         }
 
-        if(!contador) {
+        if(!contador) {// apagar
             printf("Sem Pacientes!\n");
         }
 }

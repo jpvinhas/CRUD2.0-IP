@@ -88,10 +88,13 @@ int main(void) {
                             while (1) {
 
                                 paciente* novopaciente;
+                                int novo = 0;
                                 int index = procura_paciente_livre(pacientes, qnt_pacientes);
                                 if(index<0) {
                                     novopaciente = &novospacientes[qnt_novos_pacientes];
+                                    novo=1;
                                 }else{novopaciente=&pacientes[index];}
+                                
                                 printf("%d",index);
                                 
                                 if(cadastra_nome_paciente2(novopaciente->nome, pacientes, qnt_pacientes)) {
@@ -112,7 +115,7 @@ int main(void) {
                                 }
 
                                 cadastra_documento2("RG", novopaciente->RG);
-                                if(procura_informacao2(novopaciente->RG, pacientes, qnt_pacientes,3)) { 
+                                if(procura_informacao2(novopaciente->RG, pacientes, qnt_pacientes,3,index)) { 
                                     printf(RED"RG já cadastrado --> Impossível Inserir este Paciente!\n"RESET);
 
                                     if(!coletar_opcao("Inserir outro paciente", "Ir para o Menu Pacientes")) {continue;}
@@ -120,7 +123,7 @@ int main(void) {
                                 }
 
                                 cadastra_documento2("CPF", novopaciente->CPF);
-                                if(procura_informacao2(novopaciente->CPF, pacientes, qnt_pacientes,4)) { 
+                                if(procura_informacao2(novopaciente->CPF, pacientes, qnt_pacientes,4,index)) { 
                                     printf(RED"CPF já cadastrado --> Impossível Inserir este Paciente!\n"RESET);
                                     
                                     if(!coletar_opcao("Inserir outro paciente", "Ir para o Menu Pacientes")) {continue;}
@@ -168,7 +171,8 @@ int main(void) {
                                 receber_data2(novopaciente->data_nascimento);
                                 
                                 //system("clear");
-                                qnt_novos_pacientes++;
+                                if(novo) qnt_novos_pacientes++;
+                                if(!novo) pacientes_alterados[index] = 1;
                                 qnt_alteracoes++;
                                 novopaciente->ativo=1;
                                 exibe_informacoes_paciente2(novopaciente);
@@ -227,7 +231,7 @@ int main(void) {
                                         printf(BLUE"\nOpção -> [2], \"Alterar RG\""RESET" Selecionada...\n\n");
                                         char novo_rg[40]; 
                                         cadastra_documento2("RG", novo_rg);
-                                        if(procura_informacao2(novo_rg, pacientes, qnt_pacientes, 2)) { 
+                                        if(procura_informacao2(novo_rg, pacientes, qnt_pacientes, 2,index)) { 
                                             printf(RED"RG já cadastrado --> Impossível Inserir este Paciente!\n"RESET);
 
                                             if(!coletar_opcao("Alterar outro paciente", "Ir para o Menu Pacientes")) {saida=1;}
@@ -242,7 +246,7 @@ int main(void) {
                                         printf(BLUE"\nOpção -> [3], \"Alterar CPF\""RESET" Selecionada...\n\n");
                                         char novo_cpf[40]; 
                                         cadastra_documento2("CPF", novo_cpf);
-                                        if(procura_informacao2(novo_cpf, pacientes, qnt_pacientes,3)) { 
+                                        if(procura_informacao2(novo_cpf, pacientes, qnt_pacientes,3,index)) { 
                                             printf(RED"CPF já cadastrado --> Impossível Inserir este Paciente!\n"RESET);
                                             
                                             if(!coletar_opcao("Alterar outro paciente", "Ir para o Menu Pacientes")) {saida=1;}
@@ -402,7 +406,7 @@ int main(void) {
                                     continue;
                                 }
 
-                                exibe_tipo_sanguineo_pacientes(tp_sanguineo_selecionado, tipo_sanguineo_pacientes, fator_RH_pacientes, QNTD_ATENDIMENTOS, nomes_pacientes);
+                                exibe_tipo_sanguineo_pacientes(tp_sanguineo_selecionado,qnt_pacientes,pacientes);
 
                                 if(!coletar_opcao("Inserir Novo Tipo Sanguíneo", "Ir para o Menu Pacientes")) {continue;}
                                 else {break;}
@@ -792,7 +796,7 @@ int main(void) {
                     else break;;
                 }
                 printf(GREEN"\nSaída do Sistema Confirmada!\n"RESET);
-                
+                return 0;
             default:
                 printf(RED"Selecione alguma das opções anteriores!\n"RESET);
                 break;

@@ -31,10 +31,10 @@ int cadastra_documento(char tipo_documento[], char str_documento[], int espaco_l
 int cadastra_documento2(char* tipo_documento, char* str_documento);
 int cadastro_informacao_nao_obrigatorio(char* str_documento);
 int procura_informacao(char informacao_paciente[], char matriz_informacao_paciente[][12], int tamanho_matriz, int indice_matriz);
-int procura_informacao2(char* informacao_paciente, paciente*pacientes, int tamanho_matriz,int opcao);
+int procura_informacao2(char* informacao_paciente, paciente*pacientes, int tamanho_matriz,int opcao,int index);
 int cadastra_nome_paciente(char* novopaciente,paciente*pacientes, int qnt_pacientes);
 int cadastra_nome_paciente2(char* novopaciente,paciente*pacientes, int qnt_pacientes);
-void exibe_tipo_sanguineo_pacientes(char tipo_sanguineo[], char matriz_tipo_sanguineo[][3], char matriz_fator_RH[][9], int tam_matriz_tp_sanguineo,char matriz_pacientes[][40]);
+void exibe_tipo_sanguineo_pacientes(char * tipo_sanguineo,int tam,paciente*pacientes);
 void busca_tipo_sanguineo(int tam_matriz_tp_sanguineo, char tipo_sanguineo[], char matriz_tipo_sanguineo[][3], char matriz_fator_RH[][9], char fator_rh_escolhido[] ,char matriz_pacientes[][40]);
 void exibir_todos_pacientes(char matriz_pacientes[][40], int vetor_ativos[], int tamanho_matriz);
 void exibir_todos_pacientes2(paciente*pacientes, int tamanho) ;
