@@ -12,9 +12,9 @@ int menu_pacientes() {
     printf("\n"BLUE"[3]"RESET" Excluir um Paciente\n"BLUE"[4]"RESET" Exibir os Dados de um Paciente pelo seu Código");
     printf("\n"BLUE"[5]"RESET" Exibir os Dados de Pacientes que Apresentam o Mesmo Tipo Sanguíneo");
     printf("\n"BLUE"[6]"RESET" Exibir os Dados de Pacientes pelo Dia de Consulta\n"BLUE"[7]"RESET" Exibir Todos os Pacientes");
-    printf("\n"BLUE"[8]"RESET"Exibir Todos os Pacientes em Ordem Alfabética\n"BLUE"[9]"RESET"Exibir a Soma das Consultas Pagas por um Determinado Paciente");
-    printf(BLUE"\n[10]"RESET"Voltar para o Menu Principal");
-    printf(BLUE"\n[11]"RESET"Salvar");
+    printf("\n"BLUE"[8]"RESET" Exibir Todos os Pacientes em Ordem Alfabética\n"BLUE"[9]"RESET" Exibir a Soma das Consultas Pagas por um Determinado Paciente");
+    printf(BLUE"\n[10]"RESET" Voltar para o Menu Principal");
+    printf(BLUE"\n[11]"RESET" Salvar");
 
     printf("\n------------------------------------------------------------------------\n");
 
@@ -30,8 +30,6 @@ int menu_pacientes() {
             printf(RED"Selecione uma das Opções Anteriores!\n"RESET);
             continue;
         }
-
-        system("clear");
 
         return interacao_menu_pacientes;
     }
