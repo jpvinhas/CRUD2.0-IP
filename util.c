@@ -12,6 +12,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <time.h>
+
 #include "util.h"
 
 int menu_principal() {
@@ -137,6 +138,8 @@ int procura_string(char string[],char vetor[][40],int tamanho){
         }
     }return -1;
 }
+
+
 int procura_codigo(char codigo_unico_paciente[],char matriz_codigos_pacientes[][8],int tamanho_matriz) {
     for(int i = 0; i < tamanho_matriz; i++){
         if(strcmp(matriz_codigos_pacientes[i],codigo_unico_paciente) == 0) {
@@ -146,6 +149,16 @@ int procura_codigo(char codigo_unico_paciente[],char matriz_codigos_pacientes[][
     }
     return -1;
 }
+
+
+int procura_codigo_atendimento(char codigo_atendimento_comparado[], int qntd_atendimentos, char atendimento_solicitado[]) {
+        if(!strcmp(codigo_atendimento_comparado, atendimento_solicitado)) {
+            return 1;
+        }
+    return 0;
+}
+
+
 void receber_data(char vetor[][40],int indice_livre) {
     int dia, mes, ano;
     while(1){

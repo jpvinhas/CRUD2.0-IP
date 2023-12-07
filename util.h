@@ -42,4 +42,5 @@ void adicionar(const char* nomeArquivo, void* novo_add,int qnd_novos);
 void alterar(const char* nomeArquivo, size_t indice, void* novainformacao, size_t tamanho_struct);
 void* salvar(void*pacientes,void*atendimentos, int* alteracoes_pacientes, int* alteracoes_atendimentos, size_t qnd_pacientes,size_t qnd_atendimentos);
 void* salvar_novos(void*novos_pacientes,void*novos_atendimentos,int* qnt_novos_pacientes, int* qnt_novos_atendimentos);
+int procura_codigo_atendimento(char codigo_atendimento_comparado[], int qntd_atendimentos, char atendimento_solicitado[]);
 #endif

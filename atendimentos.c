@@ -91,8 +91,9 @@ int procura_paciente_codigo(char codigo_pacientes[][8],int QNTD_PACIENTES,int pa
 
 
 int procura_atendimento(char codigo_atendimentos[][8],int QNTD_ATENDIMENTOS,int atendimentos_ativos[]){
-    char codigo_atendimento[8];
+    char codigo_atendimento[9];
     ler_str(codigo_atendimento);
+
     int indice_do_atendimento = procura_codigo(codigo_atendimento,codigo_atendimentos,QNTD_ATENDIMENTOS);
     if(indice_do_atendimento == -1){
         printf(RED"Atendimento não cadastrado\n"RESET);
@@ -106,6 +107,32 @@ int procura_atendimento(char codigo_atendimentos[][8],int QNTD_ATENDIMENTOS,int 
     }
     return indice_do_atendimento;
 }
+
+
+int procura_atendimento2(atendimento *todos_atendimentos, size_t qnt_atendimentos) {
+    int status_procura;
+    char codigo_atendimento[9];
+
+    ler_str(codigo_atendimento);
+    printf("Codigo solicitado = %s\n", codigo_atendimento);
+
+    for(int i = 0; i < qnt_atendimentos; i++) {
+        printf("Codigo de todos os atendimentos [i] = %s\n", todos_atendimentos[i].codigo_atendimento);
+        printf("atendimento ativo? [i] = %d\n", todos_atendimentos[i].ativo);
+
+
+        status_procura = procura_codigo_atendimento(todos_atendimentos[i].codigo_atendimento, qnt_atendimentos, codigo_atendimento);
+
+        if(status_procura  && todos_atendimentos[i].ativo) {
+            return i;
+        }
+    }
+
+    printf(RED"Atendimento NÃO cadastrado ou ainda NÃO salvo!\n"RESET);
+
+    return -1;
+}
+
 
 int atendimento_ja_cadastrado(char data_atendimentos[][40],int paciente_do_atendimento[],int atendimento_atual,int tamanho){
     int atendimento_ja_cadastrado=0;
@@ -199,4 +226,11 @@ void* procura_atendimento_livre(atendimento* atendimentos_arquivados, int tamanh
         }
     }
     return NULL;
+}
+
+
+//FUNCAO APGRDPS
+void exibe_struct(atendimento exemplo) {
+    printf("Codigo do Atendimento = %s\n", exemplo.codigo_atendimento);
+    printf("Codigo do Paciente = %s\n", exemplo.codigo_paciente);
 }

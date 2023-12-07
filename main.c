@@ -2,7 +2,9 @@
  * 1) Ordem Alfabetica Pacientes Errada
  * 2) Codigo Nao aleatorio, verificar ou altera-lo
  * 3) Verificar se um paciente ja nao tem atendimento na data para salvar
- * 4) administrar se o vetorde novos pacientes e atendimentos ja esta cheio*/
+ * 4) administrar se o vetorde novos pacientes e atendimentos ja esta cheio
+ * 5) nao estou conseguindo colocar atendimentos nem pacientes na util.h
+ * 6) APAGAR COEMNTARIOS DO CODIGO*/
 
 #include <stdio.h>
 #include <string.h>
@@ -66,7 +68,7 @@ int main(void) {
     pacientes_alterados = malloc(qnt_pacientes * sizeof(int));
     preenche_vetor_ativos(pacientes_alterados,qnt_pacientes);
 
-    atendimentos = ler("atendimentos.bin",&qnt_atendimentos,sizeof(atendimento));
+    atendimentos = malloc(sizeof(atendimento) * 2);//ler("atendimentos.bin",&qnt_atendimentos,sizeof(atendimento));
     atendimentos_alterados= malloc(qnt_atendimentos * sizeof(int));
     preenche_vetor_ativos(atendimentos_alterados,qnt_atendimentos);
 
@@ -535,7 +537,7 @@ int main(void) {
                         case 1:
                             system("clear");
                             while (1){
-                                printf("\nOpção -> "BLUE"[1], \"Inserir um novo atendimento\""RESET" Selecionada...\n\n");
+                                printf("\nOpção -> "BLUE"[1], \"Inserir um Novo Atendimento\""RESET" Selecionada...\n\n");
 
                                 atendimentos = ler("atendimentos.bin", &qnt_atendimentos, sizeof(atendimento));
                                 //verifica na structs com todos os atendimentos se tem algum inativo pra sobrescrever ele!
@@ -577,30 +579,41 @@ int main(void) {
 
                                 receber_tipo_atendimento(novo_atendimento);
 
+                                novos_atendimentos[qnt_novos_atendimentos - 1] = *novo_atendimento;  //esta conseguindo guardar
+
                                 novo_atendimento->ativo = 1;
                                 qnt_novos_atendimentos++;
 
-                                system("cls");
+                                //system("cls");
                                 exibir_dados_atendimento(novo_atendimento);
                                 printf(GREEN"* Atendimento Cadastrado com sucesso! *\n"RESET);
 
-                                if(coletar_opcao("Voltar","Inserir outro Atendimento"))continue;
+                                //free(novo_atendimento);
+
+                                if(coletar_opcao("Voltar ao Menu Atendimento","Inserir outro Atendimento"))continue;
                                 else {break;}
                             }
                             break;
                         case 2:
-                            system("clear");
+                            system("cls");
+
                             while(1){
-                                printf("\n----------------"BLUE"Alterar um Atendimento Existente"RESET"---------------\n");
-                                
+                                printf("\nOpção -> "BLUE"[2], \"Alterar um Atendimento Existente\""RESET" Selecionada...\n\n");
+
                                 printf("Digite o código do atendimento que deseja alterar:\n");
-                                int indice_do_atendimento = procura_atendimento(codigo_atendimentos,QNTD_ATENDIMENTOS,atendimentos_ativos);
-                                if(indice_do_atendimento == -1)continue;;
-                                if(indice_do_atendimento == -2)break;
+
+                                //APAGAR DEPOIS
+                                printf("CODIGO DE TODOS OS ATENDIMENTOS NA MAIN: %s\n",  novos_atendimentos[2].codigo_atendimento);
+
+                                int indice_do_atendimento = procura_atendimento2(novos_atendimentos, 3);//procura_atendimento2(atendimentos, qnt_atendimentos);
+                                if(indice_do_atendimento == -1) {
+                                    if(coletar_opcao("Tentar alterar outro atendimento", "Voltar ao menu atendimento")) {break;}
+                                    else{continue;}
+                                }
+
+                                atendimento *atendimento_alterado = &novos_atendimentos[indice_do_atendimento];
                                 
-                                indice_do_paciente = paciente_do_atendimento[indice_do_atendimento];
-                                
-                                system("clear");
+                                //system("cls");
                                 //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_do_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,indice_do_atendimento);
                                 int opcao;
                                 

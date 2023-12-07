@@ -33,5 +33,9 @@ float receber_preco();
 int compara_data(char data1[],char data2[]);
 void ordenar_datas(char datas[][40],int ordem_datas[],int tamanho,int atendimentos_ativos[]);
 void *procura_atendimento_livre(atendimento* atendimentos_arquivados, int tamanho_vetor);
+int procura_atendimento2(atendimento *todos_atendimentos, size_t qnt_atendimentos);
+
+//////////////////////////////
+void exibe_struct(atendimento exemplo);
 
 #endif
