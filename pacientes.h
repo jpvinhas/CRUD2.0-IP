@@ -9,7 +9,7 @@
 #define RESET   "\x1b[0m"
 
 typedef struct {
-    char codigo_paciente[8];  
+    char codigo_paciente[9];
     char nome_paciente[40];
     char RG_paciente[12]; 
     char CPF_paciente[12];

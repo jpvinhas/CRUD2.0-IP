@@ -17,8 +17,8 @@ int menu_atendimento() {
     printf("\n-----------------------------"BLUE"MENU ATENDIMENTO"RESET"-----------------------------\n");
     printf("Selecione a funcionalidade que desejar: \n");
     printf(BLUE"\n[1]"RESET" Inserir um Novo Atendimento\n"BLUE"[2]"RESET" Alterar um Atendimento Existente");
-    printf(BLUE"\n[3]"RESET" Excluir Atendimento\n"BLUE"[4]"RESET" Exibir Atendimento(Código)");
-    printf(BLUE"\n[5]"RESET" Exibir Atendimentos de um Paciente(Código do Paciente)");
+    printf(BLUE"\n[3]"RESET" Excluir Atendimento\n"BLUE"[4]"RESET" Exibir os Dados de um Atendimento com base no seu código");
+    printf(BLUE"\n[5]"RESET" Exibir Todos os Atendimentos de um Paciente com base no seu código");
     printf(BLUE"\n[6]"RESET" Exibir Atendimentos de um Paciente(Nome do Paciente)\n"BLUE"[7]"RESET" Exibir Todos Atendimentos do Dia");
     printf(BLUE"\n[8]"RESET" Exibir Todos Atendimentos(Data mais Próxima)\n"BLUE"[9]"RESET" Voltar para o Menu Anterior\n");
     printf("\n---------------------------------------------------------------------------\n");
@@ -63,6 +63,7 @@ void receber_status_atendimento(atendimento *novo_atendimento){
 }
 int procura_paciente(paciente *todos_pacientes, int qntd_pacientes, char codigo_paciente[]) {
         for(int i = 0; i < qntd_pacientes; i++) {
+            printf("PACIENTE OBSERVADO = %s\n", todos_pacientes[i].codigo_paciente);
             if(!strcmp(codigo_paciente, todos_pacientes[i].codigo_paciente)) {
                 return 1;
             }
