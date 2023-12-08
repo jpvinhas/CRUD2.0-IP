@@ -50,7 +50,9 @@ int menu_principal() {
 int coletar_opcao(char opcao1[],char opcao2[]){
     while(1) {
         char opcao;
-        printf(BLUE"[0]"RESET" %s   "BLUE"[1]"RESET"%s\n",opcao1,opcao2);;
+        printf(BLUE"[0]"RESET" %s  ",opcao1);
+        if(strcmp(opcao2,"\0") != 0)printf(BLUE"[1]"RESET" %s \n",opcao2);
+        else{printf("\n");}
         
         printf(BLUE);
         fflush(stdin);  

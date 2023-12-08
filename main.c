@@ -76,8 +76,7 @@ int main(void) {
                 printf(BLUE"\nMenu \"Paciente\" Selecionado...\n"RESET);
                 while(1) {
                     if(qnt_alteracoes>0) printf(RED"VOCÊ POSSUI %d ALTERACOES NÃO SALVAS!\n"RESET,qnt_alteracoes);
-                    int interacao_menu_pacientes = menu_pacientes(); 
-                    int espaco_livre;                                                           
+                    int interacao_menu_pacientes = menu_pacientes();                                                           
                     int informacao_nao_obrigatoria;                   
                     int formatacao_incorreta;
 
@@ -90,6 +89,7 @@ int main(void) {
                                 paciente* novopaciente;
                                 int novo = 0;
                                 int index = procura_paciente_livre(pacientes, qnt_pacientes);
+                                
                                 if(index<0) {
                                     novopaciente = &novospacientes[qnt_novos_pacientes];
                                     novo=1;
@@ -131,37 +131,8 @@ int main(void) {
 
                                 }
 
-                                while (1) {
-                                    printf("Selecione o seu Tipo Sanguíneo (Sem o Fator RH) ou ENTER para pular:\n");
-                                    printf(BLUE"[1] A     [2] B     [3] AB     [4] O\n"RESET);  
-                                    ler_str(novopaciente->tipo_sanquineo);
-
-                                    informacao_nao_obrigatoria = cadastro_informacao_nao_obrigatorio(novopaciente->tipo_sanquineo);
-                                    if(informacao_nao_obrigatoria) {break;}
-                                    
-                                    formatacao_incorreta = valida_tipo_sanguineo(novopaciente->tipo_sanquineo);
-                                    if(formatacao_incorreta) {
-                                        printf(RED"Tipo Sanguíneo Inválido, Digite Novamente!\n"RESET);
-                                        continue;
-                                    }
-                                    break;
-                                }
-
-                                while(1) {
-                                    printf("Selecione o Fator RH do Paciente (Positivo ou Negativo) ou ENTER para pular:\n");
-                                    printf(BLUE"[1] Positivo     [2] Negativo\n"RESET);
-                                    ler_str(novopaciente->fator_RH);
-
-                                    informacao_nao_obrigatoria = cadastro_informacao_nao_obrigatorio(novopaciente->fator_RH);
-                                    if(informacao_nao_obrigatoria) {break;}
-                                        
-                                    formatacao_incorreta = valida_fato_rh(novopaciente->fator_RH);
-                                    if(formatacao_incorreta) {
-                                        printf(RED"Fator RH Inválido, Digite Novamente!\n"RESET);
-                                        continue;
-                                    }
-                                    break;
-                                }
+                                cadastrar_tipo_sanguineo(novopaciente->tipo_sanquineo);
+                                cadastrar_fator_rh(novopaciente->fator_RH);
 
                                 printf("Digite seu Endereço ou ENTER para pular:\n");
                                 ler_str(novopaciente->endereco);
@@ -170,7 +141,6 @@ int main(void) {
                                 printf("Digite a Data de Nascimento do Paciente:\n");
                                 receber_data2(novopaciente->data_nascimento);
                                 
-                                //system("clear");
                                 if(novo) qnt_novos_pacientes++;
                                 if(!novo) pacientes_alterados[index] = 1;
                                 qnt_alteracoes++;
@@ -260,19 +230,8 @@ int main(void) {
                                     case 4:
                                         printf("\nOpção -> "BLUE"[4], \"Alterar Tipo Sanguíneo\""RESET" Selecionada...\n\n");
 
-                                        while (1) {
-                                            printf("Selecione o seu Tipo Sanguíneo:\n");
-                                            printf(BLUE"[1] A     [2] B     [3] AB     [4] O\n"RESET);  
-                                            ler_str(paciente_a_alterar->tipo_sanquineo);
-                            
-                                            formatacao_incorreta = valida_tipo_sanguineo(paciente_a_alterar->tipo_sanquineo);
-                                            if(formatacao_incorreta) {
-                                                printf("Tipo Sanguíneo Inválido, Digite Novamente!\n");
-                                                continue;
-                                            }
-
-                                            break;//melhorar
-                                        }
+                                        cadastrar_tipo_sanguineo(paciente_a_alterar->tipo_sanquineo);
+                                        
                                         printf(GREEN"\nTipo sanguíneo Alterado com Sucesso!\n"RESET);
                                         qnt_alteracoes++;
 
@@ -280,18 +239,7 @@ int main(void) {
                                     case 5:
                                         printf("\nOpção -> "BLUE"[5], \"Alterar Fator RH\""RESET" Selecionada...\n\n");
 
-                                        while(1) {
-                                            printf("Selecione o Fator RH do Paciente (Positivo ou Negativo):\n");
-                                            printf(BLUE"[1] Positivo     [2] Negativo\n"RESET);
-                                            ler_str(paciente_a_alterar->fator_RH);
-
-                                            formatacao_incorreta = valida_fato_rh(paciente_a_alterar->fator_RH);
-                                            if(formatacao_incorreta) {
-                                                printf("Fator RH Inválido, Digite Novamente!\n");
-                                                continue;
-                                            }
-                                            break;
-                                        }
+                                        cadastrar_fator_rh(paciente_a_alterar->fator_RH);
 
                                         printf(GREEN"Fator RH Alterado com Sucesso!\n"RESET);
                                         qnt_alteracoes++;
@@ -359,6 +307,14 @@ int main(void) {
                                     pacientes_alterados[index]=1;
                                     qnt_pacientes_alterados++;
                                     qnt_alteracoes++;
+                                    int qnt;
+                                    for(int i=0; i<qnt_atendimentos;i++){
+                                        if(strcmp(paciente_a_excluir->nome,atendimentos[i].paciente) == 0){
+                                            atendimentos[i].ativo = 0;
+                                            qnt++;
+                                        }
+                                    }
+                                    printf("O paciente tinha %d atendimentos cadastrados",qnt);
                                 }
                                 if(!coletar_opcao("Excluir outro paciente", "Ir para o Menu Pacientes")) {continue;}
                                 else {break;}
@@ -394,23 +350,12 @@ int main(void) {
                         case 5:
                             printf("\nOpção -> "BLUE"[5], \"Exibir os Dados de Pacientes que Apresentam o Mesmo"
                                 " Tipo Sanguíneo\""RESET" Selecionada...\n\n");
-                                
-                            while(1) {
-                                printf("Escolha um Tipo Sanguíneo para Vizualizar os Pacientes que pertecem a esse Determinado Grupo:\n");
-                                printf(BLUE"[1] A     [2] B     [3] AB     [4] O\n"RESET);
-                                char tp_sanguineo_selecionado[3];
-                                scanf(" %s", &tp_sanguineo_selecionado);
-
-                                if(valida_tipo_sanguineo(tp_sanguineo_selecionado)) {
-                                    printf(RED"Tipo Sanguíneo Inválido, Digite Novamente!\n"RESET);
-                                    continue;
-                                }
-
-                                exibe_tipo_sanguineo_pacientes(tp_sanguineo_selecionado,qnt_pacientes,pacientes);
-
-                                if(!coletar_opcao("Inserir Novo Tipo Sanguíneo", "Ir para o Menu Pacientes")) {continue;}
-                                else {break;}
-                            }
+                            
+                            char tp_sanguineo_selecionado[3];   
+                            cadastrar_tipo_sanguineo(tp_sanguineo_selecionado);
+                            exibe_tipo_sanguineo_pacientes(tp_sanguineo_selecionado,qnt_pacientes,pacientes);
+                            if(!coletar_opcao("Voltar para o menu", "\0")) {break;}
+                            else {break;}
                             break;
                         case 6:
                             while(1) {
