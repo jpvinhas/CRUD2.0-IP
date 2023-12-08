@@ -318,7 +318,7 @@ int main(void) {
                                     qnt_alteracoes++;
                                     int qnt;
                                     for(int i=0; i<qnt_atendimentos;i++){
-                                        if(strcmp(paciente_a_excluir->nome,atendimentos[i].paciente) == 0){
+                                        if(strcmp(paciente_a_excluir->codigo,atendimentos[i].codigo_paciente) == 0){
                                             atendimentos[i].ativo = 0;
                                             qnt++;
                                         }
@@ -380,7 +380,7 @@ int main(void) {
                                 for(int i = 0; i < qnt_atendimentos; i++) {                                    
                                     if(strcmp(atendimentos[i].data,data)) {
                                         paciente *paciente_atendimento;
-                                        paciente_atendimento = &pacientes[procura_informacao2(atendimentos[i].paciente,pacientes,qnt_pacientes,1,-1)];
+                                        paciente_atendimento = &pacientes[procura_informacao2(atendimentos[i].codigo_paciente,pacientes,qnt_pacientes,2,-1)];
                                         printf(YELLOW"\n---> Data com Consulta do Paciente: %s"RESET, paciente_atendimento->nome);
                                         exibe_informacoes_paciente2(paciente_atendimento);
                                         count++;

@@ -167,7 +167,7 @@ int procura_informacao2(char* informacao_paciente, paciente*pacientes, int taman
             break;
         case 2:
             for(int i = 0; i < tamanho_matriz; i++){
-                if(!(strcmp(informacao_paciente, pacientes[i].codigo))) return 1;
+                if(!(strcmp(informacao_paciente, pacientes[i].codigo))) return i;
             }
             break;
         case 3:
