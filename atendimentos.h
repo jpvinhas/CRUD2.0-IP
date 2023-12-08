@@ -4,11 +4,11 @@
 #include "pacientes.h"
 
 typedef struct
-{   char codigo_paciente[9]; // da para colocar um ponteiro que aponte para esse codigo
+{   char codigo_paciente[9];
     char codigo_atendimento[9];
-    char tipo[40];
+    char tipo[40];  
     char data[40];
-    char status[40];
+    char status[40];  
     float preco;
     int ativo;
 }atendimento;

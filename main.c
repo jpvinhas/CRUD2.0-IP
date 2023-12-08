@@ -8,8 +8,6 @@
  * 7) Fazer opcao de descartar salvos*/
 
 #include <stdio.h>
-#include <string.h>
-
 #include "pacientes.h"
 #include "atendimentos.h"
 #include "util.h"
@@ -21,6 +19,8 @@
 #define GREEN   "\x1b[32m"
 #define YELLOW  "\x1b[33m"
 #define BLUE    "\x1b[34m"
+#define MAGENTA "\x1b[35m"
+#define CIANO   "\x1b[36m"
 #define RESET   "\x1b[0m"
 
 paciente* pacientes;
@@ -180,7 +180,7 @@ int main(void) {
                                         if(!coletar_opcao("Inserir Novo Código", "Ir para o Menu Pacientes")) {continue;}
                                         else {break;}
                                     }
-                                    printf("Paciente %s encontrado, mas ainda não salvo no arquivo");  
+                                    printf("Paciente %s encontrado, mas ainda não salvo no arquivo",pacientes);  
                                     if(!coletar_opcao("Inserir Novo Código", "Ir para o Menu Pacientes")) {continue;}
                                     else {break;}
                                 }else{paciente_a_alterar = &pacientes[index];}
@@ -456,7 +456,7 @@ int main(void) {
                             break;
                         case 11:
                             salvar(pacientes,atendimentos,pacientes_alterados,atendimentos_alterados,qnt_pacientes,qnt_atendimentos);
-                            salvar_novos(pacientes,atendimentos,&novospacientes,&novosatendimentos,qnt_novos_pacientes,qnt_novos_atendimentos,qnt_pacientes,qnt_atendimentos);
+                            salvar_novos(pacientes,atendimentos,&novospacientes,&novos_atendimentos,qnt_novos_pacientes,qnt_novos_atendimentos,qnt_pacientes,qnt_atendimentos);
                             
                             free(pacientes);
                             free(pacientes_alterados);
@@ -515,8 +515,8 @@ int main(void) {
                                 ler_str(novo_atendimento->codigo_paciente);
                                 //apagar
                                 paciente *teste_paciente = malloc(sizeof(pacientes) * 2);
-                                strcpy(teste_paciente[0].codigo_paciente, "XXXXXXX");
-                                strcpy(teste_paciente[1].codigo_paciente, "ZZZZZZZ");
+                                strcpy(teste_paciente[0].codigo, "XXXXXXX");
+                                strcpy(teste_paciente[1].codigo, "ZZZZZZZ");
                                 //apagar
                                 //trocar "teste_paciente" por pacientes e 2 por qntd_pacientes na funcao abaixo!
                                 if (!procura_paciente(teste_paciente, 2, novo_atendimento->codigo_paciente)) {
@@ -568,8 +568,8 @@ int main(void) {
                                 printf("Digite o código do atendimento que deseja alterar:\n");
                                 //apagardepois
                                 paciente *teste_paciente = malloc(sizeof(pacientes) * 2);
-                                strcpy(teste_paciente[0].codigo_paciente, "XXXXXXX");
-                                strcpy(teste_paciente[1].codigo_paciente, "ZZZZZZZ");
+                                strcpy(teste_paciente[0].codigo, "XXXXXXX");
+                                strcpy(teste_paciente[1].codigo, "ZZZZZZZ");
                                 //----------------------
                                 //APAGAR DEPOIS
                                 printf("CODIGO DE TODOS OS ATENDIMENTOS NA MAIN: %s\n",
@@ -661,8 +661,8 @@ int main(void) {
 
                                 //apagardepois
                                 paciente *teste_paciente = malloc(sizeof(pacientes) * 2);
-                                strcpy(teste_paciente[0].codigo_paciente, "XXXXXXX");
-                                strcpy(teste_paciente[1].codigo_paciente, "ZZZZZZZ");
+                                strcpy(teste_paciente[0].codigo, "XXXXXXX");
+                                strcpy(teste_paciente[1].codigo, "ZZZZZZZ");
                                 //----------------------
                                 printf("-> Digite o Atendimento que você deseja Excluír:");
 
@@ -715,8 +715,8 @@ int main(void) {
                             while (1) {
                                 //apagardepois
                                 paciente *teste_paciente = malloc(sizeof(pacientes) * 2);
-                                strcpy(teste_paciente[0].codigo_paciente, "ZZZZZZZ");
-                                strcpy(teste_paciente[1].codigo_paciente, "xxxxxxx");
+                                strcpy(teste_paciente[0].codigo, "ZZZZZZZ");
+                                strcpy(teste_paciente[1].codigo, "xxxxxxx");
                                 //----------------------
 
                                 char codigo_paciente[8];

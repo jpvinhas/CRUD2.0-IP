@@ -1,9 +1,3 @@
-#include <stdio.h>
-#include <string.h>
-
-#include "atendimentos.h"
-#include "util.h"
-
 #define RED     "\x1b[31m"
 #define GREEN   "\x1b[32m"
 #define YELLOW  "\x1b[33m"
@@ -11,6 +5,10 @@
 #define MAGENTA "\x1b[35m"
 #define CIANO   "\x1b[36m"
 #define RESET   "\x1b[0m"
+
+#include <stdio.h>
+#include <string.h>
+#include "atendimentos.h"
 
 
 int menu_atendimento() {
@@ -249,7 +247,7 @@ float soma_consultas_pagas_pacientes(char *nome,atendimento *atendimentos,int qn
     }
     
     return soma_consultas;
-
+}
 
 void* procura_atendimento_livre(atendimento* atendimentos_arquivados, int tamanho_vetor) {
     for (int i = 0; i < tamanho_vetor; i++) {

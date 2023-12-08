@@ -6,13 +6,6 @@
 #define CIANO   "\x1b[36m"
 #define RESET   "\x1b[0m"
 
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <string.h>
-#include <time.h>
-
 #include "util.h"
 
 int menu_principal() {

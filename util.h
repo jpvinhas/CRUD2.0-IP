@@ -21,16 +21,16 @@ int preenche_vetor_ativos(int vetor_ativos[], int tamanho_vetor);
 void ler_str(char* string);
 int checar_string(char string[]);
 void formata_string_maisculo(char string[]);
-//int ja_existe(char* string,paciente*pacientes,int tamanho);
 int procura_string(char string[],char vetor[][40],int tamanho);
 int procura_codigo(char codigo_unico_paciente[],char matriz_codigos_pacientes[][8],int tamanho_matriz);
 int procura_espaco_livre(int vetor_ativos[], int tamanho_vetor);
+int procura_codigo_atendimento(char codigo_atendimento_comparado[], int qntd_atendimentos, char atendimento_solicitado[]);
 void receber_data(char vetor[][40],int indice_livre);
 void receber_data2(char* data);
 
 void imprimir_vetor(char vetor[][40],int tamanho);
 void cria_codigo(char vetor[][8],int indice_livre);
-void cria_codigo2(void* codigo);
+void cria_codigo2(char* codigo);
 void copia_matriz(char matriz1[][40], char matriz2[][40], int tamanho);
 int varrer_datas(char data[][40], char matriz_datas_atendimentos_copia[][40], int tam_matriz_datas_atendimentos);
 FILE* abrir_arquivo(const char nome[], const char modo[]);
