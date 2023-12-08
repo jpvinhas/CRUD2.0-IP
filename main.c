@@ -788,40 +788,40 @@ int main(void) {
                                 else break;
                             }
                             break;
-                            case 6:
+                        case 6:
+                            while (1) {
+                                system("cls");
+                                printf("\nOpção -> "BLUE"[6], \"Exibir Todos os Atendimentos e seu Somatório Total Diário\""RESET" Selecionada...\n\n");
 
-                                while (1) {
-                                    system("clear");
-                                    printf("-------------------"BLUE"Exibir Todos os Atendimentos do Dia"RESET"--------------------\n");
+                                char atendimentos_do_dia[1][40];
+                                float soma = 0, count = 0;
+                                printf("Digite a data que você deseja acessar as informações:");
+                                receber_data(atendimentos_do_dia, 0);
 
-                                    char atendimentos_do_dia[1][40];
-                                    float soma = 0, cont = 0;
-                                    printf("Digite a data que deseja buscar atendimentos:\n");
-                                    receber_data(atendimentos_do_dia, 0);
+                                atendimento *atendimento_teste = malloc(sizeof(atendimento) * 2);
+                                strcpy(atendimento_teste[0].data, "22/02/2022");
 
-                                    for (int i = 0; i < QNTD_ATENDIMENTOS; i++) {
-                                        if (atendimentos_ativos[i] == 0) continue;
-                                        if (strcmp(atendimentos_do_dia[0], data_atendimentos[i]) == 0) {
-                                            int indice_do_atendimento = i;
-                                            int indice_do_paciente = paciente_do_atendimento[indice_do_atendimento];
-                                            //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,indice_do_paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,indice_do_atendimento);
-                                            soma += preco_atendimentos[i];
-                                            cont++;
-                                        }
+                                for (int i = 0; i < QNTD_ATENDIMENTOS; i++) {
+                                    if (!strcmp(atendimentos_do_dia[0], atendimento_teste[i].data)) {  //trocar atendimento_teste[0].data por -> atendimentos[i].data
+                                        exibir_dados_atendimento(atendimento_teste);
+
+                                        soma += atendimento_teste[i].preco;
+                                        count++;
                                     }
-                                    if (cont == 0) {
-                                        printf("Nenhum atendimento neste dia\n");
-                                        if (coletar_opcao("Sair", "Exibir Atendimentos de Outro Dia"))continue;
-                                        else break;
-                                    }
-                                    printf("Total de Consultas Pagas no Dia[ %s ] = R$%.2f\n",
-                                           atendimentos_do_dia[1], soma);
-
-                                    if (coletar_opcao("Sair", "Exibir Atendimentos de Outro Dia"))continue;
-                                    else break;
                                 }
-                            break;
-                            case 7:
+                                if (!count) {
+                                    printf(YELLOW"* Nenhum atendimento neste dia! *\n\n"RESET);
+                                    if (coletar_opcao("Sair", "Exibir Atendimentos de Outro Dia")) {continue;}
+                                    else {break;}
+                                }
+                                printf("Total de Consultas Pagas no Dia[%s] = R$%.2f\n",
+                                       count, soma);
+
+                                if (coletar_opcao("Sair", "Selecionar outro dia")) {continue;}
+                                else {break;}
+                            }
+                        break;
+                            case 7: //Parei aqui
                                 while (1) {
                                     system("clear");
                                     printf("-------------------"BLUE"Exibir Todos os Atendimentos(Data mais próxima)"RESET"--------------------\n");
