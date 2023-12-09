@@ -153,8 +153,6 @@ int procura_codigo_atendimento(char codigo_atendimento_comparado[], int qntd_ate
         }
     return 0;
 }
-
-
 void receber_data(char vetor[][40],int indice_livre) {
     int dia, mes, ano;
     while(1){
@@ -178,31 +176,35 @@ void receber_data(char vetor[][40],int indice_livre) {
         break;
     }
 
+} 
+int validar_data(int dia, int mes, int ano) {
+    if (dia >= 1 && dia <= 31 && mes >= 1 && mes <= 12 && ano >= 1900) {
+        return 1;  // Data válida
+    } else {
+        printf("Data inválida!\n");
+        return 0;  // Data inválida
+    }
 }
+
 void receber_data2(char* data) {
     int dia, mes, ano;
-    while(1){
-        printf(BLUE"Digite o dia: "RESET);
-        scanf("%d", &dia);
 
-        printf(BLUE"Digite o mês: "RESET);
-        scanf("%d", &mes);
+    while (1) {
+        printf(BLUE"Digite a data no formato DD/MM/AAAA: "RESET);
 
-        printf(BLUE"Digite o ano (ex. 2023): "RESET);
-        scanf("%d", &ano);
-        
-        if (!(dia >= 1 && dia <= 31 && mes >= 1 && mes <= 12 && ano >= 1900)){
-        printf("Data inválida!\n");
-        if(coletar_opcao("Voltar","Tentar novamente"))continue;
-        return;
+        fflush(stdin);
+        if (scanf("%2d/%2d/%4d", &dia, &mes, &ano) != 3) {
+            printf("Formato de data inválido! Certifique-se de digitar a data no formato DD/MM/AAAA.\n");
+
+        } else if (!validar_data(dia, mes, ano)) {
+            continue;
+        } else {
+            sprintf(data, "%02d/%02d/%04d", dia, mes, ano);
+            break;
         }
-
-        sprintf(data,"%02d/%02d/%04d", dia, mes, ano);
-
-        break;
     }
-
 }
+
 
 void imprimir_vetor(char vetor[][40],int tamanho){
     for(int i=0;i<tamanho;i++){

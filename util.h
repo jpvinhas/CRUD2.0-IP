@@ -26,6 +26,7 @@ int procura_codigo(char codigo_unico_paciente[],char matriz_codigos_pacientes[][
 int procura_espaco_livre(int vetor_ativos[], int tamanho_vetor);
 int procura_codigo_atendimento(char codigo_atendimento_comparado[], int qntd_atendimentos, char atendimento_solicitado[]);
 void receber_data(char vetor[][40],int indice_livre);
+int validar_data(int dia, int mes, int ano);
 void receber_data2(char* data);
 
 void imprimir_vetor(char vetor[][40],int tamanho);
