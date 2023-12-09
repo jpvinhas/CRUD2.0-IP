@@ -781,31 +781,26 @@ int main(void) {
                                 else {break;}
                             }
                             break;
-                        case 7: //Parei aqui
+                        case 7:
                             while (1) {
-                                system("clear");
-                                printf("\nOpção -> "BLUE"[6], \"Exibir os Atendimentos em Ordem de Data de Atendimento\""RESET" Selecionada...\n\n");
+                                system("cls");
+                                printf("\nOpção -> "BLUE"[7], \"Exibir os Atendimentos em Ordem de Data de Atendimento\""RESET" Selecionada...\n\n");
 
-                                int ordem_datas[100];
-                                ordenar_datas(data_atendimentos, ordem_datas, QNTD_ATENDIMENTOS,
-                                              atendimentos_ativos);
-                                int qnd_atend_ativos = 0;
-                                for (int i = 0; i < QNTD_ATENDIMENTOS - 1; i++) {
-                                    if (atendimentos_ativos[i] == 1)qnd_atend_ativos++;
+                                int datas_ordenadas[qnt_atendimentos];
+                                ordenar_datas(atendimentos, datas_ordenadas, qnt_atendimentos);
+
+                                if (!qnt_atendimentos) {
+                                    printf(RED"Nenhum Atendimento Cadastrado\n"RESET);
                                 }
-                                if (qnd_atend_ativos == 0) {
-                                    printf(RED"Nenhum Atendimento Cadastrado"RESET);
+                                for (int i = 0; i < qnt_atendimentos; i++) {
+                                    int atendimento_ordenado = datas_ordenadas[i];
+                                    exibir_dados_atendimento(&atendimentos[atendimento_ordenado]);
                                 }
-                                for (int i = 0; i < qnd_atend_ativos; i++) {
-                                    int atendimento = ordem_datas[i];
-                                    int paciente = paciente_do_atendimento[i];
-                                    //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,atendimento);
-                                }
-                                if (coletar_opcao("Sair", "Exibir Atendimentos Novamente"))continue;
-                                else break;
+                                if (coletar_opcao("Sair", "Exibir Atendimentos Novamente")) {continue;}
+                                else {break;}
                             }
                             break;
-                        case 8:
+                        case 8: //Parei aqui
                             printf("\nOpção -> [8], \"Exibir o Somatório dos Atendimentos pagos de um\n"
                                    "determinado período de atendimento.\" Selecionada...\n\n");
                             break;

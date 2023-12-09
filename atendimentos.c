@@ -190,15 +190,15 @@ int compara_data(char data1[],char data2[]) {
         }
     }
 }
-void ordenar_datas(char datas[][40],int ordem_datas[],int tamanho,int atendimentos_ativos[]){
-    for (int i = 0; i < tamanho; i++) {
+void ordenar_datas(atendimento *todos_atendimentos,int ordem_datas[],size_t qnt_atendimentos){
+    for (int i = 0; i < qnt_atendimentos; i++) {
         ordem_datas[i] = i;
     }
-    for (int i = 0; i < tamanho - 1; i++) {
-        if(atendimentos_ativos[i]==0) continue;
-        for (int j = i + 1; j < tamanho; j++) {
-            if(atendimentos_ativos[j]==0) continue;
-            if (compara_data(datas[ordem_datas[j]], datas[ordem_datas[i]])) {
+    for (int i = 0; i < qnt_atendimentos - 1; i++) {
+        if(!todos_atendimentos[i].ativo) {continue;}
+        for (int j = i + 1; j < qnt_atendimentos; j++) {
+            if(!todos_atendimentos[i].ativo) {continue;}
+            if (compara_data(todos_atendimentos[ordem_datas[j]].data, todos_atendimentos[ordem_datas[i]].data)) {
                 int aux = ordem_datas[i];
                 ordem_datas[i] = ordem_datas[j];
                 ordem_datas[j] = aux;
