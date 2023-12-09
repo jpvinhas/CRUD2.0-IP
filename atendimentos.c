@@ -33,10 +33,10 @@ int menu_atendimento() {
 }
 void exibir_dados_atendimento(atendimento *novo_atendimento) {
     printf("*--Código-----Código do Paciente------Data----------Tipo--------Preço--------Status----*\n");
-    printf("   %s  |       %s       |   22/22/2222  |   %s   |  R$%.2f  | %s\n\n",
+    printf("   %s  |       %s       |   %s  |   %s   |  R$%.2f  | %s\n\n",
            novo_atendimento->codigo_atendimento,
            novo_atendimento->codigo_paciente,
-           //novo_atendimento->data,
+           novo_atendimento->data,
            novo_atendimento->tipo,
            novo_atendimento->preco,
            novo_atendimento->status);
@@ -215,7 +215,7 @@ void adicionar_atendimentos(const char* nomeArquivo, atendimento* novosatendimen
         perror("Erro ao abrir o arquivo");
         exit(EXIT_FAILURE);
     }
-
+    printf("1");
     // Escreve os novos structs no final do arquivo
     fseek(arquivo, 0, SEEK_END);  // Move o ponteiro para o final do arquivo
     fwrite(novosatendimentos, tam_struct, qnd_novos_atendimentos, arquivo);
@@ -251,7 +251,7 @@ float soma_consultas_pagas_pacientes(char *nome,atendimento *atendimentos,int qn
 
 int procura_atendimento_livre(atendimento* atendimentos_arquivados, int tamanho_vetor) {
     for (int i = 0; i < tamanho_vetor; i++) {
-        if(atendimentos_arquivados[i].ativo) {
+        if(atendimentos_arquivados[i].ativo == 0) {
             return i;
         }
     }

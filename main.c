@@ -509,9 +509,10 @@ int main(void) {
                                 atendimento *novo_atendimento;
                                 int eh_novo = 0;
                                 int ja_arquivado = procura_atendimento_livre(atendimentos,qnt_atendimentos);
-
+                                printf("%d",ja_arquivado);
+                                printf("%d",qnt_novos_atendimentos);
                                 if(ja_arquivado < 0) {
-                                    novo_atendimento = &novos_atendimentos[qnt_novos_pacientes];
+                                    novo_atendimento = &novos_atendimentos[qnt_novos_atendimentos];
                                     eh_novo = 1;
                                 }else{novo_atendimento = &atendimentos[ja_arquivado];}
 
@@ -534,6 +535,7 @@ int main(void) {
                                 int data_ja_cadastrada=atendimento_ja_cadastrado(data_atendimentos,paciente_do_atendimento,espaco_livre,QNTD_ATENDIMENTOS);
                                 if(data_ja_cadastrada)continue;
                                 */
+                                receber_data2(novo_atendimento->data);
 
                                 novo_atendimento->preco = receber_preco();
 
@@ -545,11 +547,12 @@ int main(void) {
 
                                 novo_atendimento->ativo = 1;
                                 qnt_alteracoes++;
-
-                                if(eh_novo) {qnt_novos_pacientes++;exibir_dados_atendimento(&novos_atendimentos[qnt_novos_pacientes - 1]);}
-                                else {pacientes_alterados[ja_arquivado] = 1;exibir_dados_atendimento(&atendimentos[ja_arquivado]);}
-
                                 exibir_dados_atendimento(novo_atendimento);
+                                printf(" %s",novos_atendimentos[qnt_novos_atendimentos].codigo_atendimento);
+
+                                if(eh_novo) {qnt_novos_atendimentos++;exibir_dados_atendimento(&novos_atendimentos[qnt_novos_atendimentos]);}
+                                else {atendimentos_alterados[ja_arquivado] = 1;exibir_dados_atendimento(&atendimentos[ja_arquivado]);}
+
                                 printf(GREEN"* Atendimento Cadastrado com sucesso! *\n"RESET);
 
                                 if (coletar_opcao("Voltar ao Menu Atendimento", "Inserir outro Atendimento"))continue;
