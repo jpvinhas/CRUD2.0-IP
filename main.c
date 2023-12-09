@@ -528,13 +528,13 @@ int main(void) {
 
                                 printf("\nPaciente "GREEN" %s"RESET"  Selecionado...\n",
                                        novo_atendimento->codigo_paciente);
-                                /*
+
                                 printf(BLUE"Dados da consulta:\n"RESET);
-                                receber_data(data_atendimentos,espaco_livre);
+                                //receber_data(data_atendimentos,espaco_livre);
 
                                 int data_ja_cadastrada=atendimento_ja_cadastrado(data_atendimentos,paciente_do_atendimento,espaco_livre,QNTD_ATENDIMENTOS);
                                 if(data_ja_cadastrada)continue;
-                                */
+
                                 receber_data2(novo_atendimento->data);
 
                                 novo_atendimento->preco = receber_preco();

@@ -155,9 +155,10 @@ int procura_codigo_atendimento(char codigo_atendimento_comparado[], int qntd_ate
 }
 
 
-void receber_data(char vetor[][40],int indice_livre) {
+void receber_data_atendimento(char* data) {
     int dia, mes, ano;
-    while(1){
+
+    while (1) {
         printf(BLUE"Digite o dia: "RESET);
         scanf("%d", &dia);
 
@@ -166,19 +167,32 @@ void receber_data(char vetor[][40],int indice_livre) {
 
         printf(BLUE"Digite o ano (ex. 2023): "RESET);
         scanf("%d", &ano);
-        
-        if (!(dia >= 1 && dia <= 31 && mes >= 1 && mes <= 12 && ano >= 1000)){
-        printf("Data inválida!\n");
-        if(coletar_opcao("Voltar","Tentar novamente"))continue;
-        return;
+
+        int ano_bisexto = (ano % 4 == 0) && ((ano % 100 != 0) || (ano % 400 == 0));
+        int dias_no_mes = 31;
+
+        if (mes < 1 || mes > 12 || ano < 2023) {
+            printf(RED"Data inválida!\n"RESET);
+            continue;
         }
 
-        sprintf(vetor[indice_livre],"%02d/%02d/%04d", dia, mes, ano);
+        if (mes == 2) {
+            if(ano_bisexto) {dias_no_mes = 29;}
+            else{dias_no_mes = 28;}
+        } else if (mes == 4 || mes == 6 || mes == 9 || mes == 11) {
+            dias_no_mes = 30;
+        }
 
-        break;
+        if (dia < 1 || dia > dias_no_mes) {
+            printf(RED"Data inválida!\n"RESET);
+            continue;
+        }
+
+        sprintf(data, "%02d/%02d/%04d", dia, mes, ano);
+        return;
     }
-
 }
+
 void receber_data2(char* data) {
     int dia, mes, ano;
     while(1){
