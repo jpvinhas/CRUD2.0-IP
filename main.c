@@ -529,13 +529,22 @@ int main(void) {
                                 printf("\nPaciente "GREEN" %s"RESET"  Selecionado...\n",
                                        novo_atendimento->codigo_paciente);
 
-                                printf(BLUE"Dados da consulta:\n"RESET);
-                                //receber_data(data_atendimentos,espaco_livre);
+                                printf(BLUE"-> Dados da consulta:\n"RESET);
 
-                                int data_ja_cadastrada=atendimento_ja_cadastrado(data_atendimentos,paciente_do_atendimento,espaco_livre,QNTD_ATENDIMENTOS);
-                                if(data_ja_cadastrada)continue;
-
-                                receber_data2(novo_atendimento->data);
+                                char data_provisoria[40];
+                                receber_data_atendimento(data_provisoria);
+                                int data_ja_cadastrada = atendimento_ja_cadastrado(atendimentos,novo_atendimento->codigo_paciente,data_provisoria,qnt_atendimentos);
+                                if(data_ja_cadastrada) {
+                                    printf(RED"Atendimento salvo já marcado para esta data, escolha outra!\n"RESET);
+                                    continue;
+                                }
+                                /*
+                                int data_nao_salva = atendimento_ja_cadastrado(novo_atendimento,novo_atendimento->codigo_paciente,data_provisoria,qnt_novos_atendimentos);
+                                if(data_nao_salva) {
+                                    printf(RED"Atendimento não salvo, já marcado para esta Data, escolha outra!\n"RESET);
+                                    continue;
+                                }*/
+                                strcpy(novo_atendimento->data, data_provisoria);
 
                                 novo_atendimento->preco = receber_preco();
 
@@ -578,6 +587,7 @@ int main(void) {
 
                                 atendimento *atendimento_alterado = &atendimentos[indice_do_atendimento];
                                 exibir_dados_atendimento(atendimento_alterado);
+                                char data_provisoria[40];
 
                                 int opcao;
                                 printf("Qual dado deseja alterar?\n");
@@ -612,14 +622,23 @@ int main(void) {
 
                                         break;
                                     case 2:
-                                        break;
+                                        receber_data_atendimento(data_provisoria);
+
+                                        int data_ja_cadastrada = atendimento_ja_cadastrado(atendimentos,atendimento_alterado->codigo_paciente,data_provisoria,qnt_atendimentos);
+                                        if(data_ja_cadastrada) {
+                                            printf(RED"Atendimento salvo já marcado para esta data, escolha outra!\n"RESET);
+                                            continue;
+                                        }
                                         /*
-                                    case 2:
-                                        printf("Digite a nova data:\n");
-                                        receber_data(data_atendimentos,indice_do_atendimento);
-                                        printf(GREEN"Nova data cadastrada: %s\n"RESET,data_atendimentos[indice_do_atendimento]);
+                                        int data_nao_salva = atendimento_ja_cadastrado(novo_atendimento,novo_atendimento->codigo_paciente,data_provisoria,qnt_novos_atendimentos);
+                                        if(data_nao_salva) {
+                                            printf(RED"Atendimento não salvo, já marcado para esta Data, escolha outra!\n"RESET);
+                                            continue;
+                                        }*/
+                                        strcpy(atendimento_alterado->data, data_provisoria);
+                                        printf(GREEN"* Data Alterada com Sucesso! *\n"RESET);
+
                                         break;
-                                         */
                                     case 3:
                                         receber_tipo_atendimento(atendimento_alterado);
 

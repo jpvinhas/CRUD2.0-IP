@@ -170,8 +170,11 @@ void receber_data_atendimento(char* data) {
 
         int ano_bisexto = (ano % 4 == 0) && ((ano % 100 != 0) || (ano % 400 == 0));
         int dias_no_mes = 31;
-
-        if (mes < 1 || mes > 12 || ano < 2023) {
+        if(ano == 2023){
+            printf("Fim de ano, Vamos festejar! --> * Marque conosco a partir de 2024! *\n");
+            continue;
+        }
+        if (mes < 1 || mes > 12 || ano <= 2023) {
             printf(RED"Data inválida!\n"RESET);
             continue;
         }

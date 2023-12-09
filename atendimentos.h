@@ -26,7 +26,7 @@ void receber_status_atendimento(atendimento *novo_atendimento);
 int procura_paciente(paciente *todos_pacientes, int qntd_pacientes, char codigo_paciente[]);
 int procura_paciente_codigo(char codigo_pacientes[][8],int QNTD_PACIENTES,int pacientes_ativos[]);
 int procura_atendimento(char codigo_atendimentos[][8],int QNTD_ATENDIMENTOS,int atendimentos_ativos[]);
-int atendimento_ja_cadastrado(char data_atendimentos[][40],int paciente_do_atendimento[],int atendimento_atual,int tamanho);
+int atendimento_ja_cadastrado(atendimento *todos_atendimentos, char paciente_codigo[], char data_analisada[], size_t qnt_atendimentos);
 void receber_tipo_atendimento(atendimento *novo_atendimento);
 float receber_preco();
 int compara_data(char data1[],char data2[]);

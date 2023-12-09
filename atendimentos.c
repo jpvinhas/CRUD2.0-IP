@@ -126,21 +126,17 @@ int procura_atendimento2(atendimento *todos_atendimentos, size_t qnt_atendimento
     return -1;
 }
 
-
-int atendimento_ja_cadastrado(char data_atendimentos[][40],int paciente_do_atendimento[],int atendimento_atual,int tamanho){
-    int atendimento_ja_cadastrado=0;
-    for(int i=0;i<tamanho;i++){
-        if(i==atendimento_atual) continue;
-        if(paciente_do_atendimento[i] == paciente_do_atendimento[atendimento_atual]){
-            int data_paciente_igual= !(strcmp(data_atendimentos[i],data_atendimentos[atendimento_atual]));
-            if(data_paciente_igual){
-                printf(RED"Paciente ja tem atendimento nesta data!\n"RESET);
-                atendimento_ja_cadastrado=1;
+int atendimento_ja_cadastrado(atendimento *todos_atendimentos, char paciente_codigo[], char data_analisada[], size_t qnt_atendimentos) {
+    for (int i = 0; i < qnt_atendimentos; i++) {
+        if(!strcmp(todos_atendimentos[i].codigo_paciente, paciente_codigo)) {
+            if(!strcmp(todos_atendimentos[i].data, data_analisada)) {
+                return 1;
             }
         }
-
-    }return atendimento_ja_cadastrado;
+    }
+    return 0;
 }
+
 void receber_tipo_atendimento(atendimento *novo_atendimento){
     
     printf(BLUE"Selecione o Tipo de Atendimento:\n"RESET);

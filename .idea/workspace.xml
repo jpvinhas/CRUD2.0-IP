@@ -22,9 +22,13 @@
   <component name="ChangeListManager">
     <list default="true" id="11e31ccb-f804-42ed-bcc0-83ba4346d7ff" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/atendimentos.bin" beforeDir="false" afterPath="$PROJECT_DIR$/atendimentos.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/atendimentos.c" beforeDir="false" afterPath="$PROJECT_DIR$/atendimentos.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/atendimentos.h" beforeDir="false" afterPath="$PROJECT_DIR$/atendimentos.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clinica.exe" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pacientes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/pacientes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/util.c" beforeDir="false" afterPath="$PROJECT_DIR$/util.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util.h" beforeDir="false" afterPath="$PROJECT_DIR$/util.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,10 +38,11 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="pacientes" />
+        <entry key="$PROJECT_DIR$" value="Pacientes" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
