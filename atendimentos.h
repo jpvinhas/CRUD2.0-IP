@@ -35,7 +35,7 @@ void adicionar_atendimentos(const char* nomeArquivo, atendimento* novosatendimen
 void salvar(paciente* pacientes,atendimento* atendimentos, int* alteracoes_pacientes, int* alteracoes_atendimentos, size_t qnd_pacientes,size_t qnd_atendimentos);
 void salvar_novos(paciente* pacientes,atendimento* atendimentos,paciente* novos_pacientes,atendimento*novos_atendimentos,int qnt_novos_pacientes, int qnt_novos_atendimentos, int qnt_pacientes,int qnt_atendimentos);
 float soma_consultas_pagas_pacientes(char *nome,atendimento *atendimentos,int qnt_atendimentos);
-void *procura_atendimento_livre(atendimento* atendimentos_arquivados, int tamanho_vetor);
+int procura_atendimento_livre(atendimento* atendimentos_arquivados, int tamanho_vetor);
 int procura_atendimento2(atendimento *todos_atendimentos, size_t qnt_atendimentos);
 
 //////////////////////////////

@@ -18,7 +18,7 @@ int menu_atendimento() {
     printf(BLUE"\n[3]"RESET" Excluir Atendimento\n"BLUE"[4]"RESET" Exibir os Dados de um Atendimento com base no seu código");
     printf(BLUE"\n[5]"RESET" Exibir Todos os Atendimentos de um Paciente com base no seu código");
     printf(BLUE"\n[6]"RESET" Exibir Todos os Atendimentos e seu Somatório Total Diário\n"BLUE"[7]"RESET" Exibir Todos Atendimentos do Dia");
-    printf(BLUE"\n[8]"RESET" Exibir Todos Atendimentos(Data mais Próxima)\n"BLUE"[9]"RESET" Voltar para o Menu Anterior\n");
+    printf(BLUE"\n[8]"RESET" Exibir Todos Atendimentos(Data mais Próxima)\n"BLUE"[9]"RESET" Salvar Atendimentos Pendentes\n");
     printf("\n---------------------------------------------------------------------------\n");
 
     printf("\nDigite a Funcionalidade Desejada: ");
@@ -32,7 +32,7 @@ int menu_atendimento() {
     return opcao;
 }
 void exibir_dados_atendimento(atendimento *novo_atendimento) {
-    printf("*--Código-----Código do Paciente------Data-------Tipo-----Preço-----Status----*\n");
+    printf("*--Código-----Código do Paciente------Data----------Tipo--------Preço--------Status----*\n");
     printf("   %s  |       %s       |   22/22/2222  |   %s   |  R$%.2f  | %s\n\n",
            novo_atendimento->codigo_atendimento,
            novo_atendimento->codigo_paciente,
@@ -61,7 +61,7 @@ void receber_status_atendimento(atendimento *novo_atendimento){
 }
 int procura_paciente(paciente *todos_pacientes, int qntd_pacientes, char codigo_paciente[]) {
         for(int i = 0; i < qntd_pacientes; i++) {
-            printf("PACIENTE OBSERVADO = %s\n", todos_pacientes[i].codigo);
+            //if(!todos_pacientes[i].ativo)break;
             if(!strcmp(codigo_paciente, todos_pacientes[i].codigo)) {
                 return 1;
             }
@@ -249,13 +249,13 @@ float soma_consultas_pagas_pacientes(char *nome,atendimento *atendimentos,int qn
     return soma_consultas;
 }
 
-void* procura_atendimento_livre(atendimento* atendimentos_arquivados, int tamanho_vetor) {
+int procura_atendimento_livre(atendimento* atendimentos_arquivados, int tamanho_vetor) {
     for (int i = 0; i < tamanho_vetor; i++) {
         if(atendimentos_arquivados[i].ativo) {
-            return &atendimentos_arquivados[i];
+            return i;
         }
     }
-    return NULL;
+    return -1;
 }
 
 
