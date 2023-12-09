@@ -1,12 +1,12 @@
 /*
  * 1) Ordem Alfabetica Pacientes Errada
- * 2) Codigo Nao aleatorio, verificar ou altera-lo (tanto para atendimento quanto para pacientes)
+ * 2) Codigo Nao aleatorio, verificar ou altera-lo (tanto para atendimento quanto para pacientes) -> Alterado no atendimento so falta no pacientes
  * 3) Verificar se um paciente ja nao tem atendimento na data para salvar
  * 4) administrar se o vetorde novos pacientes e atendimentos ja esta cheio
- * 5) nao estou conseguindo colocar atendimentos nem pacientes na util.h
  * 6) APAGAR COEMNTARIOS DO CODIGO
  * 7) Fazer opcao de descartar salvos
- * 8) Implementar função salvar*/
+ * 9) Testar erros de entradas
+ * 10) Nao deixar um paciente ter atendimento no mesmo data*/
 
 #include <stdio.h>
 #include "pacientes.h"
@@ -507,10 +507,10 @@ int main(void) {
                                 printf("\nOpção -> "BLUE"[1], \"Inserir um Novo Atendimento\""RESET" Selecionada...\n\n");
 
                                 atendimento *novo_atendimento;
+
                                 int eh_novo = 0;
                                 int ja_arquivado = procura_atendimento_livre(atendimentos,qnt_atendimentos);
-                                printf("%d",ja_arquivado);
-                                printf("%d",qnt_novos_atendimentos);
+
                                 if(ja_arquivado < 0) {
                                     novo_atendimento = &novos_atendimentos[qnt_novos_atendimentos];
                                     eh_novo = 1;
@@ -541,7 +541,9 @@ int main(void) {
 
                                 receber_status_atendimento(novo_atendimento);
 
-                                cria_codigo2(novo_atendimento->codigo_atendimento);
+                                do {
+                                    cria_codigo2(novo_atendimento->codigo_atendimento);
+                                }while(verifica_codigo_atendimento(atendimentos, novo_atendimento->codigo_atendimento, qnt_atendimentos));
 
                                 receber_tipo_atendimento(novo_atendimento);
 
@@ -550,8 +552,8 @@ int main(void) {
                                 exibir_dados_atendimento(novo_atendimento);
                                 printf(" %s",novos_atendimentos[qnt_novos_atendimentos].codigo_atendimento);
 
-                                if(eh_novo) {qnt_novos_atendimentos++;exibir_dados_atendimento(&novos_atendimentos[qnt_novos_atendimentos]);}
-                                else {atendimentos_alterados[ja_arquivado] = 1;exibir_dados_atendimento(&atendimentos[ja_arquivado]);}
+                                if(eh_novo) {qnt_novos_atendimentos++;}
+                                else {atendimentos_alterados[ja_arquivado] = 1;}
 
                                 printf(GREEN"* Atendimento Cadastrado com sucesso! *\n"RESET);
 
@@ -652,7 +654,7 @@ int main(void) {
                             break;
                         case 3:
                             while (1) {
-                                printf("\nOpção -> "BLUE"[3], \"Excluir Atendimento\""RESET" Selecionada...\n\n");
+                                printf("\nOpção -> "BLUE"[3], \"Excluir um Atendimento\""RESET" Selecionada...\n\n");
 
                                 printf("-> Digite o Atendimento que você deseja Excluír:");
                                 int indice_do_atendimento = procura_atendimento2(atendimentos,qnt_atendimentos);
@@ -686,16 +688,14 @@ int main(void) {
 
                                 printf("Digite o código do atendimento que deseja consultar:\n");
 
-                                int indice_do_atendimento = procura_atendimento2(novos_atendimentos,
-                                                                                 3);//procura_atendimento2(atendimentos, qnt_atendimentos);
-                                if (indice_do_atendimento == -1) {
-                                    if (coletar_opcao("Tentar alterar outro atendimento",
-                                                      "Voltar ao menu atendimento")) {break;}
+                                int indice_do_atendimento = procura_atendimento2(atendimentos,qnt_atendimentos);
+                                if (indice_do_atendimento < 0) {
+                                    printf(RED"* Atendimento não encontrado *\n"RESET);
+                                    if (coletar_opcao("Tentar alterar outro atendimento","Voltar ao menu atendimento")) {break;}
                                     else {continue;}
                                 }
 
-                                atendimento *atendimento_solicitado = &novos_atendimentos[indice_do_atendimento];
-                                exibir_dados_atendimento(atendimento_solicitado);
+                                exibir_dados_atendimento(&atendimentos[indice_do_atendimento]);
 
                                 if (coletar_opcao("Voltar", "Exibir outro Atendimento")) {continue;}
                                 else {break;}
@@ -733,69 +733,68 @@ int main(void) {
                             break;
                         case 6:
                             while (1) {
+                                float soma = 0;
+                                int count = 0;
+
                                 system("cls");
                                 printf("\nOpção -> "BLUE"[6], \"Exibir Todos os Atendimentos e seu Somatório Total Diário\""RESET" Selecionada...\n\n");
 
                                 char atendimentos_do_dia[1][40];
-                                float soma = 0, count = 0;
                                 printf("Digite a data que você deseja acessar as informações:");
-                                receber_data(atendimentos_do_dia, 0);
+                                receber_data2(atendimentos_do_dia[0]);
 
-                                atendimento *atendimento_teste = malloc(sizeof(atendimento) * 2);
-                                strcpy(atendimento_teste[0].data, "22/02/2022");
+                                for (int i = 0; i < qnt_atendimentos; i++) {
+                                    if (!strcmp(atendimentos_do_dia[0], atendimentos[i].data)) {
+                                        exibir_dados_atendimento(&atendimentos[i]);
 
-                                for (int i = 0; i < QNTD_ATENDIMENTOS; i++) {
-                                    if (!strcmp(atendimentos_do_dia[0], atendimento_teste[i].data)) {  //trocar atendimento_teste[0].data por -> atendimentos[i].data
-                                        exibir_dados_atendimento(atendimento_teste);
-
-                                        soma += atendimento_teste[i].preco;
+                                        soma += atendimentos[i].preco;
                                         count++;
                                     }
                                 }
                                 if (!count) {
-                                    printf(YELLOW"* Nenhum atendimento neste dia! *\n\n"RESET);
+                                    printf(RED"* Nenhum atendimento neste dia! *\n\n"RESET);
                                     if (coletar_opcao("Sair", "Exibir Atendimentos de Outro Dia")) {continue;}
                                     else {break;}
                                 }
-                                printf("Total de Consultas Pagas no Dia[%s] = R$%.2f\n",
-                                       count, soma);
+                                printf(GREEN"--> Total de Consultas Pagas no Dia[%d] = R$%.2f\n\n"RESET,count, soma);
 
                                 if (coletar_opcao("Sair", "Selecionar outro dia")) {continue;}
                                 else {break;}
                             }
-                        break;
-                            case 7: //Parei aqui
-                                while (1) {
-                                    system("clear");
-                                    printf("-------------------"BLUE"Exibir Todos os Atendimentos(Data mais próxima)"RESET"--------------------\n");
-
-                                    int ordem_datas[100];
-                                    ordenar_datas(data_atendimentos, ordem_datas, QNTD_ATENDIMENTOS,
-                                                  atendimentos_ativos);
-                                    int qnd_atend_ativos = 0;
-                                    for (int i = 0; i < QNTD_ATENDIMENTOS - 1; i++) {
-                                        if (atendimentos_ativos[i] == 1)qnd_atend_ativos++;
-                                    }
-                                    if (qnd_atend_ativos == 0) {
-                                        printf(RED"Nenhum Atendimento Cadastrado"RESET);
-                                    }
-                                    for (int i = 0; i < qnd_atend_ativos; i++) {
-                                        int atendimento = ordem_datas[i];
-                                        int paciente = paciente_do_atendimento[i];
-                                        //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,atendimento);
-                                    }
-                                    if (coletar_opcao("Sair", "Exibir Atendimentos Novamente"))continue;
-                                    else break;
-                                }
                             break;
-                            case 8:
-                                printf("\nOpção -> [8], \"Voltar para o Menu Anterior\" Selecionada...\n\n");
+                        case 7: //Parei aqui
+                            while (1) {
+                                system("clear");
+                                printf("\nOpção -> "BLUE"[6], \"Exibir os Atendimentos em Ordem de Data de Atendimento\""RESET" Selecionada...\n\n");
+
+                                int ordem_datas[100];
+                                ordenar_datas(data_atendimentos, ordem_datas, QNTD_ATENDIMENTOS,
+                                              atendimentos_ativos);
+                                int qnd_atend_ativos = 0;
+                                for (int i = 0; i < QNTD_ATENDIMENTOS - 1; i++) {
+                                    if (atendimentos_ativos[i] == 1)qnd_atend_ativos++;
+                                }
+                                if (qnd_atend_ativos == 0) {
+                                    printf(RED"Nenhum Atendimento Cadastrado"RESET);
+                                }
+                                for (int i = 0; i < qnd_atend_ativos; i++) {
+                                    int atendimento = ordem_datas[i];
+                                    int paciente = paciente_do_atendimento[i];
+                                    //exibir_dados_atendimento(codigo_atendimentos,nomes_pacientes,codigo_pacientes,paciente,data_atendimentos,tipo_atendimentos,preco_atendimentos,status_atendimentos,atendimento);
+                                }
+                                if (coletar_opcao("Sair", "Exibir Atendimentos Novamente"))continue;
+                                else break;
+                            }
+                            break;
+                        case 8:
+                            printf("\nOpção -> [8], \"Exibir o Somatório dos Atendimentos pagos de um\n"
+                                   "determinado período de atendimento.\" Selecionada...\n\n");
                             break;
                         case 9:
-                            printf("\nOpção -> [9], \"Salvar Atendimentos Pendentes\" Selecionada...\n\n");
-                            for(int i = 0; i < qnt_atendimentos; i++) {
-                                exibir_dados_atendimento(&novos_atendimentos[i]);
-                            }printf("\n**********************************************************************\n");
+                            printf("\nOpção -> [9], \"Voltar para o Menu Anterior\" Selecionada...\n\n");
+                            break;
+                        case 10:
+                            printf("\nOpção -> [10], \"Salvar Atendimentos Pendentes\" Selecionada...\n\n");
 
                             salvar(pacientes,atendimentos,pacientes_alterados,atendimentos_alterados,qnt_pacientes,qnt_atendimentos);
                             salvar_novos(pacientes,atendimentos,&novospacientes,&novos_atendimentos,qnt_novos_pacientes,qnt_novos_atendimentos,qnt_pacientes,qnt_atendimentos);
@@ -827,13 +826,12 @@ int main(void) {
                             default:
                                 printf(RED"\nSelecione alguma das opções anteriores!\n"RESET);
                             break;
-                        }
-                        if (interacao_menu_atendimentos == 8)break;
-                        continue;
+                    }
+                        if (interacao_menu_atendimentos == 9){break;}
                 }
                     continue;
             case 3:
-                if(qnt_alteracoes!=0){
+                if(qnt_alteracoes!=0) {
                     printf(RED"Você possui alteracoes pendentes. Deseja encerrar mesmo assim?\n"RESET);
                     if(!coletar_opcao("Sair sem salvar","Voltar e Salvar"))return 0;
                     else break;;

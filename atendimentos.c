@@ -13,12 +13,13 @@
 
 int menu_atendimento() {
     printf("\n-----------------------------"BLUE"MENU ATENDIMENTO"RESET"-----------------------------\n");
-    printf("Selecione a funcionalidade que desejar: \n");
+    printf(YELLOW"Selecione a funcionalidade que desejar: \n"RESET);
     printf(BLUE"\n[1]"RESET" Inserir um Novo Atendimento\n"BLUE"[2]"RESET" Alterar um Atendimento Existente");
-    printf(BLUE"\n[3]"RESET" Excluir Atendimento\n"BLUE"[4]"RESET" Exibir os Dados de um Atendimento com base no seu código");
+    printf(BLUE"\n[3]"RESET" Excluir um Atendimento\n"BLUE"[4]"RESET" Exibir os Dados de um Atendimento com base no seu código");
     printf(BLUE"\n[5]"RESET" Exibir Todos os Atendimentos de um Paciente com base no seu código");
-    printf(BLUE"\n[6]"RESET" Exibir Todos os Atendimentos e seu Somatório Total Diário\n"BLUE"[7]"RESET" Exibir Todos Atendimentos do Dia");
-    printf(BLUE"\n[8]"RESET" Exibir Todos Atendimentos(Data mais Próxima)\n"BLUE"[9]"RESET" Salvar Atendimentos Pendentes\n");
+    printf(BLUE"\n[6]"RESET" Exibir Todos os Atendimentos e seu Somatório Total Diário\n"BLUE"[7]"RESET" Exibir os Atendimentos em Ordem de Data de Atendimento");
+    printf(BLUE"\n[8]"RESET" Exibir o Somatório dos Atendimentos pagos de um determinado período de atendimento\n"BLUE"[9]"RESET" Voltar ao Menu Anterior\n");
+    printf(BLUE"[10]"RESET" Salvar Atendimentos Pendente\n");
     printf("\n---------------------------------------------------------------------------\n");
 
     printf("\nDigite a Funcionalidade Desejada: ");
@@ -258,9 +259,11 @@ int procura_atendimento_livre(atendimento* atendimentos_arquivados, int tamanho_
     return -1;
 }
 
-
-//FUNCAO APGRDPS
-void exibe_struct(atendimento exemplo) {
-    printf("Codigo do Atendimento = %s\n", exemplo.codigo_atendimento);
-    printf("Codigo do Paciente = %s\n", exemplo.codigo_paciente);
+int verifica_codigo_atendimento(atendimento *todos_atendimentos, char input_codigo[], int qnt_atendimentos) {
+    for (int i = 0; i < qnt_atendimentos; i++) {
+        if(!strcmp(input_codigo, todos_atendimentos[i].codigo_atendimento)) {
+            return 1;
+        }
+    }
+    return 0;
 }

@@ -37,7 +37,6 @@ void salvar_novos(paciente* pacientes,atendimento* atendimentos,paciente* novos_
 float soma_consultas_pagas_pacientes(char *nome,atendimento *atendimentos,int qnt_atendimentos);
 int procura_atendimento_livre(atendimento* atendimentos_arquivados, int tamanho_vetor);
 int procura_atendimento2(atendimento *todos_atendimentos, size_t qnt_atendimentos);
+int verifica_codigo_atendimento(atendimento *todos_atendimentos, char input_codigo[], int qnt_atendimentos);
 
-//////////////////////////////
-void exibe_struct(atendimento exemplo);
 #endif

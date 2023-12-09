@@ -138,7 +138,7 @@ int procura_string(char string[],char vetor[][40],int tamanho){
 
 int procura_codigo(char codigo_unico_paciente[],char matriz_codigos_pacientes[][8],int tamanho_matriz) {
     for(int i = 0; i < tamanho_matriz; i++){
-        if(strcmp(matriz_codigos_pacientes[i],codigo_unico_paciente) == 0) {
+        if(!strcmp(matriz_codigos_pacientes[i],codigo_unico_paciente)) {
             return i;
         }
 
