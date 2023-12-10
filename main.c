@@ -97,8 +97,6 @@ int main(void) {
                                     novo=1;
                                 }else{novopaciente=&pacientes[index];}
                                 
-                                //printf("%d",index);
-                                
                                 if(cadastra_nome_paciente2(novopaciente->nome, pacientes, qnt_pacientes)) {
                                     if(!coletar_opcao("Inserir outro paciente", "Ir para o Menu Pacientes")) {continue;}
                                     else {break;}
