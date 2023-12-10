@@ -165,7 +165,7 @@ void receber_data_atendimento(char* data) {
         printf(BLUE"Digite o mês: "RESET);
         scanf("%d", &mes);
 
-        printf(BLUE"Digite o ano (ex. 2023): "RESET);
+        printf(BLUE"Digite o ano (ex. 2024): "RESET);
         scanf("%d", &ano);
 
         int ano_bisexto = (ano % 4 == 0) && ((ano % 100 != 0) || (ano % 400 == 0));
@@ -205,7 +205,7 @@ void receber_data2(char* data) {
         printf(BLUE"Digite o mês: "RESET);
         scanf("%d", &mes);
 
-        printf(BLUE"Digite o ano (ex. 2023): "RESET);
+        printf(BLUE"Digite o ano (ex. 2024): "RESET);
         scanf("%d", &ano);
         
         if (!(dia >= 1 && dia <= 31 && mes >= 1 && mes <= 12 && ano >= 1900)){

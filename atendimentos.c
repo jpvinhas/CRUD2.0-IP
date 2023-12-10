@@ -18,8 +18,8 @@ int menu_atendimento() {
     printf(BLUE"\n[3]"RESET" Excluir um Atendimento\n"BLUE"[4]"RESET" Exibir os Dados de um Atendimento com base no seu código");
     printf(BLUE"\n[5]"RESET" Exibir Todos os Atendimentos de um Paciente com base no seu código");
     printf(BLUE"\n[6]"RESET" Exibir Todos os Atendimentos e seu Somatório Total Diário\n"BLUE"[7]"RESET" Exibir os Atendimentos em Ordem de Data de Atendimento");
-    printf(BLUE"\n[8]"RESET" Exibir o Somatório dos Atendimentos pagos de um determinado período de atendimento\n"BLUE"[9]"RESET" Voltar ao Menu Anterior\n");
-    printf(BLUE"[10]"RESET" Salvar Atendimentos Pendente\n");
+    printf(BLUE"\n[8]"RESET" Exibir o Somatório dos Atendimentos pagos de um determinado período de atendimento\n"BLUE"[9]"RESET" Exibir Todos os Atendimentos\n");
+    printf(BLUE"[10]"RESET" Salvar Atendimentos Pendentes\n"BLUE"[11]"RESET" Voltar para o Menu Anterior\n");
     printf("\n---------------------------------------------------------------------------\n");
 
     printf("\nDigite a Funcionalidade Desejada: ");
@@ -210,6 +210,7 @@ void adicionar_atendimentos(const char* nomeArquivo, atendimento* novosatendimen
     FILE* arquivo = fopen(nomeArquivo, "ab+");  // Abre o arquivo em modo de leitura e escrita no final
     if (arquivo == NULL) {
         perror("Erro ao abrir o arquivo");
+        perror("Erro ao abrir o arquivo");
         exit(EXIT_FAILURE);
     }
     printf("1");
@@ -262,4 +263,103 @@ int verifica_codigo_atendimento(atendimento *todos_atendimentos, char input_codi
         }
     }
     return 0;
+}
+
+
+float intervalo_entre_datas(char data1[], char data2[], atendimento *todos_atendimentos, size_t qntd_atendimentos) {
+    char aux[40];
+    if(compara_data(data1, data2)) {
+        strcpy(aux, data1);
+        strcpy(data1, data2);
+        strcpy(data2, aux);
+    }
+    int dia_incial, mes_inicial, ano_inicial;
+    sscanf(data1, "%d/%d/%d", &dia_incial, &mes_inicial, &ano_inicial);
+
+    int dia_final, mes_final, ano_final;
+    sscanf(data2, "%d/%d/%d", &dia_final, &mes_final, &ano_final);
+
+    float somatorio_preco_atendimentos = 0;
+    int flag_dias = 0;
+    int flag_mes = 0;
+    char data_comparada[40];
+
+    for(int index_atendimento = 0; index_atendimento < qntd_atendimentos; index_atendimento++) {
+        int compara_dia, compara_mes;
+        for(int compara_ano = ano_inicial; compara_ano <= ano_final; compara_ano++) {
+            if(flag_mes) {
+                mes_inicial = 1;
+            }
+            for(compara_mes = mes_inicial; compara_mes <= 12; compara_mes++) {
+                if(compara_mes == 12 && compara_ano == ano_inicial && !flag_mes) {
+                    flag_mes = 1;
+                }
+
+                if(flag_dias) {
+                    dia_incial = 1;
+                }
+                for(compara_dia = dia_incial; compara_dia <= 31; compara_dia++) {
+
+                    if((compara_dia == dia_final) && (compara_mes == mes_final) && (compara_ano == ano_final)) {
+
+                        sprintf(data_comparada, "%02d/%02d/%04d", compara_dia, compara_mes, compara_ano);
+                        if(!datas_diferentes(data_comparada, todos_atendimentos[index_atendimento].data)) {
+                            somatorio_preco_atendimentos += todos_atendimentos[index_atendimento].preco;
+                        }
+                        break;
+                    }
+
+                    if(compara_dia == 31 && compara_mes == mes_inicial && !flag_dias) {
+
+                        sprintf(data_comparada, "%02d/%02d/%04d", compara_dia, compara_mes, compara_ano);
+                        if(!datas_diferentes(data_comparada, todos_atendimentos[index_atendimento].data)) {
+                            somatorio_preco_atendimentos += todos_atendimentos[index_atendimento].preco;
+
+                        }
+                        flag_dias = 1;
+                        break;
+                    }
+                    sprintf(data_comparada, "%02d/%02d/%04d", compara_dia, compara_mes, compara_ano);
+                    if(!datas_diferentes(data_comparada, todos_atendimentos[index_atendimento].data)) {
+                        somatorio_preco_atendimentos += todos_atendimentos[index_atendimento].preco;
+                    }
+
+                }
+                if(compara_mes == mes_final && compara_ano == ano_final) {
+                    //faz a ultima comparacao
+                    break;
+                }
+            }
+        }
+    }
+    return somatorio_preco_atendimentos;
+}
+
+
+int datas_diferentes(char data1[],char data2[]) {
+
+    int dia1, mes1, ano1, dia2, mes2, ano2;
+
+    sscanf(data1, "%d/%d/%d", &dia1, &mes1, &ano1);
+    sscanf(data2, "%d/%d/%d", &dia2, &mes2, &ano2);
+
+    if (ano1 > ano2) {
+        return 1;
+    } else if (ano1 < ano2) {
+        return 2;
+    } else {
+        if (mes1 > mes2) {
+            return 1;
+        } else if (mes1 < mes2) {
+            return 2;
+        } else {
+            if (dia1 > dia2) {
+                return 1;
+            } else if (dia1 < dia2) {
+                return 2;
+            } else {
+                return 0; // As datas são iguais
+            }
+        }
+    }
 }

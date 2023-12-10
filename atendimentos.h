@@ -38,5 +38,7 @@ float soma_consultas_pagas_pacientes(char *nome,atendimento *atendimentos,int qn
 int procura_atendimento_livre(atendimento* atendimentos_arquivados, int tamanho_vetor);
 int procura_atendimento2(atendimento *todos_atendimentos, size_t qnt_atendimentos);
 int verifica_codigo_atendimento(atendimento *todos_atendimentos, char input_codigo[], int qnt_atendimentos);
+float intervalo_entre_datas(char data1[], char data2[], atendimento *todos_atendimentos, size_t qntd_atendimentos);
+int datas_diferentes(char data1[],char data2[]);
 
 #endif

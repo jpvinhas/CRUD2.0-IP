@@ -538,12 +538,7 @@ int main(void) {
                                     printf(RED"Atendimento salvo já marcado para esta data, escolha outra!\n"RESET);
                                     continue;
                                 }
-                                /*
-                                int data_nao_salva = atendimento_ja_cadastrado(novo_atendimento,novo_atendimento->codigo_paciente,data_provisoria,qnt_novos_atendimentos);
-                                if(data_nao_salva) {
-                                    printf(RED"Atendimento não salvo, já marcado para esta Data, escolha outra!\n"RESET);
-                                    continue;
-                                }*/
+
                                 strcpy(novo_atendimento->data, data_provisoria);
 
                                 novo_atendimento->preco = receber_preco();
@@ -801,11 +796,33 @@ int main(void) {
                             }
                             break;
                         case 8: //Parei aqui
-                            printf("\nOpção -> [8], \"Exibir o Somatório dos Atendimentos pagos de um\n"
-                                   "determinado período de atendimento.\" Selecionada...\n\n");
+                            while(1) {
+                                printf("\nOpção -> [8], \"Exibir o Somatório dos Atendimentos pagos de um\n"
+                                       "determinado período de atendimento.\" Selecionada...\n\n");
+
+                                char data1[40];
+                                printf("--> Digite a primeira Data:\t");
+                                receber_data2(data1);
+
+                                char data2[40];
+                                printf("--> Digite a segunda Data:\t");
+                                receber_data2(data2);
+
+                                float soma_precos = intervalo_entre_datas(data1, data2, atendimentos, qnt_atendimentos);
+                                printf("--> O Somatório dos Atendimentos pagos entre as Datas -> %s e %s foi ="GREEN"%.2f\n"RESET, data1, data2, soma_precos);
+
+                                if (coletar_opcao("Sair", "Selecionar outro Interválo de Datas")) {continue;}
+                                else {break;}
+                            }
                             break;
                         case 9:
-                            printf("\nOpção -> [9], \"Voltar para o Menu Anterior\" Selecionada...\n\n");
+                            printf("\nOpção -> [9], \"Exibir Todos os Atendimentos\" Selecionada...\n\n");
+                            for(int i = 0; i < qnt_atendimentos; i++) {
+                                printf("---> Atendimento (%d):\n",i+1);
+                                exibir_dados_atendimento(&atendimentos[i]);
+                                printf("\n");
+                            }
+
                             break;
                         case 10:
                             printf("\nOpção -> [10], \"Salvar Atendimentos Pendentes\" Selecionada...\n\n");
@@ -837,11 +854,14 @@ int main(void) {
                                 exibir_dados_atendimento(&atendimentos[i]);
                             }
                             break;
+                        case 11:
+                            printf("\nOpção -> [11], \"Voltar para o Menu Anterior\" Selecionada...\n\n");
+                            break;
                             default:
                                 printf(RED"\nSelecione alguma das opções anteriores!\n"RESET);
                             break;
                     }
-                        if (interacao_menu_atendimentos == 9){break;}
+                        if (interacao_menu_atendimentos == 11){break;}
                 }
                     continue;
             case 3:
