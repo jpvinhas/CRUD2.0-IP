@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "atendimentos.h"
 
 
@@ -43,21 +44,28 @@ void exibir_dados_atendimento(atendimento *novo_atendimento) {
            novo_atendimento->status);
 }
 void receber_status_atendimento(atendimento *novo_atendimento){
-    char opcao;
-    printf(BLUE"Selecione o status da consulta:\n"RESET);
-    printf(BLUE"[1]"RESET"Agendado "BLUE"[2]"RESET"Esperando "BLUE"[3]"RESET"Em atendimento "BLUE"[4]"RESET"Atendido\n");
+    while(1) {
+        char opcao;
+        int erro = 0;
+        printf(BLUE"Selecione o status da consulta:\n"RESET);
+        printf(BLUE"[1]"RESET"Agendado "BLUE"[2]"RESET"Esperando "BLUE"[3]"RESET"Em atendimento "BLUE"[4]"RESET"Atendido\n");
 
-    fflush(stdin);
-    printf(BLUE);  
-    opcao=getchar();
-    printf(RESET);
+        fflush(stdin);
+        printf(BLUE);
+        opcao=getchar();
+        printf(RESET);
 
-    switch(opcao){
-        case '1':strcpy(novo_atendimento->status,"Agendado");break;
-        case '2':strcpy(novo_atendimento->status,"Esperando");break;
-        case '3':strcpy(novo_atendimento->status,"Em atendimento");break;
-        case '4':strcpy(novo_atendimento->status,"Atendido");break;
-        case '\0': strcpy(novo_atendimento->status,"Não Informado");break;
+        switch(opcao){
+            case '1':strcpy(novo_atendimento->status,"Agendado");break;
+            case '2':strcpy(novo_atendimento->status,"Esperando");break;
+            case '3':strcpy(novo_atendimento->status,"Em atendimento");break;
+            case '4':strcpy(novo_atendimento->status,"Atendido");break;
+            case '\0': strcpy(novo_atendimento->status,"Não Informado");break;
+            default: printf(RED"* Selecione um Status Válido! *\n"RESET); erro = 1;break;
+        }
+        if(erro) {
+            continue;
+        }break;
     }
 }
 int procura_paciente(paciente *todos_pacientes, int qntd_pacientes, char codigo_paciente[]) {
@@ -147,20 +155,21 @@ void receber_tipo_atendimento(atendimento *novo_atendimento){
 }
 
 float receber_preco(){
-    float preco;
+    char preco[10];
+    double new_preco;
 
     while(1){
         printf(BLUE"Digite o preço da consulta:\n"RESET);
+        ler_str(preco);
 
-        scanf("%f",&preco);
-
-        if(preco <= 0){
-            printf(RED"Digite um preço REAL!\n"RESET);
+        new_preco = atof(preco);
+        if(new_preco == 0.0) {
+            printf(RED"Preco Invalido!\n"RESET);
             continue;
+        }else {
+            return (float)new_preco;
         }
-        break;
     }
-    return preco;
 }
 
 int compara_data(char data1[],char data2[]) {

@@ -1,13 +1,3 @@
-/*
- * 1) Ordem Alfabetica Pacientes Errada
- * 2) Codigo Nao aleatorio, verificar ou altera-lo (tanto para atendimento quanto para pacientes) -> Alterado no atendimento so falta no pacientes
- * 3) Verificar se um paciente ja nao tem atendimento na data para salvar
- * 4) administrar se o vetorde novos pacientes e atendimentos ja esta cheio
- * 6) APAGAR COEMNTARIOS DO CODIGO
- * 7) Fazer opcao de descartar salvos
- * 9) Testar erros de entradas
- * 10) Nao deixar um paciente ter atendimento no mesmo data*/
-
 #include <stdio.h>
 #include "pacientes.h"
 #include "atendimentos.h"
@@ -494,17 +484,26 @@ int main(void) {
                 system("cls");
                 printf(BLUE"\nMenu \"Atendimento\" Selecionado...\n"RESET);
                 while(1) {
-                    if(qnt_alteracoes) {printf(RED"VOCÊ POSSUI %d ALTERACOES NÃO SALVAS!\n"RESET, qnt_alteracoes);}
-
                     int interacao_menu_atendimentos = menu_atendimento();
+
+                    if(qnt_alteracoes && interacao_menu_atendimentos != 10) {
+                        printf(RED"\n* VOCÊ POSSUI %d ALTERACOES NÃO SALVAS!! *\n"RESET, qnt_alteracoes);
+                        printf(YELLOW"--> Salve suas alterações antes de prosseguir\n"RESET);
+                        continue;
+                    }
                     int espaco_livre;
                     int indice_do_paciente;
 
                     switch (interacao_menu_atendimentos) {
                         case 1:
-                            system("clear");
+                            system("cls");
                             while (1) {
                                 printf("\nOpção -> "BLUE"[1], \"Inserir um Novo Atendimento\""RESET" Selecionada...\n\n");
+
+                                if(qnt_novos_atendimentos == 10) {
+                                    printf(YELLOW"* Salve suas alterações para continuar!! *\n"RESET);
+                                    break;
+                                }
 
                                 atendimento *novo_atendimento;
 
@@ -535,7 +534,12 @@ int main(void) {
                                 receber_data_atendimento(data_provisoria);
                                 int data_ja_cadastrada = atendimento_ja_cadastrado(atendimentos,novo_atendimento->codigo_paciente,data_provisoria,qnt_atendimentos);
                                 if(data_ja_cadastrada) {
-                                    printf(RED"Atendimento salvo já marcado para esta data, escolha outra!\n"RESET);
+                                    printf(RED"Atendimento já marcado para esta data, escolha outra!\n"RESET);
+                                    continue;
+                                }
+                                data_ja_cadastrada = atendimento_ja_cadastrado(novos_atendimentos,novo_atendimento->codigo_paciente,data_provisoria, qnt_novos_atendimentos);
+                                if(data_ja_cadastrada) {
+                                    printf(RED"Atendimento não salvo já marcado para esta data, escolha outra!\n"RESET);
                                     continue;
                                 }
 
@@ -554,7 +558,6 @@ int main(void) {
                                 novo_atendimento->ativo = 1;
                                 qnt_alteracoes++;
                                 exibir_dados_atendimento(novo_atendimento);
-                                printf(" %s",novos_atendimentos[qnt_novos_atendimentos].codigo_atendimento);
 
                                 if(eh_novo) {qnt_novos_atendimentos++;}
                                 else {atendimentos_alterados[ja_arquivado] = 1;}
@@ -570,6 +573,11 @@ int main(void) {
 
                             while (1) {
                                 printf("\nOpção -> "BLUE"[2], \"Alterar um Atendimento Existente\""RESET" Selecionada...\n\n");
+
+                                if(qnt_novos_atendimentos == 10) {
+                                    printf(YELLOW"* Salve suas alterações para continuar!! *\n"RESET);
+                                    break;
+                                }
 
                                 printf("Digite o código do atendimento que deseja alterar:\n");
 
@@ -607,10 +615,7 @@ int main(void) {
                                                 break;
                                             } else {continue;}
                                         }
-                                        /*
-                                        int data_ja_cadastrada=atendimento_ja_cadastrado(data_atendimentos,indice_novo_paciente,espaco_livre,QNTD_ATENDIMENTOS);
-                                        if(data_ja_cadastrada)continue;
-                                        */
+
                                         printf("Paciente anterior = %s --> Novo paciente = \"GREEN\"%s\"RESET\"\n", paciente_antigo,
                                                atendimento_alterado->codigo_paciente);
                                         printf(GREEN"* Paciente do atendimento Alterado com Sucesso! *\n"RESET);
@@ -624,12 +629,7 @@ int main(void) {
                                             printf(RED"Atendimento salvo já marcado para esta data, escolha outra!\n"RESET);
                                             continue;
                                         }
-                                        /*
-                                        int data_nao_salva = atendimento_ja_cadastrado(novo_atendimento,novo_atendimento->codigo_paciente,data_provisoria,qnt_novos_atendimentos);
-                                        if(data_nao_salva) {
-                                            printf(RED"Atendimento não salvo, já marcado para esta Data, escolha outra!\n"RESET);
-                                            continue;
-                                        }*/
+
                                         strcpy(atendimento_alterado->data, data_provisoria);
                                         printf(GREEN"* Data Alterada com Sucesso! *\n"RESET);
 
