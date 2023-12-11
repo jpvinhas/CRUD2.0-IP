@@ -208,6 +208,7 @@ float soma_consultas_pagas_pacientes(char *nome,atendimento *atendimentos,int qn
     float soma_consultas = 0;
 
     for(int i = 0; i < qnt_atendimentos; i++) {
+        if(atendimentos[i].ativo== 0)continue;
         int compara_nomes = strcmp(nome, atendimentos[i].codigo_paciente);
         if(compara_nomes == 0) {
             soma_consultas += atendimentos[i].preco;

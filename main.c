@@ -265,7 +265,7 @@ int main(void) {
                                         if(!coletar_opcao("Inserir Novo Código", "Ir para o Menu Pacientes")) {continue;}
                                         else {break;}
                                     }
-                                    printf("Paciente %s encontrado, mas ainda não salvo no arquivo");  
+                                    printf("Paciente %s encontrado, mas ainda não salvo no arquivo\n");  
                                     if(!coletar_opcao("Inserir Novo Código", "Ir para o Menu Pacientes")) {continue;}
                                     else {break;}
                                 }else{paciente_a_excluir = &pacientes[index];}
@@ -287,7 +287,7 @@ int main(void) {
                                             qnt++;
                                         }
                                     }
-                                    printf("O paciente tinha %d atendimentos cadastrados",qnt);
+                                    printf("O paciente tinha %d atendimentos cadastrado\n",qnt);
                                 }
                                 if(!coletar_opcao("Excluir outro paciente", "Ir para o Menu Pacientes")) {continue;}
                                 else {break;}
@@ -341,10 +341,11 @@ int main(void) {
                                 receber_data2(data);
                                 
                                 int count = 0;
-                                for(int i = 0; i < qnt_atendimentos; i++) {                                    
-                                    if(strcmp(atendimentos[i].data,data)) {
+                                for(int i = 0; i < qnt_atendimentos; i++) {
+                                    if(atendimentos[i].ativo == 0)continue;                                   
+                                    if(strcmp(atendimentos[i].data,data) == 0) {
                                         paciente *paciente_atendimento;
-                                        paciente_atendimento = &pacientes[procura_informacao2(atendimentos[i].codigo_paciente,pacientes,qnt_pacientes,2,-1)];
+                                        paciente_atendimento = &pacientes[procura_informacao2(atendimentos[i].codigo_paciente,pacientes,qnt_pacientes,2,-2)];
                                         printf(YELLOW"\n---> Data com Consulta do Paciente: %s"RESET, paciente_atendimento->nome);
                                         exibe_informacoes_paciente2(paciente_atendimento);
                                         count++;
@@ -392,23 +393,23 @@ int main(void) {
                             while(1) {
                                 printf("\nOpção -> "BLUE"[9], \"Exibir a Soma das Consultas Pagas por um Determinado Paciente\""RESET" Selecionada...\n\n");
 
-                                printf("Digite o Nome do Paciente, para ver a soma das suas Consultas Pagas: ");
+                                printf("Digite o Código do Paciente, para ver a soma das suas Consultas Pagas: ");
 
-                                char nome[40];
-                                ler_str(nome);
-                                formata_string_maisculo(nome);
+                                char codigo[40];
+                                ler_str(codigo);
+                                formata_string_maisculo(codigo);
                                 float soma_consultas = 0;
 
-                                if(ja_existe(nome,pacientes,qnt_pacientes)) {
+                                if(procura_informacao2(codigo,pacientes,qnt_pacientes,2,-2) >= 0) {
 
-                                    soma_consultas = soma_consultas_pagas_pacientes(nome,atendimentos,qnt_atendimentos);
-                                    printf(GREEN"--> Soma das Consultas do Paciente %s = %.2f\n"RESET, nome, soma_consultas);
+                                    soma_consultas = soma_consultas_pagas_pacientes(codigo,atendimentos,qnt_atendimentos);
+                                    printf(GREEN"--> Soma das Consultas do Paciente %s = %.2f\n"RESET, codigo, soma_consultas);
 
                                     if(!coletar_opcao("Selecionar Outro Paciente", "Ir para o Menu Pacientes")) {continue;}
                                     else {break;}
                                 }
                                 else {
-                                    printf(RED"Paciente %s NÃO Cadastrado\n"RESET, nome);
+                                    printf(RED"Paciente %s NÃO Cadastrado\n"RESET, codigo);
 
                                     if(!coletar_opcao("Selecionar Outro Paciente", "Ir para o Menu Pacientes")) {continue;}
                                     else {break;}

@@ -188,6 +188,8 @@ int procura_informacao2(char* informacao_paciente, paciente*pacientes, int taman
             printf("erro");
             break;
     }
+    if(index == -2)return -1;
+
     return 0;
 }
 
@@ -285,7 +287,7 @@ void adicionar_pacientes(const char* nomeArquivo, paciente* novospaciente,int qn
 }
 int procura_codigo_paciente2(char*codigo,paciente*pacientes,int tamanho) {
     for(int i = 0; i < tamanho; i++){
-        if(pacientes[i].ativo == 0)break;
+        if(pacientes[i].ativo == 0)continue;
         if(strcmp(codigo,pacientes[i].codigo) == 0) {
             return i;
         }
