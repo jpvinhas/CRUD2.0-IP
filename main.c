@@ -502,6 +502,11 @@ int main(void) {
                                     printf(RED"Atendimento já marcado para esta data, escolha outra!\n"RESET);
                                     continue;
                                 }
+                                data_ja_cadastrada = atendimento_ja_cadastrado(novos_atendimentos,novo_atendimento->codigo_paciente,data_provisoria, qnt_novos_atendimentos);
+                                if(data_ja_cadastrada) {
+                                    printf(RED"Atendimento não salvo já marcado para esta data, escolha outra!\n"RESET);
+                                    continue;
+                                }
                                 strcpy(novo_atendimento->data, data_provisoria);
                                 
                                 receber_tipo_atendimento(novo_atendimento);
@@ -694,7 +699,7 @@ int main(void) {
                                 printf("-> Digite o codigo do paciente para exibir todos os seus atendimentos:");
                                 ler_str(codigo_paciente);
 
-                                if (!procura_paciente(pacientes, qnt_pacientes, codigo_paciente)) {
+                                if (procura_codigo_paciente2(codigo_paciente,pacientes,qnt_pacientes) < 0) {
                                     printf(RED"Paciente não cadastrado ou não Salvo!\n"RESET);
                                     if (coletar_opcao("Inserir outro paciente", "Voltar ao menu de atendimentos")) {
                                         break;
@@ -704,7 +709,7 @@ int main(void) {
 
                                 int conta_atendimentos = 0;
                                 for(int i = 0; i < qnt_pacientes; i++) {
-                                    if(!strcmp(codigo_paciente, atendimentos[i].codigo_paciente)) {
+                                    if(strcmp(codigo_paciente, atendimentos[i].codigo_paciente) == 0) {
                                         printf("* Atendimento:\n");
                                         exibir_dados_atendimento(&atendimentos[i]);
                                         conta_atendimentos++;
@@ -752,12 +757,15 @@ int main(void) {
                                 system("cls");
                                 printf("\nOpção -> "BLUE"[7], \"Exibir os Atendimentos em Ordem de Data de Atendimento\""RESET" Selecionada...\n\n");
 
-                                int datas_ordenadas[qnt_atendimentos];
-                                ordenar_datas(atendimentos, datas_ordenadas, qnt_atendimentos);
-
                                 if (!qnt_atendimentos) {
                                     printf(RED"Nenhum Atendimento Cadastrado\n"RESET);
+                                    if (coletar_opcao("Sair", "\0")) {break;}
+                                    else {break;}
                                 }
+
+                                int datas_ordenadas[qnt_atendimentos];
+                                ordenar_datas(atendimentos, datas_ordenadas, qnt_atendimentos);
+                                
                                 for (int i = 0; i < qnt_atendimentos; i++) {
                                     int atendimento_ordenado = datas_ordenadas[i];
                                     exibir_dados_atendimento(&atendimentos[atendimento_ordenado]);
