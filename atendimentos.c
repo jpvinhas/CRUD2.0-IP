@@ -255,6 +255,7 @@ float intervalo_entre_datas(char data1[], char data2[], atendimento *todos_atend
     char data_comparada[40];
 
     for(int index_atendimento = 0; index_atendimento < qntd_atendimentos; index_atendimento++) {
+        if(!todos_atendimentos[index_atendimento].ativo){continue;}
         int compara_dia, compara_mes;
         for(int compara_ano = ano_inicial; compara_ano <= ano_final; compara_ano++) {
             if(flag_mes) {

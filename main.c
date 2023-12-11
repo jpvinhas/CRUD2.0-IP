@@ -788,7 +788,7 @@ int main(void) {
                                 receber_data2(data2);
 
                                 float soma_precos = intervalo_entre_datas(data1, data2, atendimentos, qnt_atendimentos);
-                                printf("--> O Somatório dos Atendimentos pagos entre as Datas -> %s e %s foi ="GREEN"%.2f\n"RESET, data1, data2, soma_precos);
+                                printf("--> O Somatório dos Atendimentos pagos entre as Datas -> %s e %s foi = "GREEN"%.2f\n"RESET, data1, data2, soma_precos);
 
                                 if (coletar_opcao("Sair", "Selecionar outro Interválo de Datas")) {continue;}
                                 else {break;}
@@ -796,7 +796,7 @@ int main(void) {
                             break;
                         case 9:
                             printf("\nOpção -> [9], \"Exibir Todos os Atendimentos\" Selecionada...\n\n");
-                            if(qnt_atendimentos<1)printf("Sem atendimentos cadastrados!");
+                            if(qnt_atendimentos<1)printf("Sem atendimentos cadastrados!\n");
                             for(int i = 0; i < qnt_atendimentos; i++) {
                                 if(atendimentos[i].ativo ==0)continue;
                                 printf("---> Atendimento (%d):\n",i+1);
