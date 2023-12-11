@@ -201,6 +201,7 @@ int cadastra_nome_paciente2(char* novopaciente,paciente*pacientes, int qnt_pacie
             printf(RED"Digite o nome corretamente!\n"RESET);
             continue;
         }
+        if(strcmp(novopaciente,"sair")==0)return 1;
 
         formata_string_maisculo(novopaciente);
         

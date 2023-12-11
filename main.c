@@ -3,15 +3,6 @@
 #include "atendimentos.h"
 #include "util.h"
 
-#define QNTD_PACIENTES 100
-#define QNTD_ATENDIMENTOS 100
-
-#define RED     "\x1b[31m"
-#define GREEN   "\x1b[32m"
-#define YELLOW  "\x1b[33m"
-#define BLUE    "\x1b[34m"
-#define RESET   "\x1b[0m"
-
 paciente* pacientes;
 atendimento* atendimentos;
 
@@ -32,32 +23,8 @@ int *atendimentos_alterados;
 
 int qnt_alteracoes = 0;
 
-
-int pacientes_ativos[QNTD_PACIENTES];
-
-char codigo_pacientes[QNTD_PACIENTES][8];
-char nomes_pacientes[QNTD_PACIENTES][40];
-char RG_pacientes[QNTD_PACIENTES][12];
-char CPF_pacientes[QNTD_PACIENTES][12];
-char tipo_sanguineo_pacientes[QNTD_PACIENTES][3];
-char fator_RH_pacientes[QNTD_PACIENTES][9];
-char endereco_pacientes[QNTD_PACIENTES][40];
-char datas_nascimento_pacientes[QNTD_PACIENTES][40];
-
-
-int atendimentos_ativos[QNTD_ATENDIMENTOS];
-
-int paciente_do_atendimento[QNTD_ATENDIMENTOS];
-char codigo_atendimentos[QNTD_ATENDIMENTOS][8];
-char tipo_atendimentos[QNTD_ATENDIMENTOS][40];
-char data_atendimentos[QNTD_ATENDIMENTOS][40];
-char status_atendimentos[QNTD_ATENDIMENTOS][40];
-float preco_atendimentos[QNTD_ATENDIMENTOS];
-
-
 int main(void) {
-    preenche_vetor_ativos(pacientes_ativos, QNTD_PACIENTES);
-    preenche_vetor_ativos(atendimentos_ativos, QNTD_ATENDIMENTOS);
+    system("clear");
 
     pacientes = ler("pacientes.bin",&qnt_pacientes,sizeof(paciente));
     pacientes_alterados= malloc(qnt_pacientes * sizeof(int));
@@ -77,6 +44,7 @@ int main(void) {
                 system("clear");
                 printf(BLUE"\nMenu \"Paciente\" Selecionado...\n"RESET);
                 while(1) {
+                    system("clear");
                     if(qnt_alteracoes>0) printf(RED"VOCÊ POSSUI %d ALTERACOES NÃO SALVAS!\n"RESET,qnt_alteracoes);
                     int interacao_menu_pacientes = menu_pacientes();                                                           
                     int informacao_nao_obrigatoria;                   
@@ -93,6 +61,10 @@ int main(void) {
                                 int index = procura_paciente_livre(pacientes, qnt_pacientes);
                                 
                                 if(index<0) {
+                                    if(qnt_novos_pacientes>=10){
+                                        printf(RED"Quantidade novos pacientes atingida. Salve e tente novamente.\n"RESET);
+                                        break;
+                                    }
                                     novopaciente = &novospacientes[qnt_novos_pacientes];
                                     novo=1;
                                 }else{novopaciente=&pacientes[index];}
@@ -264,6 +236,7 @@ int main(void) {
                                         break;
                                     default:
                                         printf("Selecione alguma das opções anteriores!\n");
+                                        saida=1;
                                         break;
                 
                                 }
@@ -446,6 +419,7 @@ int main(void) {
                             printf("\nOpção -> "BLUE"[10], \"Voltar para o Menu Anterior\""RESET" Selecionada...\n\n");
                             break;
                         case 11:
+                            printf("\nOpção -> "BLUE"[10], \"Salvar\""RESET" Selecionada...\n\n");
                             salvar(pacientes,atendimentos,pacientes_alterados,atendimentos_alterados,qnt_pacientes,qnt_atendimentos);
                             salvar_novos(pacientes,atendimentos,&novospacientes,&novos_atendimentos,qnt_novos_pacientes,qnt_novos_atendimentos,qnt_pacientes,qnt_atendimentos);
                             
@@ -479,16 +453,11 @@ int main(void) {
                 }break;
 
             case 2:
-                system("cls");
+                system("clear");
                 printf(BLUE"\nMenu \"Atendimento\" Selecionado...\n"RESET);
                 while(1) {
+                     if(qnt_alteracoes) printf(RED"VOCÊ POSSUI %d ALTERACOES NÃO SALVAS!\n"RESET,qnt_alteracoes);
                     int interacao_menu_atendimentos = menu_atendimento();
-
-                    if(qnt_alteracoes && interacao_menu_atendimentos != 10) {
-                        printf(RED"\n* VOCÊ POSSUI %d ALTERACOES NÃO SALVAS!! *\n"RESET, qnt_alteracoes);
-                        printf(YELLOW"--> Salve suas alterações antes de prosseguir\n"RESET);
-                        continue;
-                    }
                     int espaco_livre;
                     int indice_do_paciente;
 
@@ -498,25 +467,23 @@ int main(void) {
                             while (1) {
                                 printf("\nOpção -> "BLUE"[1], \"Inserir um Novo Atendimento\""RESET" Selecionada...\n\n");
 
-                                if(qnt_novos_atendimentos == 10) {
-                                    printf(YELLOW"* Salve suas alterações para continuar!! *\n"RESET);
-                                    break;
-                                }
-
-                                atendimento *novo_atendimento;
-
-                                int eh_novo = 0;
-                                int ja_arquivado = procura_atendimento_livre(atendimentos,qnt_atendimentos);
-
-                                if(ja_arquivado < 0) {
+                                atendimento* novo_atendimento;
+                                int novo = 0;
+                                int index = procura_atendimento_livre(atendimentos, qnt_atendimentos);
+                                
+                                if(index<0) {
+                                    if(qnt_novos_atendimentos>=10){
+                                        printf(RED"Quantidade novos pacientes atingida. Salve e tente novamente.\n"RESET);
+                                        break;
+                                    }
                                     novo_atendimento = &novos_atendimentos[qnt_novos_atendimentos];
-                                    eh_novo = 1;
-                                }else{novo_atendimento = &atendimentos[ja_arquivado];}
+                                    novo=1;
+                                }else{novo_atendimento=&atendimentos[index];}
 
                                 printf("Digite o Codigo do Paciente: \n");
                                 ler_str(novo_atendimento->codigo_paciente);
 
-                                if (!procura_paciente(pacientes, qnt_pacientes, novo_atendimento->codigo_paciente)) {
+                                if (procura_codigo_paciente2(novo_atendimento->codigo_paciente,pacientes,qnt_pacientes) < 0) {
                                     printf(RED"Paciente não cadastrado ou não Salvo!\n"RESET);
                                     if (coletar_opcao("Inserir outro paciente", "Voltar ao menu de atendimentos")) {
                                         break;
@@ -535,30 +502,32 @@ int main(void) {
                                     printf(RED"Atendimento já marcado para esta data, escolha outra!\n"RESET);
                                     continue;
                                 }
-                                data_ja_cadastrada = atendimento_ja_cadastrado(novos_atendimentos,novo_atendimento->codigo_paciente,data_provisoria, qnt_novos_atendimentos);
-                                if(data_ja_cadastrada) {
-                                    printf(RED"Atendimento não salvo já marcado para esta data, escolha outra!\n"RESET);
-                                    continue;
-                                }
-
                                 strcpy(novo_atendimento->data, data_provisoria);
-
+                                
+                                receber_tipo_atendimento(novo_atendimento);
+                                
                                 novo_atendimento->preco = receber_preco();
 
                                 receber_status_atendimento(novo_atendimento);
 
-                                do {
+                                for(;;){
+                                    int k=0;
                                     cria_codigo2(novo_atendimento->codigo_atendimento);
-                                }while(verifica_codigo_atendimento(atendimentos, novo_atendimento->codigo_atendimento, qnt_atendimentos));
-
-                                receber_tipo_atendimento(novo_atendimento);
-
+                                    for(int i=0;i < qnt_atendimentos;i++){
+                                        if(atendimentos[i].ativo == 0 )continue;
+                                        if(!strcmp(novo_atendimento->codigo_atendimento,atendimentos[i].codigo_atendimento)) k=1;
+                                        break;
+                                    }
+                                    if(k) continue;
+                                    break;
+                                }
+                                
                                 novo_atendimento->ativo = 1;
                                 qnt_alteracoes++;
                                 exibir_dados_atendimento(novo_atendimento);
 
-                                if(eh_novo) {qnt_novos_atendimentos++;}
-                                else {atendimentos_alterados[ja_arquivado] = 1;}
+                                if(novo) {qnt_novos_atendimentos++;}
+                                else {atendimentos_alterados[index] = 1;}
 
                                 printf(GREEN"* Atendimento Cadastrado com sucesso! *\n"RESET);
 
@@ -617,6 +586,7 @@ int main(void) {
                                         printf("Paciente anterior = %s --> Novo paciente = \"GREEN\"%s\"RESET\"\n", paciente_antigo,
                                                atendimento_alterado->codigo_paciente);
                                         printf(GREEN"* Paciente do atendimento Alterado com Sucesso! *\n"RESET);
+                                        qnt_alteracoes++;
 
                                         break;
                                     case 2:
@@ -630,20 +600,21 @@ int main(void) {
 
                                         strcpy(atendimento_alterado->data, data_provisoria);
                                         printf(GREEN"* Data Alterada com Sucesso! *\n"RESET);
-
+                                        qnt_alteracoes++;
                                         break;
                                     case 3:
                                         receber_tipo_atendimento(atendimento_alterado);
 
-                                        printf("\n--> Novo Tipo = \"GREEN\"%s\"RESET\"\n", atendimento_alterado->tipo);
+                                        printf("\n--> Novo Tipo =   "GREEN"%s\n"RESET, atendimento_alterado->tipo);
                                         printf(GREEN"* Novo tipo cadastrado com Sucesso! *\n"RESET);
+                                        qnt_alteracoes++;
                                         break;
-                                                //3KPKJCMD//UU58FE9O
                                     case 4:
                                         printf("Digite o novo preço da consulta:\n");
 
                                         atendimento_alterado->preco = receber_preco();
                                         printf(GREEN"Novo preço cadastrado --> "GREEN"R$%.2f"RESET"\n"RESET, atendimento_alterado->preco);
+                                        qnt_alteracoes++;
                                         break;
                                     case 5:
                                         printf("Digite o novo status do atendimento:");
@@ -651,14 +622,15 @@ int main(void) {
                                         receber_status_atendimento(atendimento_alterado);
                                         printf("--> Novo Status = "GREEN"%s"RESET"\n", atendimento_alterado->status);
                                         printf(GREEN"* Status alterado com Sucesso! *\n"RESET);
+                                        qnt_alteracoes++;
                                         break;
                                     default:
                                         printf("Selecione apenas as opções acima!\n");
                                         break;
                                 }
                                 if(opcao >= 1 || opcao <= 5) {
-                                    novos_atendimentos[qnt_novos_atendimentos] = *atendimento_alterado;
-                                    qnt_novos_atendimentos++;
+                                    atendimentos_alterados[indice_do_atendimento] = 1;
+                                    qnt_atendimentos_alterados++;
                                 }
                                 if(coletar_opcao("Voltar","Alterar outro Atendimento")){continue;}
                                 else {break;}
@@ -685,8 +657,9 @@ int main(void) {
                                     strcpy(atendimento_solicitado->codigo_atendimento, "EXLUIDO");
                                     strcpy(atendimento_solicitado->codigo_paciente, "EXLUIDO");
 
-                                    novos_atendimentos[qnt_novos_atendimentos] = *atendimento_solicitado;
-                                    qnt_novos_atendimentos++;
+                                    atendimentos_alterados[indice_do_atendimento] = 1;
+                                    qnt_atendimentos_alterados++;
+                                    qnt_alteracoes++;
                                     printf(GREEN"* Atendimento Excluído *\n"RESET);
                                     break;
                                 }
@@ -717,7 +690,7 @@ int main(void) {
                             while (1) {
                                 printf("\nOpção -> "BLUE"[5], \"Exibir Todos os Atendimentos de um Paciente com base no seu código\""RESET" Selecionada...\n\n");
 
-                                char codigo_paciente[8];
+                                char codigo_paciente[9];
                                 printf("-> Digite o codigo do paciente para exibir todos os seus atendimentos:");
                                 ler_str(codigo_paciente);
 
@@ -752,7 +725,7 @@ int main(void) {
                                 printf("\nOpção -> "BLUE"[6], \"Exibir Todos os Atendimentos e seu Somatório Total Diário\""RESET" Selecionada...\n\n");
 
                                 char atendimentos_do_dia[1][40];
-                                printf("Digite a data que você deseja acessar as informações:");
+                                printf("Digite a data que você deseja acessar as informações:\n");
                                 receber_data2(atendimentos_do_dia[0]);
 
                                 for (int i = 0; i < qnt_atendimentos; i++) {
@@ -799,11 +772,11 @@ int main(void) {
                                        "determinado período de atendimento.\" Selecionada...\n\n");
 
                                 char data1[40];
-                                printf("--> Digite a primeira Data:\t");
+                                printf("--> Digite a primeira Data:\n");
                                 receber_data2(data1);
 
                                 char data2[40];
-                                printf("--> Digite a segunda Data:\t");
+                                printf("--> Digite a segunda Data:\n");
                                 receber_data2(data2);
 
                                 float soma_precos = intervalo_entre_datas(data1, data2, atendimentos, qnt_atendimentos);
@@ -815,15 +788,17 @@ int main(void) {
                             break;
                         case 9:
                             printf("\nOpção -> [9], \"Exibir Todos os Atendimentos\" Selecionada...\n\n");
+                            if(qnt_atendimentos<1)printf("Sem atendimentos cadastrados!");
                             for(int i = 0; i < qnt_atendimentos; i++) {
+                                if(atendimentos[i].ativo ==0)continue;
                                 printf("---> Atendimento (%d):\n",i+1);
                                 exibir_dados_atendimento(&atendimentos[i]);
                                 printf("\n");
                             }
-
-                            break;
+                            if (coletar_opcao("Sair", "\0")) {break;}
+                                else {break;}
                         case 10:
-                            printf("\nOpção -> [10], \"Salvar Atendimentos Pendentes\" Selecionada...\n\n");
+                            printf("\nOpção -> [10], \"Salvar\" Selecionada...\n\n");
 
                             salvar(pacientes,atendimentos,pacientes_alterados,atendimentos_alterados,qnt_pacientes,qnt_atendimentos);
                             salvar_novos(pacientes,atendimentos,&novospacientes,&novos_atendimentos,qnt_novos_pacientes,qnt_novos_atendimentos,qnt_pacientes,qnt_atendimentos);
@@ -848,9 +823,6 @@ int main(void) {
 
                             qnt_alteracoes = 0;
                             printf(GREEN"Alterações Salvas! \n"RESET);
-                            for(int i = 0; i < qnt_atendimentos; i++) {
-                                exibir_dados_atendimento(&atendimentos[i]);
-                            }
                             break;
                         case 11:
                             printf("\nOpção -> [11], \"Voltar para o Menu Anterior\" Selecionada...\n\n");
@@ -863,10 +835,37 @@ int main(void) {
                 }
                     continue;
             case 3:
+                printf("\nOpção -> [3], \"Salvar \" Selecionada...\n\n");
+
+                salvar(pacientes,atendimentos,pacientes_alterados,atendimentos_alterados,qnt_pacientes,qnt_atendimentos);
+                salvar_novos(pacientes,atendimentos,&novospacientes,&novos_atendimentos,qnt_novos_pacientes,qnt_novos_atendimentos,qnt_pacientes,qnt_atendimentos);
+
+                free(pacientes);
+                free(pacientes_alterados);
+                qnt_novos_pacientes=0;
+                qnt_pacientes_alterados=0;
+
+                pacientes = ler("pacientes.bin",&qnt_pacientes,sizeof(paciente));
+                pacientes_alterados= malloc(qnt_pacientes * sizeof(int));
+                preenche_vetor_ativos(pacientes_alterados,qnt_pacientes);
+
+                free(atendimentos);
+                free(atendimentos_alterados);
+                qnt_novos_atendimentos=0;
+                qnt_atendimentos_alterados=0;
+
+                atendimentos = ler("atendimentos.bin",&qnt_atendimentos,sizeof(atendimento));
+                atendimentos_alterados= malloc(qnt_atendimentos * sizeof(int));
+                preenche_vetor_ativos(atendimentos_alterados,qnt_atendimentos);
+
+                qnt_alteracoes = 0;
+                printf(GREEN"Alterações Salvas! \n"RESET);
+                break;
+            case 4:
                 if(qnt_alteracoes!=0) {
                     printf(RED"Você possui alteracoes pendentes. Deseja encerrar mesmo assim?\n"RESET);
                     if(!coletar_opcao("Sair sem salvar","Voltar e Salvar"))return 0;
-                    else break;;
+                    else break;
                 }
                 printf(GREEN"\nSaída do Sistema Confirmada!\n"RESET);
                 return 0;

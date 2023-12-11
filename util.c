@@ -16,7 +16,8 @@ int menu_principal() {
     printf(YELLOW"\nSelecione como você deseja acessar nosso sistema: \n"RESET);
     printf(BLUE"[1]"RESET "Paciente");
     printf(BLUE" \t[2] "RESET"Atendimento\t");
-    printf(BLUE"\t[3]"RESET" Encerrar\n");
+    printf(BLUE"    [3] "RESET"Salvar\t");
+    printf(BLUE"   [4]"RESET" Encerrar\n");
 
     while(1) {
         int interacao_menu_pacientes;
@@ -32,6 +33,8 @@ int menu_principal() {
             return 2;
         case '3':
             return 3;
+        case '4':
+            return 4;
         case '\n':
             break;
         default:
@@ -209,7 +212,7 @@ void receber_data2(char* data) {
     int dia, mes, ano;
 
     while (1) {
-        printf(BLUE"Digite a data no formato DD/MM/AAAA: "RESET);
+        printf(BLUE"Digite no formato DD/MM/AAAA: "RESET);
 
         fflush(stdin);
         if (scanf("%2d/%2d/%4d", &dia, &mes, &ano) != 3) {

@@ -20,7 +20,7 @@ int menu_atendimento() {
     printf(BLUE"\n[5]"RESET" Exibir Todos os Atendimentos de um Paciente com base no seu código");
     printf(BLUE"\n[6]"RESET" Exibir Todos os Atendimentos e seu Somatório Total Diário\n"BLUE"[7]"RESET" Exibir os Atendimentos em Ordem de Data de Atendimento");
     printf(BLUE"\n[8]"RESET" Exibir o Somatório dos Atendimentos pagos de um determinado período de atendimento\n"BLUE"[9]"RESET" Exibir Todos os Atendimentos\n");
-    printf(BLUE"[10]"RESET" Salvar Atendimentos Pendentes\n"BLUE"[11]"RESET" Voltar para o Menu Anterior\n");
+    printf(BLUE"[10]"RESET" Salvar \n"BLUE"[11]"RESET" Voltar para o Menu Anterior\n");
     printf("\n---------------------------------------------------------------------------\n");
 
     printf("\nDigite a Funcionalidade Desejada: ");
@@ -71,51 +71,12 @@ void receber_status_atendimento(atendimento *novo_atendimento){
 int procura_paciente(paciente *todos_pacientes, int qntd_pacientes, char codigo_paciente[]) {
         for(int i = 0; i < qntd_pacientes; i++) {
             //if(!todos_pacientes[i].ativo)break;
-            if(!strcmp(codigo_paciente, todos_pacientes[i].codigo)) {
+            if(strcmp(codigo_paciente, todos_pacientes[i].codigo == 0)) {
                 return 1;
             }
         }
     return 0;
 }
-
-
-int procura_paciente_codigo(char codigo_pacientes[][8],int QNTD_PACIENTES,int pacientes_ativos[]){
-    char codigo_paciente[8];
-    ler_str(codigo_paciente);                            
-    
-    int indice_do_paciente = procura_codigo(codigo_paciente,codigo_pacientes,QNTD_PACIENTES);
-    if(indice_do_paciente == -1){
-        printf(RED"Paciente não cadastrado\n"RESET);
-        if(coletar_opcao("Voltar","Tentar novamente"))return -1;
-        return -2;
-    }
-    if(pacientes_ativos[indice_do_paciente]== 0){
-        printf(RED"Paciente não cadastrado ou Excluido recentemente\n"RESET);
-        if(coletar_opcao("Voltar","Tentar novamente"))return -1;
-        return -2;
-    }
-    return indice_do_paciente;
-}
-
-
-int procura_atendimento(char codigo_atendimentos[][8],int QNTD_ATENDIMENTOS,int atendimentos_ativos[]){
-    char codigo_atendimento[9];
-    ler_str(codigo_atendimento);
-
-    int indice_do_atendimento = procura_codigo(codigo_atendimento,codigo_atendimentos,QNTD_ATENDIMENTOS);
-    if(indice_do_atendimento == -1){
-        printf(RED"Atendimento não cadastrado\n"RESET);
-        if(coletar_opcao("Voltar","Tentar novamente"))return -1;
-        return -2;
-    }
-    if(atendimentos_ativos[indice_do_atendimento]== 0){
-        printf(RED"Atendimento não cadastrado ou Excluido recentemente\n"RESET);
-        if(coletar_opcao("Voltar","Tentar novamente"))return -1;
-        return -2;
-    }
-    return indice_do_atendimento;
-}
-
 
 int procura_atendimento2(atendimento *todos_atendimentos, size_t qnt_atendimentos) {
     int status_procura;
