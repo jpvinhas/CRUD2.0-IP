@@ -1,6 +1,6 @@
 # Sistema de Gerenciamento de Pacientes e Atendimentos
 
-Este projeto foi desenvolvido como parte da cadeira de **Introdução à Programação**. Trata-se de um sistema para gerenciar o cadastro de pacientes e atendimentos, armazenando os dados de maneira persistente em arquivos binários. O sistema oferece um menu interativo que permite adicionar, alterar, e visualizar informações de pacientes e seus respectivos atendimentos.
+Este projeto foi desenvolvido como parte da cadeira de **Introdução à Programação**. Trata-se de um sistema para gerenciar o cadastro de pacientes e atendimentos, armazenando os dados de maneira persistente em arquivos binários. O sistema oferece um menu interativo que permite adicionar, alterar, e visualizar informações de pacientes e seus respectivos atendimentos. Feito por **João Pedro Vinhas** e **Matheus de Sousa Almeida**
 
 ## Tecnologias Utilizadas
 
